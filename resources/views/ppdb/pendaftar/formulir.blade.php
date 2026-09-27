@@ -184,12 +184,12 @@
 
             <div class="flex items-center justify-between pt-2">
                 <x-button as="a" href="{{ route('pendaftar.dashboard') }}" variant="ghost">
-                    &larr; Kembali ke Dasbor
+                    Kembali ke Dasbor
                 </x-button>
 
                 @if(!in_array($pendaftar->status_pendaftaran, ['terverifikasi', 'lulus', 'tidak_lulus']))
                     <x-button type="submit" variant="primary">
-                        Simpan & Lanjutkan ke Unggah Berkas &rarr;
+                        Simpan dan Lanjutkan ke Unggah Berkas
                     </x-button>
                 @endif
             </div>

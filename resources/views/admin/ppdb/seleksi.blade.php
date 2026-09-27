@@ -75,12 +75,12 @@
                                 <td class="py-3 px-3 text-[#545B52]">{{ $p->asal_sekolah }}</td>
                                 <td class="py-3 px-3">
                                     @if($status === 'LULUS')
-                                        <span class="px-2.5 py-1 rounded text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">
-                                            ✓ LULUS
+                                        <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
+                                            Lulus
                                         </span>
                                     @elseif($status === 'TIDAK_LULUS')
-                                        <span class="px-2.5 py-1 rounded text-xs font-bold bg-[#FBEAEA] text-[#C81210]">
-                                            ✕ TIDAK LULUS
+                                        <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBEAEA] text-[#C81210]">
+                                            Tidak Lulus
                                         </span>
                                     @else
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBF9D6] text-[#6B6200]">
@@ -92,9 +92,9 @@
                                     <form action="{{ route('admin.ppdb.kelulusan.simpan', $p->id) }}" method="POST" class="inline-flex items-center gap-2">
                                         @csrf
                                         <select name="status" class="rounded-lg border border-[#C9CDC3] px-2 py-1 text-xs text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]">
-                                            <option value="LULUS" {{ $status === 'LULUS' ? 'selected' : '' }}>LULUS</option>
-                                            <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>TIDAK LULUS</option>
-                                            <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>MENUNGGU</option>
+                                            <option value="LULUS" {{ $status === 'LULUS' ? 'selected' : '' }}>Lulus</option>
+                                            <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Lulus</option>
+                                            <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
                                         </select>
 
                                         <input

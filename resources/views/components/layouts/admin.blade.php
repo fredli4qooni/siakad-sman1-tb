@@ -14,8 +14,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-full flex text-[#1C2620] bg-[#FFFFFF]">
-    <!-- Sidebar Kiri -->
-    <aside class="w-64 bg-[#F3F5F2] border-r border-[#E1E4DE] flex flex-col flex-shrink-0 min-h-screen">
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+
+    <!-- Sidebar Kiri (Desktop Tetap, Mobile Slide-over) -->
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#F3F5F2] border-r border-[#E1E4DE] flex flex-col flex-shrink-0 transition-transform duration-200 -translate-x-full lg:translate-x-0 lg:static lg:min-h-screen">
         <!-- Brand / Header Sidebar -->
         <div class="h-16 flex items-center gap-3 px-5 border-b border-[#E1E4DE]">
             <div class="w-8 h-8 rounded-lg bg-[#0E6026] text-white flex items-center justify-center font-bold text-sm">
@@ -155,8 +158,13 @@
     <!-- Area Konten Utama -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
         <!-- Header Atas -->
-        <header class="h-16 border-b border-[#E1E4DE] bg-white flex items-center justify-between px-6 sticky top-0 z-20">
-            <div>
+        <header class="h-16 border-b border-[#E1E4DE] bg-white flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+            <div class="flex items-center gap-3">
+                <button type="button" id="sidebar-toggle" class="lg:hidden p-1.5 rounded-lg text-[#545B52] hover:bg-[#E1E4DE]/50" aria-label="Buka Menu">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
                 <h1 class="text-lg font-bold text-[#1C2620]">{{ $heading ?? 'Dashboard' }}</h1>
             </div>
             <div class="flex items-center gap-3">
@@ -178,9 +186,25 @@
             </div>
         @endif
 
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-4 sm:p-6">
             {{ $slot }}
         </main>
     </div>
+
+    <script>
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('admin-sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (toggleBtn && sidebar && backdrop) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                backdrop.classList.toggle('hidden');
+            });
+            backdrop.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            });
+        }
+    </script>
 </body>
 </html>

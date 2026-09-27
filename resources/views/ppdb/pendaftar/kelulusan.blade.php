@@ -30,7 +30,7 @@
 
                 <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
                     <x-button as="a" href="{{ route('siakad.sso.redirect') }}" variant="primary">
-                        Masuk ke Portal SIAKAD &rarr;
+                        Masuk ke Portal SIAKAD
                     </x-button>
                     <x-button as="a" href="{{ route('pendaftar.cetak_bukti') }}" target="_blank" variant="secondary">
                         Cetak Bukti Kelulusan
@@ -82,7 +82,7 @@
 
         <div class="flex justify-start">
             <x-button as="a" href="{{ route('pendaftar.dashboard') }}" variant="ghost">
-                &larr; Kembali ke Dasbor
+                Kembali ke Dasbor
             </x-button>
         </div>
     </div>

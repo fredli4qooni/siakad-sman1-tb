@@ -65,7 +65,7 @@
                 @endif
                 <div class="pt-2">
                     <x-button as="a" href="{{ route('siakad.sso.redirect') }}" variant="primary">
-                        Buka Portal Akademik (SIAKAD) &rarr;
+                        Buka Portal Akademik (SIAKAD)
                     </x-button>
                 </div>
             </div>

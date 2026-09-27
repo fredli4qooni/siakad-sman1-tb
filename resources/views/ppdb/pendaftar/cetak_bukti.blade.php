@@ -172,7 +172,7 @@
 <body>
 
     <div class="no-print">
-        <a href="{{ route('pendaftar.dashboard') }}" class="btn-back">&larr; Kembali ke Dasbor</a>
+        <a href="{{ route('pendaftar.dashboard') }}" class="btn-back">Kembali ke Dasbor</a>
         <button onclick="window.print()" class="btn-print">&#128438; Cetak Dokumen Ini</button>
     </div>
 

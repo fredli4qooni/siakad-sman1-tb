@@ -81,7 +81,7 @@
 
                         <div class="pt-2">
                             <a href="{{ route('ppdb.alur') }}" class="block text-center text-xs font-semibold text-[#0E6026] hover:underline">
-                                Lihat Persyaratan & Alur Lengkap &rarr;
+                                Lihat Persyaratan dan Alur Lengkap
                             </a>
                         </div>
                     </div>

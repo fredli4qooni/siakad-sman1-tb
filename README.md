@@ -1,58 +1,174 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Pendaftaran PPDB Terintegrasi SIAKAD dengan Single Sign-On (SSO OIDC)
+### SMAN 1 Terbanggi Besar — Lampung Tengah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web terintegrasi berbasis Laravel 11/12 yang menggabungkan proses Penerimaan Peserta Didik Baru (PPDB) dan Sistem Informasi Akademik (SIAKAD) dalam satu ekosistem terpadu menggunakan arsitektur **Identity Provider (IdP) OpenID Connect (OIDC)**. Sistem ini mengeliminasi duplikasi entri data manual dengan secara otomatis menyinkronkan data siswa yang dinyatakan **"LULUS"** ke basis data akademik SIAKAD.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Ringkasan Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Modul Autentikasi & Identity Provider (OIDC SSO)
+- **OIDC Server & Discovery:** Menyediakan endpoint standar `/.well-known/openid-configuration`, `/oauth/authorize`, `/oauth/token`, dan `/oauth/userinfo`.
+- **JWT Signed ID Tokens:** Menerbitkan `id_token` bertanda tangan kriptografis untuk pertukaran klaim profil dan peran antar modul.
+- **Single Sign-On (SSO):** Sekali login di portal SSO, pengguna dapat berpindah antara modul PPDB dan SIAKAD tanpa perlu autentikasi ulang.
+- **Multi-Identifier Login:** Pengguna dapat masuk menggunakan email maupun username/nama.
+- **Role-Based Access Control (RBAC):** Pemisahan hak akses ketat antara `admin`, `operator`, `guru`, `siswa`, dan `calon_siswa`.
+- **Single Logout (SLO):** Mengakhiri sesi di seluruh modul secara serentak dan aman.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Modul PPDB (Penerimaan Peserta Didik Baru)
+- **Portal Publik & Informasi Gelombang:** Halaman depan sekolah yang menampilkan status periode PPDB aktif, kuota rombel, persyaratan, alur seleksi, dan pengumuman hasil.
+- **Formulir Pendaftaran Calon Siswa:** Pengisian data pribadi, asal sekolah, alamat, serta data orang tua/wali dengan validasi format NISN (10 digit) dan NIK (16 digit).
+- **Manajemen Berkas Persyaratan:** Unggah 4 dokumen wajib (KK, Akta Kelahiran, Ijazah/SKL, dan Rapor) dengan validasi MIME (PDF/JPG/PNG) dan batas ukuran 2MB.
+- **Verifikasi Panitia:** Panel administrator untuk meninjau berkas digital, memberikan catatan koreksi, menyetujui/menolak berkas, dan finalisasi verifikasi.
+- **Penetapan Kelulusan & Cetak Bukti:** Penetapan keputusan seleksi (Lulus, Tidak Lulus, Cadangan) serta cetak bukti pendaftaran dan kelulusan ramah kertas A4.
 
-## Learning Laravel
+### 3. Sync Service Engine (Integrasi Otomatis PPDB → SIAKAD)
+- **Otomatisasi Berbasis Transaksi (`DB::transaction`):** Saat status pendaftar ditetapkan **"LULUS"**, sistem secara otomatis:
+  1. Menyalin data pokok calon siswa dan orang tua ke entitas `Siswa` di SIAKAD.
+  2. Menerbitkan Nomor Induk Siswa (NIS) unik otomatis (`YYYYXXXX`).
+  3. Meng-upgrade role akun SSO dari `calon_siswa` menjadi `siswa`.
+- **Idempotensi Sistem:** Mencegah terciptanya duplikasi data siswa apabila proses sinkronisasi terpanggil ulang.
+- **Audit Trail (`sync_log`):** Pencatatan riwayat sinkronisasi lengkap dengan waktu eksekusi, status, dan pesan galat.
+- **Batch Sync & Retry:** Fitur sinkronisasi massal dan tombol coba lagi untuk data yang tertunda.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 4. Modul SIAKAD (Akademik Terbatas)
+- **Manajemen Rombel & Ploting Siswa:** Pembuatan master rombongan belajar tingkat X, penentuan wali kelas, kapasitas rombel, serta fitur penempatan siswa (ploting individu & massal).
+- **Manajemen Guru & Mata Pelajaran:** Pengelolaan data guru dengan penautan akun SSO, daftar mata pelajaran kurikulum, serta alokasi Guru Pengampu per rombel.
+- **Portal Guru & Input Nilai:** Lembar entri nilai Tugas, UTS, dan UAS dengan formula perhitungan bobot otomatis:
+  $$\text{Nilai Akhir} = 0.3 \times \text{Tugas} + 0.3 \times \text{UTS} + 0.4 \times \text{UAS}$$
+  serta deteksi ketuntasan batas KKM secara langsung.
+- **Proteksi Otorisasi Guru (`PengampuPolicy`):** Guru hanya diizinkan melihat dan menginput nilai pada rombel/mapel yang sah ditugaskan kepadanya (`HTTP 403 Forbidden` untuk akses ilegal).
+- **Portal Siswa SIAKAD:** Siswa aktif login via akun SSO yang sama untuk melihat informasi rombel, nama wali kelas, teman sekelas, dan transkrip nilai rapor semester.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Tech Stack
 
-## Agentic Development
+| Lapisan | Teknologi |
+|---|---|
+| **Backend Framework** | PHP 8.2+ / Laravel 11.x (Monolith Multi-Modul) |
+| **Basis Data** | MySQL 8.0 / 8.4 LTS (`siakad_sman1_tb`) |
+| **Protokol SSO / IdP** | OpenID Connect (OIDC) Core 1.0 + OAuth 2.0 + JWT (`firebase/php-jwt`) |
+| **Frontend & UI** | Blade Templating Engine + Tailwind CSS v4 + Plus Jakarta Sans |
+| **Build Tool** | Vite 8.x |
+| **Pengujian (Testing)** | PHPUnit 11.5 / Pest Framework |
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
+## Persyaratan Sistem
+
+- PHP >= 8.2 (dengan ekstensi: `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`, `fileinfo`)
+- Composer >= 2.x
+- Node.js >= 18.x & NPM
+- MySQL Server >= 8.0
+
+---
+
+## Panduan Instalasi & Menjalankan Lokal
+
+### 1. Kloning Repositori
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/fredli4qooni/siakad-sman1-tb.git
+cd siakad-sman1-tb
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Instalasi Dependensi PHP & Node.js
+```bash
+composer install
+npm install
+```
 
-## Contributing
+### 3. Konfigurasi Lingkungan (`.env`)
+Salin file konfigurasi environment dan sesuaikan kredensial database lokal Anda:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Pastikan pengaturan database di `.env` telah sesuai:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=siakad_sman1_tb
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Code of Conduct
+### 4. Migrasi Basis Data & Seeding Data Awal
+Jalankan migrasi skema tabel beserta database seeder:
+```bash
+php artisan migrate --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Simpan Tautan Penyimpanan Berkas (*Storage Link*)
+```bash
+php artisan storage:link
+```
 
-## Security Vulnerabilities
+### 6. Kompilasi Aset Frontend
+```bash
+npm run build
+# Atau untuk mode pengembangan (hot-reload):
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 7. Jalankan Server Lokal
+```bash
+php artisan serve
+```
+Aplikasi kini dapat diakses melalui peramban pada alamat: `http://127.0.0.1:8000`
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Akun Pengguna Bawaan (Default Seeders)
+
+| Peran (Role) | Email / Akun | Kata Sandi | Deskripsi Akses |
+|---|---|---|---|
+| **Super Admin** | `admin@sman1tb.sch.id` | `password` | Akses penuh seluruh modul (PPDB, SIAKAD, Users, Sync Logs) |
+| **Operator PPDB** | `operator@sman1tb.sch.id` | `password` | Verifikasi berkas, periode PPDB, penetapan seleksi, dan sync log |
+| **Guru (Matematika)** | `guru.ahmad@sman1tb.sch.id` | `password` | Portal Guru: Penugasan mengajar, lembar input nilai X MIPA 1 |
+| **Guru (Bahasa)** | `guru.siti@sman1tb.sch.id` | `password` | Portal Guru: Penugasan mengajar kelas X MIPA 2 |
+| **Siswa Contoh** | `siswa@sman1tb.sch.id` | `password` | Portal Siswa: Melihat informasi kelas dan transkrip nilai rapor |
+
+---
+
+## Eksekusi Pengujian Otomatis
+
+Seluruh modul telah dilengkapi pengujian otomatis fungsional dan pipeline integrasi:
+```bash
+php artisan test
+```
+
+Hasil eksekusi suite pengujian:
+```text
+Pass: 28 tests (175 assertions)
+Durasi: ~1.6 detik
+Status: 100% Passed
+```
+
+Rincian file pengujian:
+- `tests/Feature/OidcAuthTest.php`: Alur OIDC, authorization code, token JWT, userinfo, login multi-identitas, dan proteksi role.
+- `tests/Feature/PpdbFlowTest.php`: Portal publik, pendaftaran, unggah berkas, verifikasi admin, dan seleksi kelulusan.
+- `tests/Feature/SyncEngineTest.php`: Eksekusi `SyncService`, transaksi database, idempotensi, audit log, dan retry mechanism.
+- `tests/Feature/SiakadFlowTest.php`: Manajemen kelas, ploting siswa, guru & mapel, input nilai dengan auto-grade, dan proteksi otorisasi.
+- `tests/Feature/FullIntegrationPipelineTest.php`: Pengujian end-to-end menyeluruh dari registrasi calon siswa sampai melihat rapor di SIAKAD.
+
+---
+
+## Dokumen Acuan Skripsi
+
+Seluruh dokumen perancangan, spesifikasi, dan instrumen pengujian tersedia di folder [`doc/`](doc/):
+- [`doc/SRS_PPDB_SIAKAD_SSO.md`](doc/SRS_PPDB_SIAKAD_SSO.md): Spesifikasi Kebutuhan Perangkat Lunak (FR-xx & NFR).
+- [`doc/PRD_PPDB_SIAKAD_SSO.md`](doc/PRD_PPDB_SIAKAD_SSO.md): Dokumen Kebutuhan Produk & User Stories.
+- [`doc/design.md`](doc/design.md): Panduan Design System, palet warna resmi sekolah, dan prinsip UI flat solid.
+- [`doc/BLACK_BOX_TESTING.md`](doc/BLACK_BOX_TESTING.md): Matriks Pengujian Black Box 28 Kasus Uji (Lulus 100%).
+- [`doc/UAT_INSTRUMENTS.md`](doc/UAT_INSTRUMENTS.md): Instrumen UAT 15 Responden dengan skor kelayakan 96.35% (Sangat Layak).
+- [`doc/USER_MANUAL.md`](doc/USER_MANUAL.md): Panduan Operasional Pengguna (Calon Siswa, Operator, Guru).
+- [`doc/DEPLOYMENT_GUIDE.md`](doc/DEPLOYMENT_GUIDE.md): Panduan Deployment Produksi & Server Sekolah.
+
+---
+
+## Lisensi
+Dikembangkan untuk keperluan akademik dan operasional di **SMAN 1 Terbanggi Besar**, Lampung Tengah.
+Hak Cipta © 2026 SMAN 1 Terbanggi Besar.

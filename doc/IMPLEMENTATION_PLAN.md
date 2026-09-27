@@ -20,7 +20,7 @@
 | **M5** | Sync Service Engine (PPDB → SIAKAD Pipeline) | `[x]` | 100% |
 | **M6** | Modul SIAKAD (Kelas, Pengampu, Input Nilai) | `[x]` | 100% |
 | **M7** | Automated Testing & Black Box Validation | `[x]` | 100% |
-| **M8** | UI Polish, Panduan Operator & UAT Package | `[ ]` | 0% |
+| **M8** | UI Polish, Panduan Operator & UAT Package | `[x]` | 100% |
 
 ---
 
@@ -180,9 +180,9 @@
 ### Milestone 8: Polish Antarmuka, Dokumentasi & Deployment Prep
 *Tujuan: Memastikan standar desain solid terpenuhi dan sistem siap dioperasikan.*
 
-- [ ] **Task 8.1: UI Audit & Mobile Responsiveness**
+- [x] **Task 8.1: UI Audit & Mobile Responsiveness**
   - Verifikasi checklist anti-generik `design.md` (no gradient, warna solid kontras tinggi, label sentence case).
-  - Pengujian tampilan mobile pada halaman formulir pendaftaran PPDB.
-- [ ] **Task 8.2: Dokumentasi Teknis & Panduan Pengguna**
-  - Panduan instalasi dan deployment lokal/server sekolah.
-  - Panduan operasional untuk Operator Sekolah dan Guru.
+  - Pengujian tampilan mobile pada halaman formulir pendaftaran PPDB, navigasi responsif, dan layout drawer.
+- [x] **Task 8.2: Dokumentasi Teknis & Panduan Pengguna**
+  - Panduan instalasi dan deployment lokal/server sekolah di `doc/DEPLOYMENT_GUIDE.md` & `README.md`.
+  - Panduan operasional untuk Operator Sekolah, Siswa, dan Guru di `doc/USER_MANUAL.md`.

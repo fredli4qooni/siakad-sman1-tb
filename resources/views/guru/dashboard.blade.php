@@ -49,7 +49,7 @@
 
                         <div class="pt-2">
                             <x-button as="a" href="{{ route('guru.nilai.input', $p->id) }}" variant="primary" class="w-full text-xs">
-                                Input & Kelola Nilai &rarr;
+                                Input dan Kelola Nilai
                             </x-button>
                         </div>
                     </div>

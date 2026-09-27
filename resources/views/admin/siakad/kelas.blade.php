@@ -116,7 +116,7 @@
                                 </td>
                                 <td class="py-3 px-3 text-right">
                                     <a href="{{ route('admin.siakad.siswa.index', ['kelas_id' => $k->id]) }}" class="text-xs font-semibold text-[#0E6026] hover:underline">
-                                        Lihat Siswa &rarr;
+                                        Lihat Siswa
                                     </a>
                                 </td>
                             </tr>

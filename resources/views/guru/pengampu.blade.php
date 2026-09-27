@@ -37,7 +37,7 @@
                                 <td class="py-3 px-3 text-right tabular-nums font-semibold">{{ $p->kelas->siswa->count() }} Siswa</td>
                                 <td class="py-3 px-3 text-right">
                                     <x-button as="a" href="{{ route('guru.nilai.input', $p->id) }}" variant="primary" class="text-xs py-1">
-                                        Input Nilai &rarr;
+                                        Input Nilai
                                     </x-button>
                                 </td>
                             </tr>

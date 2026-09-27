@@ -105,7 +105,7 @@
                                 </td>
                                 <td class="py-3 px-3 text-right">
                                     <x-button as="a" href="{{ route('admin.ppdb.verifikasi.show', $p->id) }}" variant="secondary" class="text-xs py-1">
-                                        Periksa Berkas &rarr;
+                                        Periksa Berkas
                                     </x-button>
                                 </td>
                             </tr>

@@ -12,7 +12,7 @@
             </div>
             <div>
                 <x-button as="a" href="{{ route('siakad.siswa.nilai') }}" variant="secondary" class="text-xs">
-                    Lihat Nilai Rapor &rarr;
+                    Lihat Nilai Rapor
                 </x-button>
             </div>
         </div>

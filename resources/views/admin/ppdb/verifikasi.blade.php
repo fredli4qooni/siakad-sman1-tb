@@ -24,17 +24,17 @@
 
             <div class="flex items-center gap-3">
                 @if($pendaftar->status_pendaftaran === 'lulus')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">LULUS SELEKSI</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">Lulus Seleksi</span>
                 @elseif($pendaftar->status_pendaftaran === 'terverifikasi')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">TERVERIFIKASI</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">Terverifikasi</span>
                 @elseif($pendaftar->status_pendaftaran === 'menunggu_verifikasi')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">MENUNGGU VERIFIKASI</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">Menunggu Verifikasi</span>
                 @else
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-100 text-neutral-600">DRAFT</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-100 text-neutral-600">Draft</span>
                 @endif
 
                 <x-button as="a" href="{{ route('admin.ppdb.pendaftar') }}" variant="ghost" class="text-xs">
-                    &larr; Kembali
+                    Kembali
                 </x-button>
             </div>
         </div>

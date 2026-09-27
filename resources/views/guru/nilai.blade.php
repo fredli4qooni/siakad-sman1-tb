@@ -33,7 +33,7 @@
 
             <div>
                 <x-button as="a" href="{{ route('guru.dashboard') }}" variant="ghost" class="text-xs">
-                    &larr; Kembali ke Dasbor
+                    Kembali ke Dasbor
                 </x-button>
             </div>
         </div>

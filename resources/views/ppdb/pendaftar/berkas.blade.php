@@ -145,7 +145,7 @@
 
                 <div class="flex items-center gap-3">
                     <x-button as="a" href="{{ route('pendaftar.formulir') }}" variant="ghost">
-                        &larr; Data Formulir
+                        Data Formulir
                     </x-button>
 
                     @if(!in_array($pendaftar->status_pendaftaran, ['menunggu_verifikasi', 'terverifikasi', 'lulus', 'tidak_lulus']))
@@ -153,7 +153,7 @@
                             <form action="{{ route('pendaftar.berkas.kirim') }}" method="POST">
                                 @csrf
                                 <x-button type="submit" variant="primary">
-                                    Ajukan Verifikasi Berkas &rarr;
+                                    Ajukan Verifikasi Berkas
                                 </x-button>
                             </form>
                         @else

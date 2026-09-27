@@ -12,7 +12,7 @@
             </div>
             <div>
                 <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="ghost" class="text-xs">
-                    &larr; Info Kelas
+                    Info Kelas
                 </x-button>
             </div>
         </div>

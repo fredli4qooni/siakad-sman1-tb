@@ -70,6 +70,30 @@
         </div>
     </header>
 
+    <!-- Mobile Subnav Bar untuk Layar HP -->
+    <div class="md:hidden border-b border-[#E1E4DE] bg-[#F3F5F2] px-4 py-2 overflow-x-auto flex items-center gap-2 whitespace-nowrap text-xs">
+        <a href="{{ route('pendaftar.dashboard') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('pendaftar.dashboard') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Dashboard
+        </a>
+        <a href="{{ route('pendaftar.formulir') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('pendaftar.formulir*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Formulir
+        </a>
+        <a href="{{ route('pendaftar.berkas') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('pendaftar.berkas*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Berkas
+        </a>
+        <a href="{{ route('pendaftar.kelulusan') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('pendaftar.kelulusan*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Kelulusan
+        </a>
+        @if (auth()->check() && (auth()->user()->role === 'siswa' || auth()->user()->siswa))
+            <a href="{{ route('siakad.siswa.kelas') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('siakad.siswa.kelas*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#0E6026]' }}">
+                Kelas
+            </a>
+            <a href="{{ route('siakad.siswa.nilai') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('siakad.siswa.nilai*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#0E6026]' }}">
+                Nilai
+            </a>
+        @endif
+    </div>
+
     <!-- Konten Halaman Portal -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         @if (session('success'))

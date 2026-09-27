@@ -56,6 +56,19 @@
         </div>
     </header>
 
+    <!-- Mobile Subnav Bar untuk Layar HP -->
+    <div class="md:hidden border-b border-[#E1E4DE] bg-[#F3F5F2] px-4 py-2 overflow-x-auto flex items-center gap-2 whitespace-nowrap text-xs">
+        <a href="{{ route('guru.dashboard') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('guru.dashboard') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Dashboard
+        </a>
+        <a href="{{ route('guru.pengampu.index') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('guru.pengampu*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Kelas & Mapel
+        </a>
+        <a href="{{ route('guru.nilai.index') }}" class="px-2.5 py-1.5 rounded-lg font-medium {{ request()->routeIs('guru.nilai*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620]' }}">
+            Input Nilai
+        </a>
+    </div>
+
     <!-- Konten Halaman Guru -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         @if (session('success'))
