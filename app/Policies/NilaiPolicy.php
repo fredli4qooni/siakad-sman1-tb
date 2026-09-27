@@ -52,6 +52,11 @@ class NilaiPolicy
         return false;
     }
 
+    public function input(User $user, Pengampu $pengampu): bool
+    {
+        return $this->inputNilai($user, $pengampu);
+    }
+
     /**
      * Tentukan apakah pengguna dapat memperbarui record nilai.
      */

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Ppdb\AdminPpdbController;
+use App\Http\Controllers\Siakad\AdminSiakadController;
+use App\Http\Controllers\Siakad\GuruNilaiController;
+use App\Http\Controllers\Siakad\SiswaPortalController;
 use App\Http\Controllers\Siakad\SyncLogController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,11 +41,27 @@ Route::prefix('admin')
 
         // SIAKAD Admin
         Route::prefix('siakad')->name('siakad.')->group(function () {
-            Route::get('/siswa', fn() => view('admin.siakad.siswa'))->name('siswa.index');
-            Route::get('/kelas', fn() => view('admin.siakad.kelas'))->name('kelas.index');
-            Route::get('/guru', fn() => view('admin.siakad.guru'))->name('guru.index');
-            Route::get('/mapel', fn() => view('admin.siakad.mapel'))->name('mapel.index');
-            Route::get('/pengampu', fn() => view('admin.siakad.pengampu'))->name('pengampu.index');
+            // 1. Siswa
+            Route::get('/siswa', [AdminSiakadController::class, 'siswaIndex'])->name('siswa.index');
+            Route::post('/siswa/{siswa}/ploting', [AdminSiakadController::class, 'updatePlotingSiswa'])->name('siswa.ploting');
+
+            // 2. Kelas
+            Route::get('/kelas', [AdminSiakadController::class, 'kelasIndex'])->name('kelas.index');
+            Route::post('/kelas', [AdminSiakadController::class, 'simpanKelas'])->name('kelas.simpan');
+            Route::post('/kelas/{kelas}/ploting', [AdminSiakadController::class, 'plotingMassal'])->name('kelas.ploting');
+
+            // 3. Guru
+            Route::get('/guru', [AdminSiakadController::class, 'guruIndex'])->name('guru.index');
+            Route::post('/guru', [AdminSiakadController::class, 'simpanGuru'])->name('guru.simpan');
+
+            // 4. Mapel
+            Route::get('/mapel', [AdminSiakadController::class, 'mapelIndex'])->name('mapel.index');
+            Route::post('/mapel', [AdminSiakadController::class, 'simpanMapel'])->name('mapel.simpan');
+
+            // 5. Pengampu
+            Route::get('/pengampu', [AdminSiakadController::class, 'pengampuIndex'])->name('pengampu.index');
+            Route::post('/pengampu', [AdminSiakadController::class, 'simpanPengampu'])->name('pengampu.simpan');
+            Route::delete('/pengampu/{pengampu}', [AdminSiakadController::class, 'hapusPengampu'])->name('pengampu.hapus');
         });
 
         // Users
@@ -54,9 +73,11 @@ Route::prefix('guru')
     ->name('guru.')
     ->middleware(['auth', 'role:guru,admin'])
     ->group(function () {
-        Route::get('/dashboard', fn() => view('guru.dashboard'))->name('dashboard');
-        Route::get('/pengampu', fn() => view('guru.pengampu'))->name('pengampu.index');
-        Route::get('/nilai', fn() => view('guru.nilai'))->name('nilai.index');
+        Route::get('/dashboard', [GuruNilaiController::class, 'dashboard'])->name('dashboard');
+        Route::get('/pengampu', [GuruNilaiController::class, 'pengampuIndex'])->name('pengampu.index');
+        Route::get('/nilai', [GuruNilaiController::class, 'dashboard'])->name('nilai.index');
+        Route::get('/nilai/{pengampu}', [GuruNilaiController::class, 'inputNilai'])->name('nilai.input');
+        Route::post('/nilai/{pengampu}', [GuruNilaiController::class, 'simpanNilai'])->name('nilai.simpan');
     });
 
 // Rute Portal Siswa SIAKAD (Dilindungi Role: siswa, admin)
@@ -64,6 +85,6 @@ Route::prefix('siakad/siswa')
     ->name('siakad.siswa.')
     ->middleware(['auth', 'role:siswa,admin'])
     ->group(function () {
-        Route::get('/kelas', fn() => view('siakad.siswa.kelas'))->name('kelas');
-        Route::get('/nilai', fn() => view('siakad.siswa.nilai'))->name('nilai');
+        Route::get('/kelas', [SiswaPortalController::class, 'kelas'])->name('kelas');
+        Route::get('/nilai', [SiswaPortalController::class, 'nilai'])->name('nilai');
     });
