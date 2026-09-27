@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ppdb;
 
+use App\Events\PendaftarLulusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ppdb\PeriodePpdbRequest;
 use App\Http\Requests\Ppdb\TetapkanKelulusanRequest;
@@ -10,6 +11,7 @@ use App\Models\BerkasPendaftaran;
 use App\Models\HasilSeleksi;
 use App\Models\Pendaftar;
 use App\Models\PeriodePpdb;
+use App\Services\SyncService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -210,8 +212,11 @@ class AdminPpdbController extends Controller
     /**
      * Menyimpan penetapan kelulusan calon siswa.
      */
-    public function tetapkanKelulusan(TetapkanKelulusanRequest $request, Pendaftar $pendaftar): RedirectResponse
-    {
+    public function tetapkanKelulusan(
+        TetapkanKelulusanRequest $request,
+        Pendaftar $pendaftar,
+        SyncService $syncService
+    ): RedirectResponse {
         $validated = $request->validated();
         $status = $validated['status']; // LULUS / TIDAK_LULUS
 
@@ -231,6 +236,14 @@ class AdminPpdbController extends Controller
             ]);
         });
 
-        return back()->with('success', "Status kelulusan {$pendaftar->nama_lengkap} berhasil ditetapkan menjadi {$status}.");
+        // Trigger sinkronisasi otomatis PPDB -> SIAKAD saat dinyatakan LULUS
+        $syncMsg = '';
+        if ($status === 'LULUS') {
+            $syncResult = $syncService->syncPendaftar($pendaftar);
+            PendaftarLulusEvent::dispatch($pendaftar);
+            $syncMsg = $syncResult['success'] ? ' Data berhasil disinkronkan ke SIAKAD.' : ' Namun sinkronisasi SIAKAD tertunda: ' . $syncResult['message'];
+        }
+
+        return back()->with('success', "Status kelulusan {$pendaftar->nama_lengkap} berhasil ditetapkan menjadi {$status}.{$syncMsg}");
     }
 }

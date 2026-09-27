@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Ppdb\AdminPpdbController;
+use App\Http\Controllers\Siakad\SyncLogController;
 use Illuminate\Support\Facades\Route;
 
 // Rute Admin & Operator (Dilindungi Role: admin, operator)
@@ -31,7 +32,9 @@ Route::prefix('admin')
         });
 
         // Integrasi / Sync Logs
-        Route::get('/sync', fn() => view('admin.sync.index'))->name('sync.index');
+        Route::get('/sync', [SyncLogController::class, 'index'])->name('sync.index');
+        Route::post('/sync/batch', [SyncLogController::class, 'batchSync'])->name('sync.batch');
+        Route::post('/sync/{log}/retry', [SyncLogController::class, 'retry'])->name('sync.retry');
 
         // SIAKAD Admin
         Route::prefix('siakad')->name('siakad.')->group(function () {
