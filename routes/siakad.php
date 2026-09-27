@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ppdb\AdminPpdbController;
 use Illuminate\Support\Facades\Route;
 
 // Rute Admin & Operator (Dilindungi Role: admin, operator)
@@ -13,9 +14,20 @@ Route::prefix('admin')
 
         // PPDB Admin
         Route::prefix('ppdb')->name('ppdb.')->group(function () {
-            Route::get('/periode', fn() => view('admin.ppdb.periode'))->name('periode.index');
-            Route::get('/pendaftar', fn() => view('admin.ppdb.pendaftar'))->name('pendaftar.index');
-            Route::get('/seleksi', fn() => view('admin.ppdb.seleksi'))->name('seleksi.index');
+            Route::get('/periode', [AdminPpdbController::class, 'periodeIndex'])->name('periode.index');
+            Route::get('/periode-alias', [AdminPpdbController::class, 'periodeIndex'])->name('periode');
+            Route::post('/periode', [AdminPpdbController::class, 'simpanPeriode'])->name('periode.simpan');
+            Route::post('/periode/{periode}/toggle', [AdminPpdbController::class, 'togglePeriode'])->name('periode.toggle');
+
+            Route::get('/pendaftar', [AdminPpdbController::class, 'pendaftarIndex'])->name('pendaftar.index');
+            Route::get('/pendaftar-alias', [AdminPpdbController::class, 'pendaftarIndex'])->name('pendaftar');
+            Route::get('/pendaftar/{pendaftar}/verifikasi', [AdminPpdbController::class, 'showVerifikasi'])->name('verifikasi.show');
+            Route::post('/pendaftar/{pendaftar}/verifikasi/{berkas}', [AdminPpdbController::class, 'verifikasiBerkas'])->name('verifikasi.berkas');
+            Route::post('/pendaftar/{pendaftar}/finalisasi', [AdminPpdbController::class, 'finalisasiVerifikasi'])->name('verifikasi.finalisasi');
+
+            Route::get('/seleksi', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi.index');
+            Route::get('/seleksi-alias', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi');
+            Route::post('/seleksi/{pendaftar}', [AdminPpdbController::class, 'tetapkanKelulusan'])->name('kelulusan.simpan');
         });
 
         // Integrasi / Sync Logs

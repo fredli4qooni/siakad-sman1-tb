@@ -1,28 +1,90 @@
 <x-layouts.guest title="Beranda PPDB & SIAKAD">
-    <!-- Hero Section: Flat Minimalist, Warna Solid Resmi SMAN 1 Terbanggi Besar -->
+    <!-- Hero Section: Flat Minimalist, Solid Warna Resmi SMAN 1 Terbanggi Besar -->
     <div class="border-b border-[#E1E4DE] bg-[#FFFFFF] py-16 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-4">
-                    Tahun Ajaran 2026/2027
-                </span>
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C2620] tracking-tight leading-tight">
-                    Penerimaan Peserta Didik Baru Terintegrasi SIAKAD
-                </h1>
-                <p class="mt-4 text-base sm:text-lg text-[#545B52] leading-relaxed">
-                    Sistem pendaftaran online SMAN 1 Terbanggi Besar dengan teknologi Single Sign-On (SSO berbasis OIDC). Data calon siswa yang diterima otomatis tersinkronisasi ke sistem akademik tanpa input manual.
-                </p>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7">
+                    @if($periodeAktif)
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#039834] animate-pulse"></span>
+                            PPDB {{ $periodeAktif->tahun_ajaran }} &bull; {{ $periodeAktif->nama_gelombang }}
+                        </div>
+                    @else
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBEAEA] text-[#C81210] mb-4">
+                            Periode Pendaftaran Belum Dibuka
+                        </div>
+                    @endif
 
-                <div class="mt-8 flex flex-wrap items-center gap-3">
-                    <x-button as="a" href="{{ route('auth.register') }}" variant="primary">
-                        Daftar PPDB Sekarang
-                    </x-button>
-                    <x-button as="a" href="{{ route('ppdb.pengumuman') }}" variant="secondary">
-                        Cek Hasil Seleksi
-                    </x-button>
-                    <x-button as="a" href="{{ route('auth.login') }}" variant="ghost">
-                        Masuk Akun SSO
-                    </x-button>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C2620] tracking-tight leading-tight">
+                        Penerimaan Peserta Didik Baru Terintegrasi SIAKAD
+                    </h1>
+                    <p class="mt-4 text-base sm:text-lg text-[#545B52] leading-relaxed">
+                        Sistem pendaftaran online SMAN 1 Terbanggi Besar dengan teknologi Single Sign-On (SSO OIDC). Calon siswa yang dinyatakan lulus otomatis tersinkronisasi ke sistem akademik tanpa entri data berulang.
+                    </p>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+                        @if($periodeAktif && $periodeAktif->is_aktif)
+                            <x-button as="a" href="{{ route('auth.register') }}" variant="primary">
+                                Daftar PPDB Sekarang
+                            </x-button>
+                        @endif
+                        <x-button as="a" href="{{ route('ppdb.pengumuman') }}" variant="secondary">
+                            Cek Hasil Seleksi
+                        </x-button>
+                        <x-button as="a" href="{{ route('auth.login') }}" variant="ghost">
+                            Masuk Akun SSO
+                        </x-button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="p-6 rounded-2xl border border-[#E1E4DE] bg-[#F3F5F2] space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-[#E1E4DE]">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-[#545B52]">Informasi Gelombang</span>
+                            @if($periodeAktif)
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E7F4EA] text-[#0E6026]">Aktif</span>
+                            @else
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-200 text-neutral-700">Tutup</span>
+                            @endif
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-white border border-[#E1E4DE]">
+                                <div class="text-xs text-[#545B52]">Target Kuota</div>
+                                <div class="text-2xl font-bold text-[#1C2620] tabular-nums mt-1">
+                                    {{ $periodeAktif ? number_format($periodeAktif->kuota, 0, ',', '.') : '-' }}
+                                </div>
+                                <div class="text-[11px] text-[#545B52] mt-0.5">Siswa Tingkat X</div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-white border border-[#E1E4DE]">
+                                <div class="text-xs text-[#545B52]">Total Pendaftar</div>
+                                <div class="text-2xl font-bold text-[#0E6026] tabular-nums mt-1">
+                                    {{ number_format($totalPendaftar, 0, ',', '.') }}
+                                </div>
+                                <div class="text-[11px] text-[#545B52] mt-0.5">Berkas Masuk</div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 text-xs text-[#545B52] space-y-1.5">
+                            <div class="flex justify-between">
+                                <span>Periode Pendaftaran:</span>
+                                <span class="font-medium text-[#1C2620] tabular-nums">
+                                    {{ $periodeAktif ? $periodeAktif->tanggal_buka->format('d M Y') . ' - ' . $periodeAktif->tanggal_tutup->format('d M Y') : 'Menunggu Jadwal' }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Jalur Seleksi:</span>
+                                <span class="font-medium text-[#1C2620]">Zonasi, Prestasi & Afirmasi</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <a href="{{ route('ppdb.alur') }}" class="block text-center text-xs font-semibold text-[#0E6026] hover:underline">
+                                Lihat Persyaratan & Alur Lengkap &rarr;
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,7 +115,7 @@
         </div>
     </div>
 
-    <!-- Alur Pendaftaran -->
+    <!-- Alur Pendaftaran Ringkas -->
     <div class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-10 text-left">
@@ -68,7 +130,7 @@
                     </div>
                     <h3 class="text-base font-semibold text-[#1C2620] mb-1">Registrasi Akun</h3>
                     <p class="text-xs text-[#545B52] leading-relaxed">
-                        Calon siswa mendaftar akun SSO dengan NISN dan email aktif, lalu mengisi kelengkapan formulir pendaftaran.
+                        Calon siswa mendaftar akun SSO dengan NISN dan email aktif, lalu mengisi formulir pendaftaran.
                     </p>
                 </div>
 

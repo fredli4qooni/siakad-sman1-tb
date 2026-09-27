@@ -18,14 +18,14 @@
                             <span class="w-6 h-6 rounded-full bg-[#E7F4EA] text-[#0E6026] flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">1</span>
                             <div>
                                 <div class="font-semibold">Pendaftaran Akun Daring</div>
-                                <div class="text-xs text-[#545B52] mt-0.5">Calon siswa mendaftarkan akun menggunakan NISN dan email aktif di portal PPDB resmi.</div>
+                                <div class="text-xs text-[#545B52] mt-0.5">Calon siswa mendaftarkan akun menggunakan NISN dan email aktif di portal SSO resmi.</div>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-[#E7F4EA] text-[#0E6026] flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">2</span>
                             <div>
                                 <div class="font-semibold">Pengisian Formulir Lengkap</div>
-                                <div class="text-xs text-[#545B52] mt-0.5">Mengisi data pribadi, asal sekolah, alamat domisili, dan data orang tua/wali siswa.</div>
+                                <div class="text-xs text-[#545B52] mt-0.5">Mengisi biodata pribadi, data asal sekolah, alamat domisili, dan data orang tua/wali siswa.</div>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
@@ -58,8 +58,12 @@
                     <div class="space-y-4">
                         <div class="p-4 rounded-lg bg-[#F3F5F2] border border-[#E1E4DE]">
                             <div class="text-xs text-[#545B52]">Target Kuota Siswa Baru</div>
-                            <div class="text-2xl font-bold text-[#1C2620] tabular-nums mt-1">540 Siswa</div>
-                            <div class="text-xs text-[#545B52] mt-0.5">Dibagi dalam rombongan belajar Kelas X</div>
+                            <div class="text-2xl font-bold text-[#1C2620] tabular-nums mt-1">
+                                {{ $periodeAktif ? number_format($periodeAktif->kuota, 0, ',', '.') : 540 }} Siswa
+                            </div>
+                            <div class="text-xs text-[#545B52] mt-0.5">
+                                Tahun Ajaran {{ $periodeAktif ? $periodeAktif->tahun_ajaran : '2026/2027' }}
+                            </div>
                         </div>
 
                         <div class="text-xs text-[#545B52] space-y-2">
@@ -73,9 +77,15 @@
                         </div>
 
                         <div class="pt-2">
-                            <x-button as="a" href="{{ route('auth.register') }}" variant="primary" class="w-full">
-                                Daftar Sekarang
-                            </x-button>
+                            @if($periodeAktif && $periodeAktif->is_aktif)
+                                <x-button as="a" href="{{ route('auth.register') }}" variant="primary" class="w-full">
+                                    Daftar Sekarang
+                                </x-button>
+                            @else
+                                <x-button as="a" href="{{ route('auth.login') }}" variant="secondary" class="w-full">
+                                    Masuk SSO
+                                </x-button>
+                            @endif
                         </div>
                     </div>
                 </x-card>
