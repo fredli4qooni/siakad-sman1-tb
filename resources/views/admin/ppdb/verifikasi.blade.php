@@ -1,16 +1,5 @@
 <x-layouts.admin title="Verifikasi Berkas Siswa" heading="Pemeriksaan & Verifikasi Dokumen">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Perhatian">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- Header Ringkas Calon Siswa -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl bg-white border border-[#E1E4DE]">

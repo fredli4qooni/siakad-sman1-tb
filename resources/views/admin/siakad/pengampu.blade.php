@@ -1,16 +1,5 @@
 <x-layouts.admin title="Guru Pengampu" heading="Alokasi Guru Pengampu Kelas">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Perhatian">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- Form Tambah Penugasan Mengajar -->
         <x-card title="Alokasikan Guru ke Rombel & Mata Pelajaran" subtitle="Penetapan penugasan mengajar untuk pemberian hak input nilai di portal guru">

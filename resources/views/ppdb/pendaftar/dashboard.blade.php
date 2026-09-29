@@ -1,36 +1,39 @@
-<x-layouts.pendaftar title="Dashboard Pendaftar — SMAN 1 TB">
+<x-layouts.pendaftar title="Dashboard Pendaftar" heading="Dashboard Calon Siswa">
     <div class="space-y-6">
-        <!-- Header Banner -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#E1E4DE]">
+        <!-- Header Banner Welcome Card -->
+        <div class="bg-white rounded-xl border border-[#E1E4DE] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-2">
-                    Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}
-                </span>
-                <h1 class="text-2xl font-bold text-[#1C2620]">Selamat Datang, {{ $pendaftar->nama_lengkap }}</h1>
-                <p class="text-xs text-[#545B52] mt-1">
-                    No. Pendaftaran: <span class="font-mono font-bold text-[#1C2620]">{{ $pendaftar->no_pendaftaran }}</span> &bull; NISN: <span class="tabular-nums font-medium text-[#1C2620]">{{ $pendaftar->nisn }}</span>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
+                        Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}
+                    </span>
+                    <span class="text-xs text-[#545B52]">&bull; SMAN 1 Terbanggi Besar</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-[#1C2620]">Selamat Datang, {{ $pendaftar->nama_lengkap }}</h2>
+                <p class="text-xs text-[#545B52] mt-1.5">
+                    No. Pendaftaran: <span class="font-mono font-bold text-[#1C2620]">{{ $pendaftar->no_pendaftaran }}</span> &bull; NISN: <span class="tabular-nums font-medium text-[#1C2620]">{{ $pendaftar->nisn }}</span> &bull; Asal: <span class="font-medium text-[#1C2620]">{{ $pendaftar->asal_sekolah ?? '-' }}</span>
                 </p>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 @if($pendaftar->status_pendaftaran === 'lulus')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
                         LULUS SELEKSI
                     </span>
                 @elseif($pendaftar->status_pendaftaran === 'tidak_lulus')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
                         TIDAK LULUS
                     </span>
                 @elseif($pendaftar->status_pendaftaran === 'terverifikasi')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">
                         BERKAS TERVERIFIKASI
                     </span>
                 @elseif($pendaftar->status_pendaftaran === 'menunggu_verifikasi')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">
                         MENUNGGU VERIFIKASI
                     </span>
                 @else
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-neutral-100 text-neutral-600">
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#F3F5F2] text-[#545B52] border border-[#E1E4DE]">
                         DRAFT PENDAFTARAN
                     </span>
                 @endif
@@ -43,11 +46,6 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <x-alert type="success" title="Informasi">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         @if($hasilSeleksi && $hasilSeleksi->status === 'LULUS')
             <div class="p-6 rounded-2xl bg-[#E7F4EA] border border-[#039834] text-[#0E6026] space-y-3">
@@ -64,7 +62,7 @@
                     </div>
                 @endif
                 <div class="pt-2">
-                    <x-button as="a" href="{{ route('siakad.sso.redirect') }}" variant="primary">
+                    <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="primary">
                         Buka Portal Akademik (SIAKAD)
                     </x-button>
                 </div>

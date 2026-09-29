@@ -235,6 +235,19 @@ class PpdbFlowTest extends TestCase
         $printResponse->assertStatus(200)
             ->assertSee('TANDA BUKTI PENDAFTARAN PPDB')
             ->assertSee('PPDB-2026-0004');
+
+        $kelulusanResponse = $this->actingAs($user)->get('/pendaftar/kelulusan');
+        $kelulusanResponse->assertStatus(200);
+
+        // Test kelulusan saat LULUS
+        \App\Models\HasilSeleksi::create([
+            'pendaftar_id' => $pendaftar->id,
+            'status' => 'LULUS',
+            'catatan' => 'Selamat, Anda dinyatakan Lulus!',
+            'tanggal_pengumuman' => now(),
+        ]);
+        $lulusResponse = $this->actingAs($user)->get('/pendaftar/kelulusan');
+        $lulusResponse->assertStatus(200)->assertSee('Selamat');
     }
 
     public function test_admin_can_manage_periode_and_verify_documents_and_set_kelulusan(): void

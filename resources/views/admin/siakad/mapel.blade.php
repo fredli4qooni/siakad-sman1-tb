@@ -1,10 +1,5 @@
 <x-layouts.admin title="Mata Pelajaran" heading="Master Mata Pelajaran & KKM">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         <!-- Form Tambah Mapel Baru -->
         <x-card title="Tambah Mata Pelajaran Baru" subtitle="Definisikan mata pelajaran kurikulum dan standar Kriteria Ketuntasan Minimal (KKM)">

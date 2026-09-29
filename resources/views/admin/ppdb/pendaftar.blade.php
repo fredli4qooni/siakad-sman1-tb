@@ -1,10 +1,5 @@
 <x-layouts.admin title="Verifikasi Pendaftar" heading="Verifikasi Berkas Calon Siswa">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         <!-- 4 Statistik Kartu Ringkas -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">

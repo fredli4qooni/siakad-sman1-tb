@@ -1,10 +1,5 @@
 <x-layouts.admin title="Hasil Seleksi PPDB" heading="Penetapan Hasil Seleksi & Kelulusan">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         <div class="p-4 rounded-xl bg-[#E7F4EA] border border-[#039834]/30 text-xs text-[#0E6026] flex items-center justify-between gap-4">
             <div>

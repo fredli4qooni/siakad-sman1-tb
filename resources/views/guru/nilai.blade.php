@@ -1,16 +1,5 @@
-<x-layouts.guru title="Input Nilai Siswa — SIAKAD SMAN 1 TB">
+<x-layouts.guru title="Input Nilai Siswa" heading="Input Nilai Rapor Siswa">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil Disimpan">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Perhatian">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- Header Rincian Mapel & Kelas -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl bg-white border border-[#E1E4DE]">

@@ -1,7 +1,7 @@
 <x-layouts.guest title="Beranda PPDB & SIAKAD">
     <!-- Hero Section: Flat Minimalist, Solid Warna Resmi SMAN 1 Terbanggi Besar -->
     <div class="border-b border-[#E1E4DE] bg-[#FFFFFF] py-16 sm:py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-6 sm:px-10 lg:px-16">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7">
                     @if($periodeAktif)
@@ -92,7 +92,7 @@
 
     <!-- Informasi 3 Pilar Utama -->
     <div class="py-12 bg-[#F3F5F2] border-b border-[#E1E4DE]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-6 sm:px-10 lg:px-16">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <x-card title="1. Satu Akun (SSO OIDC)" subtitle="OpenID Connect Identity Provider">
                     <p class="text-sm text-[#545B52] leading-relaxed">
@@ -117,7 +117,7 @@
 
     <!-- Alur Pendaftaran Ringkas -->
     <div class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-6 sm:px-10 lg:px-16">
             <div class="mb-10 text-left">
                 <h2 class="text-2xl font-bold text-[#1C2620]">Alur Pendaftaran PPDB</h2>
                 <p class="mt-1 text-sm text-[#545B52]">4 tahapan mudah penerimaan peserta didik baru hingga terdaftar di SIAKAD.</p>

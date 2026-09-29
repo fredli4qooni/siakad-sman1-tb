@@ -1,5 +1,5 @@
 <x-layouts.guest title="Alur Pendaftaran & Kuota — PPDB SMAN 1 TB">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="w-full px-6 sm:px-10 lg:px-16 py-12">
         <div class="mb-8">
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E7F4EA] text-[#0E6026] mb-2">
                 Informasi Resmi

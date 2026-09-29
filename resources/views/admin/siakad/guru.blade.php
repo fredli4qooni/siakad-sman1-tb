@@ -1,10 +1,5 @@
 <x-layouts.admin title="Manajemen Guru" heading="Data Guru & Tenaga Pendidik">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         <!-- Form Tambah Guru Baru -->
         <x-card title="Tambah Data Guru & Akun SSO" subtitle="Guru otomatis didaftarkan akun Single Sign-On (SSO) untuk login ke portal nilai">

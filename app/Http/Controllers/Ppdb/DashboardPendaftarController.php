@@ -76,13 +76,15 @@ class DashboardPendaftarController extends Controller
     {
         $user = Auth::user();
         $pendaftar = $user->pendaftar()
-            ->with(['periode', 'orangTua', 'berkas'])
+            ->with(['periode', 'orangTua', 'berkas', 'hasilSeleksi'])
             ->first();
 
         if (!$pendaftar) {
             return redirect()->route('pendaftar.formulir');
         }
 
-        return view('ppdb.pendaftar.cetak_bukti', compact('pendaftar'));
+        $siswa = $user->siswa()->with('kelas')->first();
+
+        return view('ppdb.pendaftar.cetak_bukti', compact('pendaftar', 'siswa'));
     }
 }

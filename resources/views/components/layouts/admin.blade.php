@@ -13,17 +13,15 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full flex text-[#1C2620] bg-[#FFFFFF]">
+<body class="h-full overflow-hidden flex text-[#1C2620] bg-[#FFFFFF]">
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
 
     <!-- Sidebar Kiri (Desktop Tetap, Mobile Slide-over) -->
-    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#F3F5F2] border-r border-[#E1E4DE] flex flex-col flex-shrink-0 transition-transform duration-200 -translate-x-full lg:translate-x-0 lg:static lg:min-h-screen">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#F3F5F2] border-r border-[#E1E4DE] flex flex-col flex-shrink-0 transition-transform duration-200 -translate-x-full lg:translate-x-0 lg:static h-full">
         <!-- Brand / Header Sidebar -->
-        <div class="h-16 flex items-center gap-3 px-5 border-b border-[#E1E4DE]">
-            <div class="w-8 h-8 rounded-lg bg-[#0E6026] text-white flex items-center justify-center font-bold text-sm">
-                TB
-            </div>
+        <div class="h-16 flex-shrink-0 flex items-center gap-3 px-5 border-b border-[#E1E4DE]">
+            <img src="{{ asset('images/logo-sma.png') }}" alt="Logo SMAN 1 TB" class="w-8 h-8 object-contain">
             <div>
                 <div class="text-sm font-bold text-[#1C2620] leading-tight">Admin & Operator</div>
                 <div class="text-[11px] text-[#545B52]">SMAN 1 Terbanggi Besar</div>
@@ -139,7 +137,7 @@
         </nav>
 
         <!-- User Info & Logout di Bawah Sidebar -->
-        <div class="p-4 border-t border-[#E1E4DE]">
+        <div class="p-4 border-t border-[#E1E4DE] flex-shrink-0 bg-[#F3F5F2]">
             <div class="flex items-center justify-between">
                 <div class="truncate">
                     <div class="text-xs font-semibold text-[#1C2620] truncate">{{ auth()->user()->nama ?? 'Operator Sekolah' }}</div>
@@ -156,38 +154,43 @@
     </aside>
 
     <!-- Area Konten Utama -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <!-- Header Atas -->
-        <header class="h-16 border-b border-[#E1E4DE] bg-white flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-white">
+        <!-- Header Atas (Fixed 64px, NEVER scrolls away, perfectly vertically centered) -->
+        <header class="h-16 flex-shrink-0 border-b border-[#E1E4DE] bg-white flex items-center justify-between px-6 lg:px-8">
             <div class="flex items-center gap-3">
                 <button type="button" id="sidebar-toggle" class="lg:hidden p-1.5 rounded-lg text-[#545B52] hover:bg-[#E1E4DE]/50" aria-label="Buka Menu">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
-                <h1 class="text-lg font-bold text-[#1C2620]">{{ $heading ?? 'Dashboard' }}</h1>
+                <h1 class="text-base sm:text-lg font-bold text-[#1C2620]">
+                    {{ $heading ?? 'Dashboard Utama' }}
+                </h1>
             </div>
             <div class="flex items-center gap-3">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E7F4EA] text-[#0E6026]">
-                    SSO Aktif
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#039834]"></span>
+                    SSO Admin Aktif
                 </span>
             </div>
         </header>
 
-        <!-- Flash Message Alerts -->
-        @if (session('success'))
-            <div class="mx-6 mt-4">
-                <x-alert type="success">{{ session('success') }}</x-alert>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="mx-6 mt-4">
-                <x-alert type="danger">{{ session('error') }}</x-alert>
-            </div>
-        @endif
+        <!-- Area Scroll Utama -->
+        <main class="flex-1 overflow-y-auto p-6 lg:p-8">
+            <div class="w-full space-y-6">
+                <!-- Flash Message Alerts -->
+                @if (session('success'))
+                    <x-alert type="success" title="Berhasil">{{ session('success') }}</x-alert>
+                @endif
+                @if (session('warning'))
+                    <x-alert type="warning" title="Peringatan">{{ session('warning') }}</x-alert>
+                @endif
+                @if (session('error'))
+                    <x-alert type="danger" title="Terjadi Kesalahan">{{ session('error') }}</x-alert>
+                @endif
 
-        <main class="flex-1 p-4 sm:p-6">
-            {{ $slot }}
+                {{ $slot }}
+            </div>
         </main>
     </div>
 

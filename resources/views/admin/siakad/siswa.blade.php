@@ -1,10 +1,5 @@
 <x-layouts.admin title="Data Siswa SIAKAD" heading="Daftar Siswa Aktif SIAKAD">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
         <!-- 2 Statistik Ringkas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

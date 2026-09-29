@@ -1,16 +1,5 @@
 <x-layouts.admin title="Periode & Kuota PPDB" heading="Manajemen Periode & Kuota PPDB">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Gagal">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- Formulir Tambah/Edit Periode -->
         <x-card title="Buka / Atur Periode PPDB" subtitle="Konfigurasi jadwal pembukaan gelombang dan target kuota penerimaan rombel">

@@ -1,22 +1,5 @@
 <x-layouts.admin title="Sync Logs" heading="Audit Log Sinkronisasi PPDB → SIAKAD">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('warning'))
-            <x-alert type="warning" title="Peringatan">
-                {{ session('warning') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Gagal">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- 3 Statistik Ringkas -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

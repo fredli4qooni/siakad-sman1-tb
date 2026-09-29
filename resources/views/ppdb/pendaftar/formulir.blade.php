@@ -1,5 +1,5 @@
-<x-layouts.pendaftar title="Formulir Pendaftaran — SMAN 1 TB">
-    <div class="max-w-4xl mx-auto space-y-6">
+<x-layouts.pendaftar title="Formulir Pendaftaran" heading="Formulir Pendaftaran Siswa">
+    <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-2xl font-bold text-[#1C2620]">Formulir Pendaftaran Siswa Baru</h1>

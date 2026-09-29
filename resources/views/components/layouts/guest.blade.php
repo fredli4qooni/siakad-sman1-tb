@@ -16,12 +16,10 @@
 <body class="min-h-full flex flex-col bg-white text-[#1C2620]">
     <!-- Header Navigasi Publik -->
     <header class="border-b border-[#E1E4DE] bg-white sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-[#0E6026] text-white flex items-center justify-center font-bold text-base">
-                        TB
-                    </div>
+                    <img src="{{ asset('images/logo-sma.png') }}" alt="Logo SMAN 1 TB" class="w-10 h-10 object-contain">
                     <div>
                         <div class="text-sm font-bold text-[#1C2620] leading-tight">SMAN 1 Terbanggi Besar</div>
                         <div class="text-xs text-[#545B52]">Portal PPDB & SIAKAD Terintegrasi</div>
@@ -73,7 +71,7 @@
 
     <!-- Footer -->
     <footer class="border-t border-[#E1E4DE] bg-[#F3F5F2] py-8 text-center text-xs text-[#545B52]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="w-full px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
                 © {{ date('Y') }} SMAN 1 Terbanggi Besar — Sistem Informasi PPDB Terintegrasi SIAKAD
             </div>

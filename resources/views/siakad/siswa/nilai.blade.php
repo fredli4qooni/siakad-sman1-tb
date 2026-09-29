@@ -1,5 +1,5 @@
-<x-layouts.pendaftar title="Nilai Akademik — SIAKAD SMAN 1 TB">
-    <div class="max-w-5xl mx-auto space-y-6">
+<x-layouts.pendaftar title="Nilai Akademik" heading="Rapor & Nilai Akademik">
+    <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E1E4DE]">
             <div>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-2">

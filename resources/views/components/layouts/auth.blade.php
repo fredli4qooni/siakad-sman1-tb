@@ -18,9 +18,7 @@
         <!-- Logo / Brand Sekolah -->
         <div class="flex justify-center">
             <a href="{{ url('/') }}" class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-[#0E6026] text-white flex items-center justify-center font-bold text-lg">
-                    TB
-                </div>
+                <img src="{{ asset('images/logo-sma.png') }}" alt="Logo SMAN 1 TB" class="w-16 h-16 object-contain">
             </a>
         </div>
         <h2 class="mt-4 text-center text-2xl font-bold tracking-tight text-[#1C2620]">

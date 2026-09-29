@@ -1,26 +1,26 @@
-<x-layouts.guru title="Dashboard Guru — SIAKAD SMAN 1 TB">
+<x-layouts.guru title="Dashboard Guru" heading="Dashboard Guru">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
 
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#E1E4DE]">
+        <!-- Welcome Card Guru -->
+        <div class="bg-white rounded-xl border border-[#E1E4DE] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-2">
-                    Portal Akademik Guru
-                </span>
-                <h1 class="text-2xl font-bold text-[#1C2620]">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
+                        Portal Akademik SIAKAD
+                    </span>
+                    <span class="text-xs text-[#545B52]">&bull; SMAN 1 Terbanggi Besar</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-[#1C2620]">
                     Selamat Datang, {{ $guru ? $guru->nama_lengkap . ($guru->gelar ? ', ' . $guru->gelar : '') : auth()->user()->nama }}
-                </h1>
-                <p class="text-xs text-[#545B52] mt-1">
-                    NIP: <span class="font-mono font-medium text-[#1C2620]">{{ $guru->nip ?? '-' }}</span> &bull; Status: <span class="text-[#0E6026] font-semibold">Guru Aktif</span>
+                </h2>
+                <p class="text-xs text-[#545B52] mt-1.5">
+                    NIP: <span class="font-mono font-medium text-[#1C2620]">{{ $guru->nip ?? '-' }}</span> &bull; Status: <span class="text-[#0E6026] font-semibold">Guru Pengampu Aktif</span>
                 </p>
             </div>
             <div>
-                <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
-                    SSO Terautentikasi
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
+                    <span class="w-2 h-2 rounded-full bg-[#039834]"></span>
+                    SSO Guru Terautentikasi
                 </span>
             </div>
         </div>

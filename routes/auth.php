@@ -33,6 +33,15 @@ Route::prefix('siakad/sso')->name('sso.siakad.')->group(function () {
     Route::get('/callback', [SsoClientController::class, 'callbackSiakad'])->name('callback');
 });
 
+Route::get('/siakad/redirect', function () {
+    if (auth()->check() && (auth()->user()->isSiswa() || auth()->user()->siswa)) {
+        return redirect()->route('siakad.siswa.kelas');
+    }
+    return redirect()->route('sso.siakad.login');
+})->name('siakad.sso.redirect');
+
+Route::get('/login', fn () => redirect()->route('auth.login'))->name('login');
+
 /*
 |--------------------------------------------------------------------------
 | Portal Autentikasi Terpusat (Modul Auth IdP)

@@ -1,4 +1,4 @@
-<x-layouts.guru title="Kelas Diampu — SIAKAD SMAN 1 TB">
+<x-layouts.guru title="Kelas Diampu" heading="Kelas & Mata Pelajaran Diampu">
     <div class="space-y-6">
         <div>
             <h1 class="text-2xl font-bold text-[#1C2620]">Daftar Kelas & Mata Pelajaran Diampu</h1>

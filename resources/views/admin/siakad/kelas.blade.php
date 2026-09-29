@@ -1,16 +1,5 @@
 <x-layouts.admin title="Manajemen Kelas" heading="Manajemen Kelas & Rombongan Belajar">
     <div class="space-y-6">
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Perhatian">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         <!-- Formulir Tambah Kelas Baru -->
         <x-card title="Tambah Rombongan Belajar (Kelas)" subtitle="Konfigurasi kelas akademik, kapasitas siswa, dan penugasan wali kelas">

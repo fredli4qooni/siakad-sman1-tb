@@ -1,5 +1,5 @@
-<x-layouts.pendaftar title="Unggah Berkas Persyaratan — SMAN 1 TB">
-    <div class="max-w-4xl mx-auto space-y-6">
+<x-layouts.pendaftar title="Unggah Berkas" heading="Unggah Dokumen Persyaratan">
+    <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-2xl font-bold text-[#1C2620]">Unggah Berkas Persyaratan PPDB</h1>
@@ -15,17 +15,6 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <x-alert type="success" title="Berhasil">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
-        @if(session('error'))
-            <x-alert type="danger" title="Perhatian">
-                {{ session('error') }}
-            </x-alert>
-        @endif
 
         @if(in_array($pendaftar->status_pendaftaran, ['terverifikasi', 'lulus', 'tidak_lulus']))
             <x-alert type="warning" title="Pendaftaran Telah Diproses">
