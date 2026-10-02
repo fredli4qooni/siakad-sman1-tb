@@ -21,6 +21,7 @@
 | **M6** | Modul SIAKAD (Kelas, Pengampu, Input Nilai) | `[x]` | 100% |
 | **M7** | Automated Testing & Black Box Validation | `[x]` | 100% |
 | **M8** | UI Polish, Panduan Operator & UAT Package | `[x]` | 100% |
+| **M9** | Revisi Flow: Daftar Ulang, Validasi Berkas Fisik & Dashboard Siswa SIAKAD | `[x]` | 100% |
 
 ---
 
@@ -186,3 +187,28 @@
 - [x] **Task 8.2: Dokumentasi Teknis & Panduan Pengguna**
   - Panduan instalasi dan deployment lokal/server sekolah di `doc/DEPLOYMENT_GUIDE.md` & `README.md`.
   - Panduan operasional untuk Operator Sekolah, Siswa, dan Guru di `doc/USER_MANUAL.md`.
+
+---
+
+### Milestone 9: Revisi Alur Sistem (Daftar Ulang, Validasi Berkas Fisik & Dashboard Siswa SIAKAD)
+*Tujuan: Mengadaptasi flow bisnis nyata SMAN 1 Terbanggi Besar di mana seleksi awal dilakukan sistem PPDB pemerintah, sekolah menyelenggarakan daftar ulang, penjadwalan verifikasi berkas fisik, pengumuman penerimaan dengan kredensial SIAKAD, dan dashboard SIAKAD khusus data siswa.*
+
+- [x] **Task 9.1: Penyesuaian Skema & Model Verifikasi Fisik**
+  - Migrasi penambahan kolom: `no_peserta_ppdb_provinsi`, `tgl_verifikasi_fisik`, `sesi_verifikasi_fisik`, `lokasi_verifikasi_fisik`, `catatan_verifikasi_fisik`, `status_verifikasi_fisik`.
+  - Update model `Pendaftar` & `HasilSeleksi` dengan helper methods (`isDijadwalkanFisik()`, `isDiterima()`).
+  - Adaptasi `SyncService` untuk mendukung status `DITERIMA` dan sinkronisasi otomatis SIAKAD.
+- [x] **Task 9.2: Fitur Admin Validasi & Pengaturan Jadwal Berkas Fisik**
+  - Endpoint `POST /admin/ppdb/pendaftar/{pendaftar}/jadwal-fisik` dan request `AturJadwalFisikRequest`.
+  - Form penjadwalan fisik pada halaman verifikasi berkas admin (`admin.ppdb.verifikasi`).
+  - Penetapan kelulusan/penerimaan resmi (`DITERIMA`) pada halaman seleksi admin.
+- [x] **Task 9.3: Pengumuman Diterima & Kredensial SIAKAD di Portal Siswa**
+  - Dasbor pendaftar menampilkan kartu selamat datang dan kredensial login SIAKAD (NIS resmi, username, status aktif).
+  - Tampilan jadwal validasi berkas fisik (hari/tanggal, sesi, ruangan, daftar berkas wajib dibawa).
+  - Cetak bukti registrasi resmi yang mencantumkan jadwal verifikasi berkas fisik dan status penerimaan.
+- [x] **Task 9.4: Dashboard SIAKAD Khusus Data Siswa Sendiri**
+  - Route `/siakad/siswa/dashboard` dengan action `SiswaPortalController::dashboard`.
+  - Tampilan bersih berfokus pada data induk kependidikan siswa (NIS, NISN, NIK, tempat/tgl lahir, alamat, kontak, rombel kelas, wali kelas, kontak orang tua).
+- [x] **Task 9.5: Automated Testing & Verifikasi Komprehensif**
+  - Feature test untuk penjadwalan fisik admin dan tampilan di sisi siswa.
+  - Feature test untuk penetapan `DITERIMA`, eksekusi sinkronisasi SIAKAD, dan akses dashboard data siswa.
+  - Seluruh 30 test PHPUnit lulus 100% (192 assertions).

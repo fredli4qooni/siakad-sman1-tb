@@ -155,28 +155,30 @@ sequenceDiagram
 | FR-AUTH-05 | Sistem membatasi akses fitur berdasarkan peran (role-based access control) | Sistem | Tinggi |
 | FR-AUTH-06 | Pengguna dapat logout dan sesi di semua modul ikut berakhir (single logout) | Semua | Sedang |
 
-### 4.2 Modul PPDB
+### 4.2 Modul Daftar Ulang PPDB
 
 | ID | Deskripsi | Aktor | Prioritas |
 |---|---|---|---|
-| FR-PPDB-01 | Calon siswa dapat mendaftar akun dan mengisi formulir pendaftaran (biodata, data orang tua) | Calon Siswa | Tinggi |
-| FR-PPDB-02 | Calon siswa dapat mengunggah berkas persyaratan (KK, akta lahir, rapor, dll.) | Calon Siswa | Tinggi |
-| FR-PPDB-03 | Admin dapat membuka/menutup periode pendaftaran beserta kuota per tahun ajaran | Admin | Tinggi |
-| FR-PPDB-04 | Admin dapat memverifikasi kelengkapan berkas pendaftar | Admin | Tinggi |
-| FR-PPDB-05 | Admin dapat menetapkan status kelulusan per pendaftar 🔶 **[ASUMSI: manual, bukan skoring otomatis]** | Admin | Tinggi |
-| FR-PPDB-06 | Calon siswa dapat melihat status pendaftaran dan pengumuman kelulusan | Calon Siswa | Tinggi |
-| FR-PPDB-07 | Sistem menyimpan riwayat pendaftaran per tahun ajaran (data historis) | Sistem | Sedang |
+| FR-PPDB-01 | Calon siswa yang telah lulus seleksi pemerintah dapat mendaftar akun dan mengisi formulir daftar ulang (nomor kelulusan pemerintah, biodata, data orang tua) | Calon Siswa | Tinggi |
+| FR-PPDB-02 | Calon siswa dapat mengunggah berkas persyaratan digital (bukti lulus pemerintah, KK, akta lahir, SKL/ijazah SMP) | Calon Siswa | Tinggi |
+| FR-PPDB-03 | Admin dapat membuka/menutup periode pendaftaran ulang beserta kuota daya tampung | Admin | Tinggi |
+| FR-PPDB-04 | Admin dapat memverifikasi keabsahan berkas digital pendaftar | Admin | Tinggi |
+| FR-PPDB-05 | Admin dapat mengatur jadwal validasi berkas fisik di sekolah (tanggal, sesi waktu, ruangan, dan instruksi berkas) | Admin | Tinggi |
+| FR-PPDB-06 | Admin dapat menetapkan keputusan penerimaan resmi siswa baru (DITERIMA / LULUS) setelah verifikasi berkas fisik | Admin | Tinggi |
+| FR-PPDB-07 | Calon siswa dapat melihat status daftar ulang, jadwal validasi berkas fisik, pengumuman penerimaan, dan kredensial akun SIAKAD | Calon Siswa | Tinggi |
+| FR-PPDB-08 | Calon siswa dapat mencetak surat bukti registrasi resmi yang mencantumkan jadwal validasi fisik dan dokumen yang wajib dibawa | Calon Siswa | Tinggi |
 
 ### 4.3 Modul SIAKAD
 
 | ID | Deskripsi | Aktor | Prioritas |
 |---|---|---|---|
-| FR-SIAKAD-01 | Sistem otomatis membuat data siswa di SIAKAD saat status PPDB = LULUS, tanpa input ulang manual | Sistem | Tinggi |
-| FR-SIAKAD-02 | Admin dapat membagi siswa ke dalam kelas | Admin | Tinggi |
+| FR-SIAKAD-01 | Sistem otomatis membuat data siswa di SIAKAD saat pendaftar berstatus DITERIMA/LULUS, menerbitkan NIS unik resmi, tanpa input ulang manual | Sistem | Tinggi |
+| FR-SIAKAD-02 | Admin dapat membagi siswa ke dalam kelas (rombongan belajar) | Admin | Tinggi |
 | FR-SIAKAD-03 | Admin dapat mengelola data guru dan penugasan guru terhadap kelas/mata pelajaran | Admin | Tinggi |
 | FR-SIAKAD-04 | Guru dapat menginput nilai siswa hanya untuk kelas/mapel yang diampu | Guru | Tinggi |
-| FR-SIAKAD-05 | Siswa dapat melihat kelasnya dan nilai miliknya sendiri | Siswa | Tinggi |
-| FR-SIAKAD-06 | Sistem mencatat log setiap proses sinkronisasi data dari PPDB (untuk audit & pengujian) | Sistem | Sedang |
+| FR-SIAKAD-05 | Siswa dapat mengakses Dashboard SIAKAD khusus data induk akademiknya sendiri (profil resmi, NIS, NISN, rombel kelas, wali kelas, data orang tua) | Siswa | Tinggi |
+| FR-SIAKAD-06 | Siswa dapat melihat kelasnya dan nilai rapor miliknya sendiri | Siswa | Tinggi |
+| FR-SIAKAD-07 | Sistem mencatat log audit setiap proses sinkronisasi data dari PPDB ke SIAKAD | Sistem | Sedang |
 
 ---
 

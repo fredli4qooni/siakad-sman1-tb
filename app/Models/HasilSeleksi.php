@@ -39,6 +39,11 @@ class HasilSeleksi extends Model
 
     public function isLulus(): bool
     {
-        return strtoupper($this->status) === 'LULUS';
+        return in_array(strtoupper($this->status), ['LULUS', 'DITERIMA']);
+    }
+
+    public function isDiterima(): bool
+    {
+        return in_array(strtoupper($this->status), ['LULUS', 'DITERIMA']);
     }
 }

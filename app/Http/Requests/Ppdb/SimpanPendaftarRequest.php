@@ -24,6 +24,7 @@ class SimpanPendaftarRequest extends FormRequest
 
         return [
             // Data Calon Siswa
+            'no_peserta_ppdb_provinsi' => ['nullable', 'string', 'max:50'],
             'nisn' => [
                 'required',
                 'string',

@@ -688,36 +688,61 @@
                 </tbody>
             </table>
 
-            <!-- IV. Status Ketetapan Hasil Seleksi & Integrasi SIAKAD -->
-            <h3 class="section-header">IV. Ketetapan Hasil Seleksi & Integrasi Sistem Akademik (SIAKAD)</h3>
-            @if($pendaftar->hasilSeleksi && $pendaftar->hasilSeleksi->isLulus())
+            <!-- IV. Status Ketetapan Hasil & Jadwal Validasi Fisik -->
+            <h3 class="section-header">IV. Ketetapan Pendaftaran Ulang & Jadwal Validasi Berkas Fisik</h3>
+            @if($pendaftar->isDiterima())
                 <table class="info-table">
                     <tr>
                         <td class="col-label">Status Ketetapan</td>
                         <td class="col-sep">:</td>
-                        <td class="col-val" style="color: #0E6026; font-weight: 700;">DITERIMA / LULUS SELEKSI PPDB</td>
+                        <td class="col-val" style="color: #0E6026; font-weight: 700;">DITERIMA — RESMI MENJADI SISWA SMAN 1 TERBANGGI BESAR</td>
                     </tr>
                     <tr>
                         <td class="col-label">Keterangan Penetapan</td>
                         <td class="col-sep">:</td>
                         <td class="col-val" style="font-weight: 400; color: #1C2620;">
-                            Berdasarkan hasil sidang pleno panitia PPDB dan verifikasi dokumen, peserta didik dinyatakan <strong>DITERIMA</strong> di SMA Negeri 1 Terbanggi Besar Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}.
+                            Berdasarkan hasil validasi berkas fisik pendaftaran ulang, calon peserta didik dinyatakan <strong>RESMI DITERIMA</strong> di SMA Negeri 1 Terbanggi Besar Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}.
                         </td>
                     </tr>
                     <tr>
                         <td class="col-label">Nomor Induk Siswa (NIS)</td>
                         <td class="col-sep">:</td>
-                        <td class="col-val tabular-nums">{{ $siswa->nis ?? 'Ditetapkan Saat Registrasi Kelas' }}</td>
+                        <td class="col-val tabular-nums" style="font-weight: 700; color: #0E6026;">{{ $siswa->nis ?? ($pendaftar->user->siswa?->nis ?? 'Ditetapkan Saat Registrasi Kelas') }}</td>
                     </tr>
                     <tr>
-                        <td class="col-label">Rombongan Belajar (Kelas)</td>
-                        <td class="col-sep">:</td>
-                        <td class="col-val">{{ $siswa->kelas->nama_kelas ?? 'Tahap Penjurusan Rombel' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-label">Status Integrasi SIAKAD</td>
+                        <td class="col-label">Status Akun SIAKAD</td>
                         <td class="col-sep">:</td>
                         <td class="col-val">Aktif (Tersinkronisasi Otomatis via Akun Single Sign-On / SSO)</td>
+                    </tr>
+                </table>
+            @elseif($pendaftar->isDijadwalkanFisik())
+                <table class="info-table">
+                    <tr>
+                        <td class="col-label">Status Pendaftaran</td>
+                        <td class="col-sep">:</td>
+                        <td class="col-val" style="font-weight: 700; color: #6B6200;">DIJADWALKAN UNTUK VALIDASI BERKAS FISIK</td>
+                    </tr>
+                    <tr>
+                        <td class="col-label">Hari & Tanggal Hadir</td>
+                        <td class="col-sep">:</td>
+                        <td class="col-val" style="font-weight: 600;">{{ $pendaftar->tgl_verifikasi_fisik->translatedFormat('l, d F Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-label">Sesi / Jam Validasi</td>
+                        <td class="col-sep">:</td>
+                        <td class="col-val">{{ $pendaftar->sesi_verifikasi_fisik ?? 'Sesi 1 (08.00 - 11.00 WIB)' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-label">Tempat / Ruangan</td>
+                        <td class="col-sep">:</td>
+                        <td class="col-val">{{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB SMAN 1 Terbanggi Besar' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-label">Berkas Wajib Dibawa</td>
+                        <td class="col-sep">:</td>
+                        <td class="col-val" style="font-size: 10px; color: #1C2620; line-height: 1.4;">
+                            {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Lembar Cetak Bukti Pendaftaran Ulang ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Kelulusan PPDB Pemerintah. 6. Pas Foto 3x4 (3 lembar).' }}
+                        </td>
                     </tr>
                 </table>
             @else
@@ -725,13 +750,13 @@
                     <tr>
                         <td class="col-label">Status Pendaftaran</td>
                         <td class="col-sep">:</td>
-                        <td class="col-val" style="font-weight: 700;">BERKAS DITERIMA — DALAM PROSES SELEKSI</td>
+                        <td class="col-val" style="font-weight: 700;">BERKAS DITERIMA — MENUNGGU PENJADWALAN VERIFIKASI FISIK</td>
                     </tr>
                     <tr>
                         <td class="col-label">Keterangan</td>
                         <td class="col-sep">:</td>
                         <td class="col-val" style="font-weight: 400; color: #1C2620;">
-                            Data registrasi dan dokumen pendaftaran telah tercatat resmi di pangkalan data sistem PPDB online dan sedang dalam proses seleksi administratif.
+                            Data registrasi dan dokumen pendaftaran telah tercatat di sistem sekolah dan sedang dalam proses peninjauan administrasi panitia.
                         </td>
                     </tr>
                 </table>

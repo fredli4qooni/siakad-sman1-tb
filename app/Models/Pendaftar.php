@@ -18,6 +18,7 @@ class Pendaftar extends Model
         'user_id',
         'periode_id',
         'no_pendaftaran',
+        'no_peserta_ppdb_provinsi',
         'nisn',
         'nik',
         'nama_lengkap',
@@ -30,13 +31,30 @@ class Pendaftar extends Model
         'no_hp',
         'status_pendaftaran',
         'catatan_verifikasi',
+        'tgl_verifikasi_fisik',
+        'sesi_verifikasi_fisik',
+        'lokasi_verifikasi_fisik',
+        'catatan_verifikasi_fisik',
+        'status_verifikasi_fisik',
     ];
 
     protected function casts(): array
     {
         return [
             'tanggal_lahir' => 'date',
+            'tgl_verifikasi_fisik' => 'date',
         ];
+    }
+
+    public function isDijadwalkanFisik(): bool
+    {
+        return !empty($this->tgl_verifikasi_fisik) && in_array($this->status_verifikasi_fisik, ['dijadwalkan', 'hadir_valid']);
+    }
+
+    public function isDiterima(): bool
+    {
+        return in_array(strtolower($this->status_pendaftaran), ['lulus', 'diterima']) ||
+            ($this->hasilSeleksi && in_array(strtoupper($this->hasilSeleksi->status), ['LULUS', 'DITERIMA']));
     }
 
     public function user(): BelongsTo

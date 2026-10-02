@@ -195,5 +195,75 @@
                 </div>
             </div>
         </x-card>
+
+        <!-- Form Pengaturan Jadwal Validasi Berkas Fisik -->
+        <x-card title="Pengaturan Jadwal Validasi Berkas Fisik" subtitle="Atur tanggal, sesi jam, lokasi, dan instruksi berkas fisik yang wajib dibawa calon siswa ke sekolah">
+            <form action="{{ route('admin.ppdb.verifikasi.jadwal_fisik', $pendaftar->id) }}" method="POST" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <x-input
+                        type="date"
+                        label="Tanggal Verifikasi Fisik"
+                        name="tgl_verifikasi_fisik"
+                        required
+                        :value="old('tgl_verifikasi_fisik', $pendaftar->tgl_verifikasi_fisik ? $pendaftar->tgl_verifikasi_fisik->format('Y-m-d') : '')"
+                    />
+
+                    <div>
+                        <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
+                            Sesi / Jam Validasi <span class="text-[#C81210]">*</span>
+                        </label>
+                        <select name="sesi_verifikasi_fisik" class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]" required>
+                            <option value="Sesi 1 (08.00 - 10.00 WIB)" {{ old('sesi_verifikasi_fisik', $pendaftar->sesi_verifikasi_fisik) === 'Sesi 1 (08.00 - 10.00 WIB)' ? 'selected' : '' }}>Sesi 1 (08.00 - 10.00 WIB)</option>
+                            <option value="Sesi 2 (10.00 - 12.00 WIB)" {{ old('sesi_verifikasi_fisik', $pendaftar->sesi_verifikasi_fisik) === 'Sesi 2 (10.00 - 12.00 WIB)' ? 'selected' : '' }}>Sesi 2 (10.00 - 12.00 WIB)</option>
+                            <option value="Sesi 3 (13.00 - 15.00 WIB)" {{ old('sesi_verifikasi_fisik', $pendaftar->sesi_verifikasi_fisik) === 'Sesi 3 (13.00 - 15.00 WIB)' ? 'selected' : '' }}>Sesi 3 (13.00 - 15.00 WIB)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
+                            Status Verifikasi Fisik <span class="text-[#C81210]">*</span>
+                        </label>
+                        <select name="status_verifikasi_fisik" class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]" required>
+                            <option value="dijadwalkan" {{ old('status_verifikasi_fisik', $pendaftar->status_verifikasi_fisik) === 'dijadwalkan' ? 'selected' : '' }}>Dijadwalkan Hadir</option>
+                            <option value="hadir_valid" {{ old('status_verifikasi_fisik', $pendaftar->status_verifikasi_fisik) === 'hadir_valid' ? 'selected' : '' }}>Hadir & Berkas Sah</option>
+                            <option value="tidak_hadir" {{ old('status_verifikasi_fisik', $pendaftar->status_verifikasi_fisik) === 'tidak_hadir' ? 'selected' : '' }}>Tidak Hadir</option>
+                            <option value="belum_dijadwalkan" {{ old('status_verifikasi_fisik', $pendaftar->status_verifikasi_fisik) === 'belum_dijadwalkan' ? 'selected' : '' }}>Belum Dijadwalkan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <x-input
+                        label="Lokasi / Ruangan Verifikasi di Sekolah"
+                        name="lokasi_verifikasi_fisik"
+                        required
+                        :value="old('lokasi_verifikasi_fisik', $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB / Aula SMAN 1 Terbanggi Besar')"
+                    />
+
+                    <div>
+                        <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
+                            Catatan Khusus / Berkas Fisik yang Wajib Dibawa
+                        </label>
+                        <input
+                            type="text"
+                            name="catatan_verifikasi_fisik"
+                            class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]"
+                            placeholder="Contoh: Bawa lembar bukti cetak, KK asli, Akta asli, SKL asli, fotokopi legalisir 2 rangkap"
+                            value="{{ old('catatan_verifikasi_fisik', $pendaftar->catatan_verifikasi_fisik) }}"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t border-[#E1E4DE]">
+                    <div class="text-xs text-[#545B52]">
+                        Jadwal ini akan otomatis tampil di dasbor dan lembar cetak bukti registrasi calon siswa.
+                    </div>
+                    <x-button type="submit" variant="primary" class="text-xs font-semibold">
+                        Simpan Jadwal Validasi Fisik
+                    </x-button>
+                </div>
+            </form>
+        </x-card>
     </div>
 </x-layouts.admin>

@@ -78,6 +78,7 @@ class PendaftarController extends Controller
         DB::transaction(function () use ($pendaftar, $validated) {
             // 1. Perbarui data calon siswa
             $pendaftar->update([
+                'no_peserta_ppdb_provinsi' => $validated['no_peserta_ppdb_provinsi'] ?? null,
                 'nisn' => $validated['nisn'],
                 'nik' => $validated['nik'],
                 'nama_lengkap' => $validated['nama_lengkap'],

@@ -14,7 +14,7 @@ class TetapkanKelulusanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', 'in:LULUS,TIDAK_LULUS,CADANGAN,MENUNGGU'],
+            'status' => ['required', 'in:DITERIMA,LULUS,TIDAK_LULUS,CADANGAN,MENUNGGU'],
             'catatan' => ['nullable', 'string', 'max:500'],
         ];
     }

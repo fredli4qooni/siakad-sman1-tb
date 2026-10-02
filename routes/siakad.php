@@ -28,6 +28,7 @@ Route::prefix('admin')
             Route::get('/pendaftar/{pendaftar}/verifikasi', [AdminPpdbController::class, 'showVerifikasi'])->name('verifikasi.show');
             Route::post('/pendaftar/{pendaftar}/verifikasi/{berkas}', [AdminPpdbController::class, 'verifikasiBerkas'])->name('verifikasi.berkas');
             Route::post('/pendaftar/{pendaftar}/finalisasi', [AdminPpdbController::class, 'finalisasiVerifikasi'])->name('verifikasi.finalisasi');
+            Route::post('/pendaftar/{pendaftar}/jadwal-fisik', [AdminPpdbController::class, 'aturJadwalFisik'])->name('verifikasi.jadwal_fisik');
 
             Route::get('/seleksi', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi.index');
             Route::get('/seleksi-alias', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi');
@@ -85,6 +86,7 @@ Route::prefix('siakad/siswa')
     ->name('siakad.siswa.')
     ->middleware(['auth', 'role:siswa,admin'])
     ->group(function () {
+        Route::get('/dashboard', [SiswaPortalController::class, 'dashboard'])->name('dashboard');
         Route::get('/kelas', [SiswaPortalController::class, 'kelas'])->name('kelas');
         Route::get('/nilai', [SiswaPortalController::class, 'nilai'])->name('nilai');
     });

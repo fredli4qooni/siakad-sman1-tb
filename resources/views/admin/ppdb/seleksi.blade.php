@@ -52,9 +52,9 @@
                             <th class="py-3 px-3">No. Registrasi</th>
                             <th class="py-3 px-3">Nama Lengkap</th>
                             <th class="py-3 px-3">NISN</th>
-                            <th class="py-3 px-3">Asal Sekolah</th>
+                            <th class="py-3 px-3">Verifikasi Fisik</th>
                             <th class="py-3 px-3">Status Saat Ini</th>
-                            <th class="py-3 px-3 text-right">Penetapan Keputusan</th>
+                            <th class="py-3 px-3 text-right">Penetapan Siswa</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#E1E4DE] text-xs">
@@ -67,15 +67,27 @@
                                 <td class="py-3 px-3 font-mono font-medium">{{ $p->no_pendaftaran }}</td>
                                 <td class="py-3 px-3 font-semibold">{{ $p->nama_lengkap }}</td>
                                 <td class="py-3 px-3 tabular-nums font-mono">{{ $p->nisn }}</td>
-                                <td class="py-3 px-3 text-[#545B52]">{{ $p->asal_sekolah }}</td>
                                 <td class="py-3 px-3">
-                                    @if($status === 'LULUS')
+                                    @if($p->status_verifikasi_fisik === 'hadir_valid')
+                                        <span class="inline-flex items-center gap-1 text-[#0E6026] font-medium">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#039834]"></span> Hadir & Sah
+                                        </span>
+                                    @elseif($p->tgl_verifikasi_fisik)
+                                        <span class="text-[#6B6200] font-medium">
+                                            {{ $p->tgl_verifikasi_fisik->format('d/m/Y') }} ({{ ucfirst($p->status_verifikasi_fisik) }})
+                                        </span>
+                                    @else
+                                        <span class="text-neutral-400 italic">Belum Dijadwalkan</span>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-3">
+                                    @if(in_array($status, ['DITERIMA', 'LULUS']))
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
-                                            Lulus
+                                            Diterima
                                         </span>
                                     @elseif($status === 'TIDAK_LULUS')
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBEAEA] text-[#C81210]">
-                                            Tidak Lulus
+                                            Tidak Diterima
                                         </span>
                                     @else
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBF9D6] text-[#6B6200]">
@@ -87,15 +99,15 @@
                                     <form action="{{ route('admin.ppdb.kelulusan.simpan', $p->id) }}" method="POST" class="inline-flex items-center gap-2">
                                         @csrf
                                         <select name="status" class="rounded-lg border border-[#C9CDC3] px-2 py-1 text-xs text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]">
-                                            <option value="LULUS" {{ $status === 'LULUS' ? 'selected' : '' }}>Lulus</option>
-                                            <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Lulus</option>
+                                            <option value="DITERIMA" {{ in_array($status, ['DITERIMA', 'LULUS']) ? 'selected' : '' }}>Diterima (Siswa Baru)</option>
+                                            <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Diterima</option>
                                             <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
                                         </select>
 
                                         <input
                                             type="hidden"
                                             name="catatan"
-                                            value="Penetapan seleksi reguler panitia PPDB"
+                                            value="Penetapan daftar ulang siswa baru SMAN 1 Terbanggi Besar"
                                         />
 
                                         <x-button type="submit" variant="primary" class="text-xs py-1 px-3">
@@ -107,7 +119,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="py-8 text-center text-xs text-[#545B52]">
-                                    Belum ada calon peserta didik yang berstatus terverifikasi.
+                                    Belum ada calon peserta didik yang berstatus siap penetapan.
                                 </td>
                             </tr>
                         @endforelse

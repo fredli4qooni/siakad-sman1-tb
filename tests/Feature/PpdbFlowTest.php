@@ -326,4 +326,100 @@ class PpdbFlowTest extends TestCase
             'status_pendaftaran' => 'lulus',
         ]);
     }
+
+    public function test_admin_can_schedule_physical_verification_and_candidate_sees_it(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $candidateUser = User::factory()->create(['role' => 'calon_siswa']);
+
+        $pendaftar = Pendaftar::create([
+            'user_id' => $candidateUser->id,
+            'periode_id' => $this->periode->id,
+            'no_pendaftaran' => 'PPDB-2026-0088',
+            'nisn' => '0088776655',
+            'nama_lengkap' => 'Budi Setiawan',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Terbanggi Besar',
+            'tanggal_lahir' => '2010-08-17',
+            'agama' => 'Islam',
+            'asal_sekolah' => 'SMPN 2 Terbanggi Besar',
+            'alamat' => 'Jl. Lintas Sumatera Km. 12',
+            'no_hp' => '082199887766',
+            'status_pendaftaran' => 'terverifikasi',
+        ]);
+
+        // Admin schedules physical verification
+        $this->actingAs($admin)->post("/admin/ppdb/pendaftar/{$pendaftar->id}/jadwal-fisik", [
+            'tgl_verifikasi_fisik' => '2026-07-20',
+            'sesi_verifikasi_fisik' => 'Sesi 1 (08.00 - 10.00 WIB)',
+            'lokasi_verifikasi_fisik' => 'Ruang Panitia PPDB SMAN 1 TB',
+            'catatan_verifikasi_fisik' => 'Wajib bawa KK dan Akta Asli',
+            'status_verifikasi_fisik' => 'dijadwalkan',
+        ])->assertSessionHas('success');
+
+        $this->assertDatabaseHas('pendaftar', [
+            'id' => $pendaftar->id,
+            'sesi_verifikasi_fisik' => 'Sesi 1 (08.00 - 10.00 WIB)',
+            'lokasi_verifikasi_fisik' => 'Ruang Panitia PPDB SMAN 1 TB',
+            'status_verifikasi_fisik' => 'dijadwalkan',
+        ]);
+
+        // Candidate sees schedule on dashboard
+        $response = $this->actingAs($candidateUser)->get('/pendaftar/dashboard');
+        $response->assertStatus(200)
+            ->assertSee('Jadwal Validasi Berkas Fisik')
+            ->assertSee('Ruang Panitia PPDB SMAN 1 TB')
+            ->assertSee('Sesi 1 (08.00 - 10.00 WIB)');
+    }
+
+    public function test_admin_accepts_student_and_student_accesses_siakad_dashboard(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $candidateUser = User::factory()->create(['role' => 'calon_siswa']);
+
+        $pendaftar = Pendaftar::create([
+            'user_id' => $candidateUser->id,
+            'periode_id' => $this->periode->id,
+            'no_pendaftaran' => 'PPDB-2026-0077',
+            'nisn' => '0077889900',
+            'nik' => '1802010101100077',
+            'nama_lengkap' => 'Citra Lestari',
+            'jenis_kelamin' => 'P',
+            'tempat_lahir' => 'Bandar Jaya',
+            'tanggal_lahir' => '2010-09-09',
+            'agama' => 'Islam',
+            'asal_sekolah' => 'SMPN 1 TB',
+            'alamat' => 'Jl. Pahlawan No. 45',
+            'no_hp' => '081377889900',
+            'status_pendaftaran' => 'terverifikasi',
+        ]);
+
+        // Admin marks as DITERIMA
+        $this->actingAs($admin)->post("/admin/ppdb/seleksi/{$pendaftar->id}", [
+            'status' => 'DITERIMA',
+            'catatan' => 'Lengkap dan sah setelah verifikasi fisik',
+        ])->assertSessionHas('success');
+
+        // Assert database sync
+        $this->assertDatabaseHas('hasil_seleksi', [
+            'pendaftar_id' => $pendaftar->id,
+            'status' => 'DITERIMA',
+        ]);
+
+        $this->assertDatabaseHas('siswa', [
+            'nisn' => '0077889900',
+            'nama' => 'Citra Lestari',
+        ]);
+
+        // User role upgraded
+        $candidateUser->refresh();
+        $this->assertEquals('siswa', $candidateUser->role);
+
+        // Student can access SIAKAD dashboard
+        $response = $this->actingAs($candidateUser)->get('/siakad/siswa/dashboard');
+        $response->assertStatus(200)
+            ->assertSee('Selamat Datang, Citra Lestari!')
+            ->assertSee('Data Induk Kependidikan Siswa')
+            ->assertSee('0077889900');
+    }
 }

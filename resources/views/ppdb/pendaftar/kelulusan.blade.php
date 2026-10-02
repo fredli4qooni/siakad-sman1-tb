@@ -1,4 +1,4 @@
-<x-layouts.pendaftar title="Status Kelulusan" heading="Status & Hasil Kelulusan">
+<x-layouts.pendaftar title="Status Penerimaan & Kredensial" heading="Status Penerimaan Siswa Baru">
     <div class="space-y-6">
         <!-- Header Page with Back Button -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E1E4DE]">
@@ -9,8 +9,8 @@
                     </span>
                     <span class="text-xs text-[#545B52]">&bull; SMAN 1 Terbanggi Besar</span>
                 </div>
-                <h1 class="text-2xl font-bold text-[#1C2620]">Pengumuman Hasil Seleksi PPDB</h1>
-                <p class="text-xs text-[#545B52] mt-0.5">Surat Keputusan Resmi Panitia Penerimaan Peserta Didik Baru</p>
+                <h1 class="text-2xl font-bold text-[#1C2620]">Pengumuman Penerimaan & Kredensial SIAKAD</h1>
+                <p class="text-xs text-[#545B52] mt-0.5">Ketetapan Resmi Panitia Daftar Ulang Siswa Baru SMAN 1 Terbanggi Besar</p>
             </div>
             <div class="flex items-center gap-3">
                 <x-button as="a" href="{{ route('pendaftar.dashboard') }}" variant="secondary" class="text-xs">
@@ -19,9 +19,9 @@
             </div>
         </div>
 
-        @if($hasilSeleksi && $hasilSeleksi->status === 'LULUS')
-            <!-- Official Decision Banner (Left-aligned, elegant framed card) -->
-            <div class="rounded-xl border border-[#039834] bg-[#E7F4EA] p-6 lg:p-7 space-y-4">
+        @if($pendaftar->isDiterima())
+            <!-- Official Decision Banner (DITERIMA) -->
+            <div class="rounded-xl border border-[#039834] bg-[#E7F4EA] p-6 lg:p-7 space-y-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-[#039834] text-white flex items-center justify-center flex-shrink-0">
@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-[#0E6026] border border-[#039834]">
-                                DINYATAKAN LULUS SELEKSI
+                                RESMI DITERIMA
                             </span>
                             <h2 class="text-xl sm:text-2xl font-bold text-[#0E6026] mt-1">
                                 Selamat, {{ $pendaftar->nama_lengkap }}!
@@ -40,20 +40,20 @@
                     </div>
 
                     <div class="flex items-center gap-2.5 flex-wrap">
-                        <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="primary" class="text-xs">
-                            Buka Portal SIAKAD
+                        <x-button as="a" href="{{ route('siakad.siswa.dashboard') }}" variant="primary" class="text-xs font-semibold">
+                            Buka Data Induk Siswa (SIAKAD)
                         </x-button>
-                        <x-button as="a" href="{{ route('pendaftar.cetak_bukti') }}" target="_blank" variant="secondary" class="text-xs">
-                            Cetak Surat Kelulusan
+                        <x-button as="a" href="{{ route('pendaftar.cetak_bukti') }}" target="_blank" variant="secondary" class="text-xs font-semibold">
+                            Cetak Surat Penerimaan
                         </x-button>
                     </div>
                 </div>
 
                 <p class="text-sm text-[#1C2620] leading-relaxed max-w-4xl">
-                    Berdasarkan rapat pleno panitia penerimaan peserta didik baru SMAN 1 Terbanggi Besar, Anda resmi dinyatakan <strong>DITERIMA</strong> sebagai calon siswa baru Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}. Data pendaftaran pokok Anda telah otomatis disinkronisasi ke sistem akademik SIAKAD sekolah.
+                    Berdasarkan hasil validasi berkas fisik pendaftaran ulang oleh panitia SMAN 1 Terbanggi Besar, Anda resmi dinyatakan <strong>DITERIMA</strong> sebagai siswa baru Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}. Data kependidikan Anda telah disinkronisasikan ke sistem akademik SIAKAD sekolah.
                 </p>
 
-                @if($hasilSeleksi->catatan)
+                @if($hasilSeleksi && $hasilSeleksi->catatan)
                     <div class="p-3.5 rounded-lg bg-white border border-[#039834]/30 text-xs text-[#1C2620]">
                         <span class="font-bold text-[#0E6026]">Catatan Panitia:</span> {{ $hasilSeleksi->catatan }}
                     </div>
@@ -63,12 +63,18 @@
             <!-- Two Column Details Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Card 1: Data Penetapan Pendaftar -->
-                <x-card title="Data Penetapan Seleksi Calon Siswa" subtitle="Rincian identitas pendaftar pada berkas ketetapan panitia">
+                <x-card title="Data Penetapan Siswa Baru" subtitle="Rincian identitas pendaftar ulang yang telah disahkan">
                     <dl class="divide-y divide-[#E1E4DE] text-xs">
                         <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Nomor Registrasi</dt>
+                            <dt class="text-[#545B52]">Nomor Registrasi Sekolah</dt>
                             <dd class="font-mono font-bold text-[#1C2620]">{{ $pendaftar->no_pendaftaran }}</dd>
                         </div>
+                        @if($pendaftar->no_peserta_ppdb_provinsi)
+                            <div class="py-3 flex justify-between items-center">
+                                <dt class="text-[#545B52]">No. Kelulusan PPDB Pemerintah</dt>
+                                <dd class="font-mono font-semibold text-[#0E6026]">{{ $pendaftar->no_peserta_ppdb_provinsi }}</dd>
+                            </div>
+                        @endif
                         <div class="py-3 flex justify-between items-center">
                             <dt class="text-[#545B52]">NISN</dt>
                             <dd class="tabular-nums font-semibold text-[#1C2620]">{{ $pendaftar->nisn }}</dd>
@@ -82,45 +88,53 @@
                             <dd class="font-bold text-[#1C2620]">{{ $pendaftar->nama_lengkap }}</dd>
                         </div>
                         <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Asal Sekolah</dt>
+                            <dt class="text-[#545B52]">Asal Sekolah (SMP/MTs)</dt>
                             <dd class="font-medium text-[#1C2620]">{{ $pendaftar->asal_sekolah ?? '-' }}</dd>
                         </div>
                         <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Status Berkas</dt>
+                            <dt class="text-[#545B52]">Status Validasi Berkas Fisik</dt>
                             <dd>
                                 <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#E7F4EA] text-[#0E6026]">
-                                    Berkas Terverifikasi
+                                    Hadir & Berkas Sah
                                 </span>
                             </dd>
                         </div>
                         <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Keputusan Akhir</dt>
+                            <dt class="text-[#545B52]">Status Akhir</dt>
                             <dd>
                                 <span class="px-2.5 py-1 rounded text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
-                                    DITERIMA / LULUS SELEKSI
+                                    RESMI DITERIMA
                                 </span>
                             </dd>
                         </div>
                     </dl>
                 </x-card>
 
-                <!-- Card 2: Status Integrasi SIAKAD & Tindak Lanjut -->
-                <x-card title="Status Integrasi SIAKAD & Tindak Lanjut" subtitle="Informasi akun akademik dan alur langkah registrasi ulang">
+                <!-- Card 2: Kredensial Akun SIAKAD & Tindak Lanjut -->
+                <x-card title="Kredensial Akun SIAKAD" subtitle="Akses masuk sistem akademik dan langkah selanjutnya">
                     <div class="space-y-4 text-xs">
-                        <div class="p-4 rounded-xl bg-[#F3F5F2] border border-[#E1E4DE] space-y-2">
+                        <div class="p-4 rounded-xl bg-[#F3F5F2] border border-[#E1E4DE] space-y-3">
                             <div class="flex items-center justify-between pb-2 border-b border-[#E1E4DE]">
-                                <span class="text-[#545B52]">Integrasi Data Pokok:</span>
-                                <span class="font-bold text-[#0E6026] flex items-center gap-1.5">
-                                    <span class="w-2 h-2 rounded-full bg-[#039834]"></span>
-                                    Tersinkron ke SIAKAD
+                                <span class="text-[#545B52]">Nomor Induk Siswa (NIS):</span>
+                                <span class="font-mono font-bold text-sm text-[#0E6026] tabular-nums">
+                                    {{ $pendaftar->user->siswa?->nis ?? '-' }}
                                 </span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-[#545B52]">Hak Akses Akun SSO:</span>
-                                <span class="font-semibold text-[#1C2620]">Siswa Aktif Terverifikasi</span>
+                                <span class="text-[#545B52]">Username Login SIAKAD:</span>
+                                <span class="font-mono font-semibold text-[#1C2620]">
+                                    {{ $pendaftar->user->siswa?->nis ?? $pendaftar->user->email }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#545B52]">Status Akun SSO:</span>
+                                <span class="font-semibold text-[#0E6026] flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-[#039834]"></span>
+                                    Siswa Aktif Terdaftar
+                                </span>
                             </div>
                             @if(auth()->user()->siswa && auth()->user()->siswa->kelas)
-                                <div class="flex items-center justify-between">
+                                <div class="flex items-center justify-between pt-2 border-t border-[#E1E4DE]">
                                     <span class="text-[#545B52]">Rombongan Belajar:</span>
                                     <span class="font-bold text-[#0E6026]">{{ auth()->user()->siswa->kelas->nama_kelas }}</span>
                                 </div>
@@ -128,149 +142,104 @@
                         </div>
 
                         <div>
-                            <h4 class="font-bold text-[#1C2620] mb-2">Petunjuk Langkah Selanjutnya:</h4>
+                            <h4 class="font-bold text-[#1C2620] mb-2">Petunjuk Penggunaan Akun:</h4>
                             <ol class="space-y-2 text-[#545B52] list-decimal list-inside leading-relaxed">
                                 <li>
-                                    <strong class="text-[#1C2620]">Cetak Bukti Kelulusan:</strong> Unduh dan cetak surat bukti registrasi sebagai dokumen fisik kelulusan resmi.
+                                    <strong class="text-[#1C2620]">Single Sign-On (SSO):</strong> Anda tidak perlu membuat akun baru. Akun email yang Anda gunakan sekarang otomatis terhubung ke sistem SIAKAD.
                                 </li>
                                 <li>
-                                    <strong class="text-[#1C2620]">Akses Portal SIAKAD:</strong> Buka menu SIAKAD menggunakan akun login yang sama tanpa perlu mendaftar ulang.
+                                    <strong class="text-[#1C2620]">Cetak Bukti Penerimaan:</strong> Simpan atau cetak surat bukti penerimaan untuk arsip administrasi pribadi Anda.
                                 </li>
                                 <li>
-                                    <strong class="text-[#1C2620]">Cek Pembagian Kelas:</strong> Periksa alokasi rombongan belajar dan informasi wali kelas Anda melalui portal siswa.
+                                    <strong class="text-[#1C2620]">Cek Data Induk:</strong> Periksa biodata induk siswa pada Dashboard SIAKAD Anda.
                                 </li>
                             </ol>
                         </div>
 
                         <div class="pt-2">
-                            <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="primary" class="w-full text-xs">
-                                Masuk ke Halaman Kelas Saya (SIAKAD)
+                            <x-button as="a" href="{{ route('siakad.siswa.dashboard') }}" variant="primary" class="w-full text-xs font-semibold py-2.5">
+                                Masuk ke Portal Data Induk Siswa (SIAKAD)
                             </x-button>
                         </div>
                     </div>
                 </x-card>
             </div>
-        @elseif($hasilSeleksi && $hasilSeleksi->status === 'TIDAK_LULUS')
-            <!-- Official Decision Banner (TIDAK LULUS) -->
-            <div class="rounded-xl border border-[#C81210] bg-[#FBEAEA] p-6 lg:p-7 space-y-4">
+        @elseif($pendaftar->isDijadwalkanFisik())
+            <!-- Banner Tahap Verifikasi Fisik -->
+            <div class="rounded-xl border border-[#6B6200] bg-[#FBF9D6] p-6 lg:p-7 space-y-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-[#C81210] text-white flex items-center justify-center flex-shrink-0">
+                        <div class="w-10 h-10 rounded-full bg-[#6B6200] text-white flex items-center justify-center flex-shrink-0">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
                         <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-[#C81210] border border-[#C81210]">
-                                TIDAK LULUS SELEKSI
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-[#6B6200] border border-[#6B6200]">
+                                JADWAL VALIDASI BERKAS FISIK
                             </span>
-                            <h2 class="text-xl sm:text-2xl font-bold text-[#C81210] mt-1">
-                                Mohon Maaf, {{ $pendaftar->nama_lengkap }}
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#1C2620] mt-1">
+                                Jadwal Hadir ke Sekolah, {{ $pendaftar->nama_lengkap }}
                             </h2>
                         </div>
                     </div>
+
+                    <x-button as="a" href="{{ route('pendaftar.cetak_bukti') }}" target="_blank" variant="secondary" class="text-xs font-semibold">
+                        Cetak Bukti Pendaftaran Ulang
+                    </x-button>
                 </div>
 
-                <p class="text-sm text-[#1C2620] leading-relaxed max-w-4xl">
-                    Berdasarkan hasil pemeringkatan seleksi dan batas kuota daya tampung peserta didik baru SMAN 1 Terbanggi Besar Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}, Anda dinyatakan <strong>BELUM MEMENUHI KUALIFIKASI</strong> pada jalur seleksi yang dipilih.
+                <p class="text-xs sm:text-sm text-[#545B52] leading-relaxed max-w-4xl">
+                    Berkas formulir daftar ulang digital Anda telah disetujui. Langkah berikutnya adalah verifikasi dokumen fisik asli oleh panitia di sekolah. Silakan hadir sesuai jadwal di bawah ini.
                 </p>
 
-                @if($hasilSeleksi->catatan)
-                    <div class="p-3.5 rounded-lg bg-white border border-[#C81210]/30 text-xs text-[#1C2620]">
-                        <span class="font-bold text-[#C81210]">Catatan Panitia:</span> {{ $hasilSeleksi->catatan }}
-                    </div>
-                @endif
-            </div>
-
-            <!-- Two Column Details Grid for TIDAK LULUS -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <x-card title="Data Pendaftar" subtitle="Rincian identitas pendaftar pada berkas seleksi">
-                    <dl class="divide-y divide-[#E1E4DE] text-xs">
-                        <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Nomor Registrasi</dt>
-                            <dd class="font-mono font-bold text-[#1C2620]">{{ $pendaftar->no_pendaftaran }}</dd>
-                        </div>
-                        <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">NISN</dt>
-                            <dd class="tabular-nums font-semibold text-[#1C2620]">{{ $pendaftar->nisn }}</dd>
-                        </div>
-                        <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Nama Lengkap</dt>
-                            <dd class="font-bold text-[#1C2620]">{{ $pendaftar->nama_lengkap }}</dd>
-                        </div>
-                        <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Asal Sekolah</dt>
-                            <dd class="font-medium text-[#1C2620]">{{ $pendaftar->asal_sekolah ?? '-' }}</dd>
-                        </div>
-                        <div class="py-3 flex justify-between items-center">
-                            <dt class="text-[#545B52]">Status Keputusan</dt>
-                            <dd>
-                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
-                                    TIDAK LULUS
-                                </span>
-                            </dd>
-                        </div>
-                    </dl>
-                </x-card>
-
-                <x-card title="Layanan Informasi & Kontak Panitia" subtitle="Bantuan dan informasi lebih lanjut terkait hasil seleksi">
-                    <div class="space-y-3 text-xs text-[#545B52] leading-relaxed">
-                        <p>
-                            Apabila Anda memerlukan informasi tambahan mengenai alur seleksi atau terdapat kekeliruan data verifikasi dokumen, Anda dapat menghubungi sekretariat panitia PPDB:
-                        </p>
-                        <div class="p-3.5 rounded-xl bg-[#F3F5F2] border border-[#E1E4DE] space-y-1">
-                            <div><strong>Sekretariat PPDB:</strong> SMAN 1 Terbanggi Besar</div>
-                            <div><strong>Alamat:</strong> Jl. Lintas Sumatera, Terbanggi Besar, Lampung Tengah</div>
-                            <div><strong>Jam Layanan:</strong> Senin - Jumat (08.00 - 15.00 WIB)</div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2">
+                    <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
+                        <span class="text-[#545B52] block">Hari & Tanggal</span>
+                        <div class="font-bold text-sm text-[#1C2620] mt-1">
+                            {{ $pendaftar->tgl_verifikasi_fisik->isoFormat('dddd, D MMMM Y') }}
                         </div>
                     </div>
-                </x-card>
+                    <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
+                        <span class="text-[#545B52] block">Sesi Waktu</span>
+                        <div class="font-bold text-sm text-[#1C2620] mt-1">
+                            {{ $pendaftar->sesi_verifikasi_fisik ?? 'Sesi 1 (08.00 - 11.00 WIB)' }}
+                        </div>
+                    </div>
+                    <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
+                        <span class="text-[#545B52] block">Lokasi Verifikasi</span>
+                        <div class="font-bold text-sm text-[#1C2620] mt-1">
+                            {{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB SMAN 1 Terbanggi Besar' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white border border-[#6B6200]/30 text-xs space-y-2">
+                    <span class="font-bold text-[#6B6200] block">Berkas Fisik yang Wajib Dibawa Saat Hadir:</span>
+                    <p class="text-[#545B52] leading-relaxed">
+                        {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan PPDB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
+                    </p>
+                </div>
             </div>
         @else
-            <!-- Status Pending / Menunggu Penetapan -->
-            <div class="rounded-xl border border-[#E1E4DE] bg-white p-6 space-y-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-[#F3F5F2] text-[#0E6026] flex items-center justify-center flex-shrink-0">
+            <!-- Menunggu Proses -->
+            <x-card title="Status Proses Pendaftaran Ulang" subtitle="Tahapan verifikasi berkas oleh panitia sekolah">
+                <div class="p-6 text-center space-y-3">
+                    <div class="w-12 h-12 rounded-full bg-[#F3F5F2] text-[#545B52] flex items-center justify-center mx-auto">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <div>
-                        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FBF9D6] text-[#6B6200] border border-[#E9E920]">
-                            MENUNGGU SIDANG PENETAPAN
-                        </span>
-                        <h2 class="text-xl font-bold text-[#1C2620] mt-1">
-                            Pemeriksaan Berkas Sedang Berlangsung
-                        </h2>
+                    <h3 class="text-base font-bold text-[#1C2620]">Berkas Sedang Ditinjau oleh Panitia</h3>
+                    <p class="text-xs text-[#545B52] max-w-md mx-auto leading-relaxed">
+                        Pastikan Anda telah melengkapi seluruh biodata formulir dan mengunggah dokumen persyaratan secara lengkap. Panitia akan segera memvalidasi dan menerbitkan jadwal verifikasi fisik Anda di sekolah.
+                    </p>
+                    <div class="pt-2">
+                        <x-button as="a" href="{{ route('pendaftar.berkas') }}" variant="secondary" class="text-xs">
+                            Periksa Kelengkapan Berkas
+                        </x-button>
                     </div>
                 </div>
-
-                <p class="text-xs text-[#545B52] leading-relaxed max-w-3xl">
-                    Data pendaftaran dan dokumen berkas Anda telah berhasil kami terima. Hasil seleksi resmi PPDB Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }} akan diumumkan secara serentak setelah rapat pleno penetapan kelulusan panitia selesai dilaksanakan.
-                </p>
-
-                <div class="pt-2">
-                    <x-badge status="menunggu">
-                        Status Berkas Saat Ini: {{ ucfirst(str_replace('_', ' ', $pendaftar->status_pendaftaran)) }}
-                    </x-badge>
-                </div>
-            </div>
-
-            <x-card title="Rincian Berkas Registrasi" subtitle="Data yang telah tersimpan dalam sistem pendaftaran">
-                <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                    <div class="p-3 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
-                        <dt class="text-[#545B52]">Nomor Pendaftaran</dt>
-                        <dd class="font-mono font-bold text-[#1C2620] mt-0.5">{{ $pendaftar->no_pendaftaran }}</dd>
-                    </div>
-                    <div class="p-3 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
-                        <dt class="text-[#545B52]">NISN Siswa</dt>
-                        <dd class="tabular-nums font-semibold text-[#1C2620] mt-0.5">{{ $pendaftar->nisn }}</dd>
-                    </div>
-                    <div class="p-3 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
-                        <dt class="text-[#545B52]">Nama Lengkap</dt>
-                        <dd class="font-bold text-[#1C2620] mt-0.5">{{ $pendaftar->nama_lengkap }}</dd>
-                    </div>
-                </dl>
             </x-card>
         @endif
     </div>

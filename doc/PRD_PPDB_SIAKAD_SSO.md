@@ -44,26 +44,26 @@ Masalah ini menyebabkan pemborosan jam kerja operator, risiko data siswa tidak a
 ## 5. Ruang Lingkup Produk
 
 ### 5.1 Termasuk (In Scope)
-- Modul PPDB: pendaftaran online, upload berkas, verifikasi, penetapan kelulusan, pengumuman
-- Modul SIAKAD (terbatas): biodata siswa, pembagian kelas, input nilai
-- Sinkronisasi otomatis data pokok siswa **yang lulus seleksi** (biodata, NISN, alamat, data orang tua) dari PPDB ke SIAKAD
+- Modul Pendaftaran Ulang PPDB: pengisian biodata siswa baru lulusan seleksi pemerintah, upload berkas persyaratan (bukti kelulusan, KK, Akta, SKL), pemeriksaan berkas online
+- Modul Penjadwalan Validasi Berkas Fisik: admin mengatur tanggal, sesi waktu, ruangan, dan instruksi berkas fisik yang wajib dibawa ke sekolah
+- Penetapan Siswa Diterima & Penerbitan Kredensial SIAKAD: pengumuman kelulusan/penerimaan resmi di dashboard siswa disertai penomoran NIS dan kredensial login SIAKAD
+- Modul SIAKAD Siswa: dashboard khusus data induk akademik siswa sendiri (biodata resmi, NIS, NISN, status rombel kelas, wali kelas, dan kontak orang tua)
+- Sinkronisasi otomatis data pokok siswa yang DITERIMA dari modul PPDB ke SIAKAD
 - SSO menggunakan protokol OpenID Connect (OIDC) yang menghubungkan modul PPDB dan SIAKAD
 - Tiga level hak akses: Admin/Operator, Calon Siswa/Siswa, Guru
 
 ### 5.2 Di Luar Lingkup (Out of Scope)
-- Fitur SIAKAD lengkap (jadwal pelajaran, presensi, rapor cetak, dll.) — hanya biodata, kelas, dan nilai
-- Pengamanan jaringan tingkat lanjut (mitigasi DDoS, SQL Injection spesifik) — cukup praktik keamanan dasar
-- Pengadaan perangkat keras sekolah
-- Integrasi dengan sistem PPDB zonasi resmi milik pemerintah (di luar cakupan proposal)
+- Seleksi awal zonasi/afirmasi/prestasi (dilakukan langsung oleh sistem PPDB Pemerintah Provinsi Lampung di luar sistem sekolah)
+- Fitur SIAKAD lengkap tingkat lanjut (presensi harian, modul BK, jadwal per jam pelajaran, e-rapor cetak kurikulum merdeka)
 
 ## 6. Fitur Utama (User Stories)
 
-**Calon Siswa / Siswa**
-- Sebagai calon siswa, saya ingin mendaftar secara online agar tidak perlu datang ke sekolah untuk mengisi formulir.
-- Sebagai calon siswa, saya ingin mengunggah berkas persyaratan agar proses verifikasi bisa dilakukan operator secara digital.
-- Sebagai calon siswa, saya ingin melihat status pendaftaran dan pengumuman kelulusan secara real-time.
-- Sebagai siswa yang diterima, saya ingin memakai akun pendaftaran yang sama untuk masuk ke SIAKAD tanpa mendaftar ulang.
-- Sebagai siswa, saya ingin melihat kelas dan nilai saya di SIAKAD.
+**Calon Siswa / Siswa Baru**
+- Sebagai calon siswa yang telah lulus di sistem pemerintah, saya ingin login menggunakan akun email untuk melakukan pendaftaran ulang ke SMAN 1 Terbanggi Besar.
+- Sebagai calon siswa, saya ingin mengunggah berkas persyaratan secara digital agar proses verifikasi awal berlangsung cepat.
+- Sebagai calon siswa, saya ingin melihat informasi jadwal validasi berkas fisik (tanggal, jam, ruangan, dan dokumen yang harus dibawa) di dashboard dan cetak bukti registrasi.
+- Sebagai siswa yang telah diterima, saya ingin melihat pengumuman resmi dan memperoleh kredensial akun SIAKAD (NIS dan status aktif) di dashboard saya.
+- Sebagai siswa, saya ingin mengakses dashboard SIAKAD yang menampilkan data induk akademik saya sendiri.
 
 **Guru**
 - Sebagai guru, saya ingin login dengan satu akun untuk mengakses SIAKAD.

@@ -143,10 +143,10 @@ Gunakan akun-akun bawaan berikut selama proses pengujian skenario:
 
 ---
 
-### Skenario 6: Verifikasi Berkas oleh Panitia PPDB (Admin Panel)
-> **Tujuan:** Memverifikasi dokumen pendaftar melalui panel administrasi sekolah.
+### Skenario 6: Verifikasi Berkas & Pengaturan Jadwal Validasi Berkas Fisik (Admin Panel)
+> **Tujuan:** Memverifikasi dokumen pendaftar secara digital dan menetapkan jadwal kedatangan verifikasi dokumen fisik di sekolah.
 
-1. Di pojok kanan atas, klik tombol merah **"Keluar SSO"** untuk logout dari akun Budi Santoso.
+1. Di pojok kanan atas, klik tombol **"Keluar SSO"** untuk logout dari akun siswa.
 2. Masuk sebagai Administrator:
    - **URL:** `http://localhost:8000/auth/login`
    - **Email:** `admin@sman1tb.sch.id`
@@ -156,29 +156,69 @@ Gunakan akun-akun bawaan berikut selama proses pengujian skenario:
 4. Cari nama `Budi Santoso` (status saat ini: `Menunggu Verifikasi`).
 5. Klik tombol **"Periksa Berkas"**.
 6. Pada halaman verifikasi berkas:
-   - Periksa keempat dokumen. Pada masing-masing berkas, pilih status **"Valid"**, beri catatan (mis. *"Dokumen jelas dan sah"*), lalu klik **"Simpan Verifikasi"**.
-   - Setelah keempat berkas berstatus valid, pada kotak *Finalisasi Verifikasi*, klik tombol **"Tetapkan Terverifikasi"**.
-7. **Hal yang Diamati & Diverifikasi:**
-   - [ ] Notifikasi hijau muncul: *"Berkas pendaftar berhasil ditetapkan TERVERIFIKASI"*.
-   - [ ] Status pendaftar berubah menjadi hijau: **"Terverifikasi"**.
+   - Periksa keempat dokumen. Pada masing-masing berkas, pilih status **"Valid"**, beri catatan (mis. *"Dokumen jelas dan sah"*), lalu klik **"Simpan"**.
+   - Setelah berkas valid, pada kotak *Finalisasi Verifikasi*, klik tombol **"Tetapkan Berkas TERVERIFIKASI"**.
+7. **Pengaturan Jadwal Validasi Berkas Fisik:**
+   - Gulir ke kartu **"Pengaturan Jadwal Validasi Berkas Fisik"**.
+   - Masukkan **Tanggal Verifikasi Fisik:** misal tanggal besok / tanggal berjalan.
+   - Pilih **Sesi / Jam Validasi:** `Sesi 1 (08.00 - 10.00 WIB)`.
+   - Pilih **Status Verifikasi Fisik:** `Dijadwalkan Hadir`.
+   - Lokasi: `Ruang Panitia PPDB / Aula SMAN 1 Terbanggi Besar`.
+   - Catatan: `Bawa lembar cetak bukti registrasi, KK asli, Akta asli, dan SKL asli`.
+   - Klik tombol **"Simpan Jadwal Validasi Fisik"**.
+8. **Hal yang Diamati & Diverifikasi:**
+   - [ ] Notifikasi hijau muncul: *"Jadwal validasi berkas fisik untuk Budi Santoso berhasil diperbarui"*.
+   - [ ] Jadwal fisik tersimpan di database.
 
 ---
 
-### Skenario 7: Penetapan Kelulusan & Otomatisasi Sinkronisasi PPDB $\to$ SIAKAD
-> **Tujuan: (CRITICAL STEP)** Menguji integrasi otomatis transfer data siswa tanpa input ulang manual.
+### Skenario 7: Siswa Melihat Jadwal Validasi Fisik & Cetak Bukti Registrasi
+> **Tujuan:** Memvalidasi tampilan jadwal fisik pada dasbor calon siswa dan lembar cetak bukti registrasi.
 
-1. Di panel admin, buka menu **PPDB $\to$ Hasil Seleksi** (`http://localhost:8000/admin/ppdb/seleksi`).
-2. Cari baris siswa `Budi Santoso`.
-3. Pada kolom **Penetapan Keputusan**:
-   - Pilih opsi: **Lulus**
+1. Logout dari akun Admin dan login kembali dengan akun siswa:
+   - **Email:** `budi.santoso@gmail.com`
+   - **Kata Sandi:** `password123`
+2. Buka **Dashboard Daftar Ulang** (`http://localhost:8000/pendaftar/dashboard`).
+3. **Hal yang Diamati & Diverifikasi:**
+   - [ ] Tampil kartu informasi warna kuning: **"Jadwal Validasi Berkas Fisik di SMAN 1 Terbanggi Besar"**.
+   - [ ] Tercantum Hari/Tanggal, Sesi Waktu (`Sesi 1 (08.00 - 10.00 WIB)`), dan Tempat Verifikasi.
+   - [ ] Tercantum instruksi berkas fisik yang wajib dibawa ke sekolah.
+4. Klik tombol **"Cetak Bukti Registrasi"** (`/pendaftar/cetak-bukti`).
+   - [ ] Pada lembar cetak Section IV, tercantum jadwal validasi fisik dan berkas wajib yang harus dibawa ke sekolah.
+
+---
+
+### Skenario 8: Penetapan DITERIMA & Sinkronisasi Otomatis ke SIAKAD (Admin Panel)
+> **Tujuan: (CRITICAL STEP)** Mensimulasikan hasil verifikasi fisik di sekolah dan penetapan resmi menjadi siswa baru yang tersinkron ke SIAKAD.
+
+1. Logout dari siswa, lalu login kembali sebagai Admin (`admin@sman1tb.sch.id`).
+2. Buka menu **PPDB $\to$ Hasil Seleksi** (`http://localhost:8000/admin/ppdb/seleksi`).
+3. Cari baris siswa `Budi Santoso`.
+4. Periksa kolom **Verifikasi Fisik**: tercatat jadwal yang telah ditetapkan.
+5. Pada kolom **Penetapan Siswa**:
+   - Pilih opsi: **Diterima (Siswa Baru)**
    - Klik tombol **"Simpan"**.
-4. **Uji Otomatisasi Sync Engine:**
+6. **Uji Otomatisasi Sync Engine:**
    - Buka menu **Integrasi Data $\to$ Sync Logs** (`http://localhost:8000/admin/sync`).
-5. **Hal yang Diamati & Diverifikasi:**
-   - [ ] Muncul baris log baru untuk `Budi Santoso`.
-   - [ ] Status log adalah **"BERHASIL"** (berwarna hijau).
-   - [ ] Nomor Induk Siswa (NIS) baru otomatis di-generate oleh sistem (format: `2026XXXX`).
-   - [ ] Waktu sinkronisasi tercatat akurat sesuai waktu lokal saat tombol disimpan.
+   - [ ] Muncul baris log baru untuk `Budi Santoso` dengan status **"BERHASIL"**.
+   - [ ] Nomor Induk Siswa (NIS) resmi baru otomatis di-generate oleh sistem.
+   - [ ] Peran akun pengguna di-upgrade otomatis dari `calon_siswa` menjadi `siswa`.
+
+---
+
+### Skenario 9: Pengumuman DITERIMA, Kredensial SIAKAD & Dashboard Data Siswa
+> **Tujuan:** Memastikan siswa baru melihat status Diterima, kredensial login SIAKAD, dan mengakses dashboard khusus data siswa miliknya sendiri.
+
+1. Logout dari Admin, lalu login kembali sebagai siswa (`budi.santoso@gmail.com`).
+2. Masuk ke **Dashboard Daftar Ulang** (`/pendaftar/dashboard`):
+   - [ ] Tampil banner pengumuman hijau: **"SELAMAT! ANDA RESMI DITERIMA SEBAGAI SISWA SMAN 1 TERBANGGI BESAR"**.
+   - [ ] Tampil kotak **Kredensial Akun SIAKAD**: Nomor Induk Siswa (NIS) resmi, Username SIAKAD, dan status Siswa Aktif.
+3. Klik tombol **"Buka Data Induk Siswa (SIAKAD)"** atau menu sidebar **Akademik SIAKAD $\to$ Data Induk Siswa** (`/siakad/siswa/dashboard`).
+4. **Hal yang Diamati & Diverifikasi pada Dashboard SIAKAD:**
+   - [ ] Tampil Dashboard khusus data siswa: nama siswa, NIS resmi, NISN, NIK, jenis kelamin, TTL, alamat, dan kontak.
+   - [ ] Tampil data orang tua siswa (nama ayah, nama ibu, pekerjaan, nomor telepon orang tua).
+   - [ ] Tampil status penempatan rombel kelas.
+   - [ ] Tidak menampilkan data siswa lain (hanya data miliknya sendiri).
 
 ---
 

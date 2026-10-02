@@ -18,14 +18,16 @@ class SyncService
      */
     public function syncPendaftar(Pendaftar $pendaftar): array
     {
-        // Pastikan calon siswa berstatus LULUS
-        $isLulus = $pendaftar->status_pendaftaran === 'lulus' ||
-            ($pendaftar->hasilSeleksi && $pendaftar->hasilSeleksi->status === 'LULUS');
+        // Pastikan calon siswa berstatus LULUS / DITERIMA
+        $statusPendaftar = strtolower($pendaftar->status_pendaftaran);
+        $statusHasil = $pendaftar->hasilSeleksi ? strtoupper($pendaftar->hasilSeleksi->status) : '';
+        $isLulus = in_array($statusPendaftar, ['lulus', 'diterima']) ||
+            in_array($statusHasil, ['LULUS', 'DITERIMA']);
 
         if (!$isLulus) {
             return [
                 'success' => false,
-                'message' => "Pendaftar {$pendaftar->nama_lengkap} ({$pendaftar->no_pendaftaran}) belum dinyatakan LULUS.",
+                'message' => "Pendaftar {$pendaftar->nama_lengkap} ({$pendaftar->no_pendaftaran}) belum dinyatakan DITERIMA / LULUS.",
             ];
         }
 
@@ -125,8 +127,8 @@ class SyncService
     {
         $query = Pendaftar::with(['periode', 'orangTua', 'hasilSeleksi'])
             ->where(function ($q) {
-                $q->where('status_pendaftaran', 'lulus')
-                    ->orWhereHas('hasilSeleksi', fn($h) => $h->where('status', 'LULUS'));
+                $q->whereIn('status_pendaftaran', ['lulus', 'diterima'])
+                    ->orWhereHas('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA']));
             });
 
         if ($periodeId) {

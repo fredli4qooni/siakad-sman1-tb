@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ppdb;
 
 use App\Events\PendaftarLulusEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Ppdb\AturJadwalFisikRequest;
 use App\Http\Requests\Ppdb\PeriodePpdbRequest;
 use App\Http\Requests\Ppdb\TetapkanKelulusanRequest;
 use App\Http\Requests\Ppdb\VerifikasiBerkasRequest;
@@ -183,12 +184,30 @@ class AdminPpdbController extends Controller
     }
 
     /**
-     * 4. Halaman Penetapan Kelulusan Peserta Seleksi
+     * Mengatur jadwal verifikasi berkas fisik calon siswa di sekolah.
+     */
+    public function aturJadwalFisik(AturJadwalFisikRequest $request, Pendaftar $pendaftar): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $pendaftar->update([
+            'tgl_verifikasi_fisik' => $validated['tgl_verifikasi_fisik'],
+            'sesi_verifikasi_fisik' => $validated['sesi_verifikasi_fisik'],
+            'lokasi_verifikasi_fisik' => $validated['lokasi_verifikasi_fisik'],
+            'catatan_verifikasi_fisik' => $validated['catatan_verifikasi_fisik'] ?? null,
+            'status_verifikasi_fisik' => $validated['status_verifikasi_fisik'],
+        ]);
+
+        return back()->with('success', "Jadwal validasi berkas fisik untuk {$pendaftar->nama_lengkap} berhasil diperbarui.");
+    }
+
+    /**
+     * 4. Halaman Penetapan Kelulusan / Penerimaan Siswa Baru
      */
     public function seleksiIndex(Request $request): View
     {
         $query = Pendaftar::with(['periode', 'hasilSeleksi'])
-            ->whereIn('status_pendaftaran', ['terverifikasi', 'lulus', 'tidak_lulus']);
+            ->whereIn('status_pendaftaran', ['terverifikasi', 'lulus', 'diterima', 'tidak_lulus']);
 
         if ($request->filled('keyword')) {
             $keyword = trim($request->input('keyword'));
@@ -210,7 +229,7 @@ class AdminPpdbController extends Controller
     }
 
     /**
-     * Menyimpan penetapan kelulusan calon siswa.
+     * Menyimpan penetapan penerimaan / kelulusan calon siswa baru.
      */
     public function tetapkanKelulusan(
         TetapkanKelulusanRequest $request,
@@ -218,7 +237,7 @@ class AdminPpdbController extends Controller
         SyncService $syncService
     ): RedirectResponse {
         $validated = $request->validated();
-        $status = $validated['status']; // LULUS / TIDAK_LULUS
+        $status = $validated['status']; // DITERIMA / LULUS / TIDAK_LULUS
 
         DB::transaction(function () use ($pendaftar, $validated, $status) {
             HasilSeleksi::updateOrCreate(
@@ -231,19 +250,25 @@ class AdminPpdbController extends Controller
                 ]
             );
 
-            $pendaftar->update([
+            $updateData = [
                 'status_pendaftaran' => strtolower($status),
-            ]);
+            ];
+
+            if (in_array($status, ['DITERIMA', 'LULUS'])) {
+                $updateData['status_verifikasi_fisik'] = 'hadir_valid';
+            }
+
+            $pendaftar->update($updateData);
         });
 
-        // Trigger sinkronisasi otomatis PPDB -> SIAKAD saat dinyatakan LULUS
+        // Trigger sinkronisasi otomatis PPDB -> SIAKAD saat dinyatakan DITERIMA / LULUS
         $syncMsg = '';
-        if ($status === 'LULUS') {
+        if (in_array($status, ['DITERIMA', 'LULUS'])) {
             $syncResult = $syncService->syncPendaftar($pendaftar);
             PendaftarLulusEvent::dispatch($pendaftar);
             $syncMsg = $syncResult['success'] ? ' Data berhasil disinkronkan ke SIAKAD.' : ' Namun sinkronisasi SIAKAD tertunda: ' . $syncResult['message'];
         }
 
-        return back()->with('success', "Status kelulusan {$pendaftar->nama_lengkap} berhasil ditetapkan menjadi {$status}.{$syncMsg}");
+        return back()->with('success', "Status pendaftaran ulang {$pendaftar->nama_lengkap} berhasil ditetapkan menjadi {$status}.{$syncMsg}");
     }
 }
