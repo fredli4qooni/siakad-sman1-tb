@@ -13,9 +13,9 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-full flex flex-col bg-white text-[#1C2620]">
+<body class="min-h-full flex flex-col text-[#1C2620] relative" style="background-image: linear-gradient(180deg, rgba(243, 245, 242, 0.62) 0%, rgba(243, 245, 242, 0.72) 100%), url('{{ asset('images/latar-belakang.jpeg') }}'); background-size: cover; background-position: center top; background-attachment: fixed;">
     <!-- Header Navigasi Publik -->
-    <header class="border-b border-[#E1E4DE] bg-white sticky top-0 z-30">
+    <header class="border-b border-[#E1E4DE] bg-white/95 backdrop-blur-md sticky top-0 z-30">
         <div class="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
@@ -70,7 +70,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-[#E1E4DE] bg-[#F3F5F2] py-8 text-center text-xs text-[#545B52]">
+    <footer class="border-t border-[#E1E4DE] bg-[#F3F5F2]/90 backdrop-blur-md py-8 text-center text-xs text-[#545B52]">
         <div class="w-full px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
                 © {{ date('Y') }} SMAN 1 Terbanggi Besar — Sistem Informasi PPDB Terintegrasi SIAKAD

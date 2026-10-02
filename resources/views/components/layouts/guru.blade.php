@@ -77,7 +77,7 @@
     </aside>
 
     <!-- Area Konten Utama -->
-    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-white">
+    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-[#F3F5F2]">
         <!-- Header Atas (Fixed 64px, NEVER scrolls away, perfectly vertically centered) -->
         <header class="h-16 flex-shrink-0 border-b border-[#E1E4DE] bg-white flex items-center justify-between px-6 lg:px-8">
             <div class="flex items-center gap-3">
@@ -99,7 +99,7 @@
         </header>
 
         <!-- Area Scroll Utama -->
-        <main class="flex-1 overflow-y-auto p-6 lg:p-8">
+        <main class="flex-1 overflow-y-auto p-6 lg:p-8" style="background-image: linear-gradient(rgba(243, 245, 242, 0.75), rgba(243, 245, 242, 0.85)), url('{{ asset('images/latar-belakang.jpeg') }}'); background-size: cover; background-position: center top; background-attachment: fixed;">
             <div class="w-full space-y-6">
                 <!-- Flash Message Alerts -->
                 @if (session('success'))
