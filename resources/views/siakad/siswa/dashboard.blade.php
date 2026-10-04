@@ -20,7 +20,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="primary" class="text-xs font-semibold">
-                    Lihat Rombel Kelas
+                    Lihat Kelas & Semester
                 </x-button>
                 <x-button as="a" href="{{ route('pendaftar.cetak_bukti') }}" target="_blank" variant="secondary" class="text-xs font-semibold">
                     Cetak Bukti Pendaftaran
@@ -157,29 +157,33 @@
 
             <!-- Kolom Kanan: Status Akademik & Kredensial SIAKAD (1 Kolom) -->
             <div class="space-y-6">
-                <!-- Status Penempatan Kelas -->
-                <x-card title="Penempatan Kelas">
+                <!-- Status Penempatan Kelas & Semester Saat Ini -->
+                <x-card title="Kelas & Semester Saat Ini">
                     @if($siswa->kelas)
                         <div class="p-4 rounded-xl bg-[#E7F4EA] border border-[#039834]/30 space-y-3">
                             <div>
-                                <span class="text-[11px] text-[#0E6026] font-semibold uppercase tracking-wider">Rombongan Belajar</span>
+                                <span class="text-[11px] text-[#0E6026] font-semibold uppercase tracking-wider">Rombel & Semester</span>
                                 <div class="text-xl font-bold text-[#0E6026] mt-0.5">
                                     {{ $siswa->kelas->nama_kelas }}
                                 </div>
-                                <div class="text-xs text-[#545B52] mt-1">
-                                    Tingkat {{ $siswa->kelas->tingkat }} &bull; TP {{ $siswa->kelas->tahun_ajaran }}
+                                <div class="text-xs text-[#1C2620] font-medium mt-1">
+                                    Tingkat {{ $siswa->kelas->tingkat }} &bull; Semester Ganjil &bull; TP {{ $siswa->kelas->tahun_ajaran }}
                                 </div>
                             </div>
 
-                            <div class="pt-2 border-t border-[#039834]/20 text-xs">
-                                <span class="text-[#545B52]">Wali Kelas:</span>
-                                <div class="font-semibold text-[#1C2620] mt-0.5">
-                                    {{ $siswa->kelas->waliKelas ? $siswa->kelas->waliKelas->nama_lengkap . ($siswa->kelas->waliKelas->gelar ? ', ' . $siswa->kelas->waliKelas->gelar : '') : 'Belum Ditentukan' }}
+                            <div class="pt-2 border-t border-[#039834]/20 text-xs space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[#545B52]">Semester:</span>
+                                    <span class="font-semibold text-[#0E6026]">Semester Ganjil (1)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[#545B52]">Wali Kelas:</span>
+                                    <span class="font-semibold text-[#1C2620]">{{ $siswa->kelas->waliKelas ? $siswa->kelas->waliKelas->nama_lengkap . ($siswa->kelas->waliKelas->gelar ? ', ' . $siswa->kelas->waliKelas->gelar : '') : 'Belum Ditentukan' }}</span>
                                 </div>
                             </div>
 
                             <x-button as="a" href="{{ route('siakad.siswa.kelas') }}" variant="primary" class="w-full text-xs font-semibold py-2">
-                                Lihat Teman Sekelas
+                                Lihat Rincian Kelas & Semester
                             </x-button>
                         </div>
                     @else
@@ -188,10 +192,10 @@
                                 <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                <span>Menunggu Ploting Kelas</span>
+                                <span>Menunggu Penempatan Kelas</span>
                             </div>
                             <p class="text-xs text-[#545B52] leading-relaxed">
-                                Pembagian rombel/kelas untuk siswa baru sedang disiapkan oleh kurikulum sekolah. Silakan cek berkala.
+                                Pembagian rombel dan kelas semester siswa baru sedang dipersiapkan oleh pihak kurikulum sekolah. Silakan cek berkala.
                             </p>
                         </div>
                     @endif
@@ -217,7 +221,7 @@
                         </div>
 
                         <div class="p-3 bg-[#E7F4EA] rounded-lg border border-[#039834]/30 text-[#0E6026] text-[11px] leading-relaxed">
-                            <strong>SSO Terintegrasi:</strong> Anda dapat langsung mengakses modul PPDB maupun SIAKAD tanpa perlu login ulang.
+                            <strong>SSO Terintegrasi:</strong> Anda dapat langsung mengakses modul SPMB maupun SIAKAD tanpa perlu login ulang.
                         </div>
                     </div>
                 </x-card>

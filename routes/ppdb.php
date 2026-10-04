@@ -6,7 +6,13 @@ use App\Http\Controllers\Ppdb\PendaftarController;
 use App\Http\Controllers\Ppdb\PublicPpdbController;
 use Illuminate\Support\Facades\Route;
 
-// Halaman Publik PPDB
+// Halaman Publik SPMB (dan alias PPDB)
+Route::prefix('spmb')->name('spmb.')->group(function () {
+    Route::get('/', [PublicPpdbController::class, 'index'])->name('index');
+    Route::get('/alur', [PublicPpdbController::class, 'alur'])->name('alur');
+    Route::get('/pengumuman', [PublicPpdbController::class, 'pengumuman'])->name('pengumuman');
+});
+
 Route::prefix('ppdb')->name('ppdb.')->group(function () {
     Route::get('/', [PublicPpdbController::class, 'index'])->name('index');
     Route::get('/alur', [PublicPpdbController::class, 'alur'])->name('alur');

@@ -238,7 +238,7 @@
                         label="Lokasi / Ruangan Verifikasi di Sekolah"
                         name="lokasi_verifikasi_fisik"
                         required
-                        :value="old('lokasi_verifikasi_fisik', $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB / Aula SMAN 1 Terbanggi Besar')"
+                        :value="old('lokasi_verifikasi_fisik', $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia SPMB / Aula SMAN 1 Terbanggi Besar')"
                     />
 
                     <div>

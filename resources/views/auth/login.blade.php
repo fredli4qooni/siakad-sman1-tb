@@ -1,6 +1,6 @@
 <x-layouts.auth title="Masuk SSO" heading="Masuk ke Akun SSO">
     <p class="text-xs text-[#545B52] mb-6 text-center">
-        Gunakan akun tunggal Anda untuk mengakses portal PPDB dan SIAKAD.
+        Gunakan akun tunggal Anda untuk mengakses portal SPMB dan SIAKAD.
     </p>
 
     <form method="POST" action="{{ route('auth.login') }}" class="space-y-4">

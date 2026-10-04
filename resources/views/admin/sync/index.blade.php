@@ -1,4 +1,4 @@
-<x-layouts.admin title="Sync Logs" heading="Audit Log Sinkronisasi PPDB → SIAKAD">
+<x-layouts.admin title="Sync Logs" heading="Audit Log Sinkronisasi SPMB → SIAKAD">
     <div class="space-y-6">
 
         <!-- 3 Statistik Ringkas -->
@@ -75,7 +75,7 @@
                     <thead>
                         <tr class="border-b border-[#C9CDC3] text-xs font-semibold text-[#545B52]">
                             <th class="py-3 px-3">Waktu</th>
-                            <th class="py-3 px-3">Calon Siswa (PPDB)</th>
+                            <th class="py-3 px-3">Calon Siswa (SPMB)</th>
                             <th class="py-3 px-3">Siswa SIAKAD</th>
                             <th class="py-3 px-3">Status</th>
                             <th class="py-3 px-3">Snapshot Payload / Error</th>
@@ -142,7 +142,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="py-8 text-center text-xs text-[#545B52]">
-                                    Belum ada transaksi log sinkronisasi PPDB ke SIAKAD.
+                                    Belum ada transaksi log sinkronisasi SPMB ke SIAKAD.
                                 </td>
                             </tr>
                         @endforelse

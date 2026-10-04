@@ -1,33 +1,37 @@
-<x-layouts.pendaftar title="Kelas Saya" heading="Informasi Kelas & Rombel">
+<x-layouts.pendaftar title="Kelas & Semester Saya" heading="Informasi Kelas & Semester Saat Ini">
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E1E4DE]">
             <div>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-2">
                     SIAKAD Aktif
                 </span>
-                <h1 class="text-2xl font-bold text-[#1C2620]">Informasi Kelas & Rombongan Belajar</h1>
+                <h1 class="text-2xl font-bold text-[#1C2620]">Informasi Kelas & Semester Saat Ini</h1>
                 <p class="text-xs text-[#545B52] mt-1">
                     Siswa: <strong class="text-[#1C2620]">{{ $siswa->nama }}</strong> &bull; NISN: <span class="font-mono tabular-nums">{{ $siswa->nisn }}</span> &bull; NIS: <span class="font-mono tabular-nums font-semibold text-[#0E6026]">{{ $siswa->nis ?? '-' }}</span>
                 </p>
             </div>
             <div>
-                <x-button as="a" href="{{ route('siakad.siswa.nilai') }}" variant="secondary" class="text-xs">
-                    Lihat Nilai Rapor
+                <x-button as="a" href="{{ route('siakad.siswa.dashboard') }}" variant="secondary" class="text-xs">
+                    Kembali ke Data Siswa
                 </x-button>
             </div>
         </div>
 
         @if($kelas)
-            <!-- Rincian Kelas & Wali Kelas -->
-            <x-card title="Rincian Rombongan Belajar">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            <!-- Rincian Kelas & Semester Saat Ini -->
+            <x-card title="Rincian Kelas & Semester">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
                     <div class="p-3.5 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
-                        <div class="text-[#545B52]">Nama Rombel</div>
+                        <div class="text-[#545B52]">Nama Rombel / Kelas</div>
                         <div class="font-bold text-base text-[#1C2620] mt-1">{{ $kelas->nama_kelas }}</div>
                     </div>
                     <div class="p-3.5 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
                         <div class="text-[#545B52]">Tingkat Pendidikan</div>
                         <div class="font-bold text-base text-[#1C2620] mt-1">Tingkat {{ $kelas->tingkat }}</div>
+                    </div>
+                    <div class="p-3.5 bg-[#E7F4EA] rounded-xl border border-[#039834]/30">
+                        <div class="text-[#0E6026] font-semibold">Semester Saat Ini</div>
+                        <div class="font-bold text-base text-[#0E6026] mt-1">Semester Ganjil (1)</div>
                     </div>
                     <div class="p-3.5 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE]">
                         <div class="text-[#545B52]">Tahun Ajaran</div>

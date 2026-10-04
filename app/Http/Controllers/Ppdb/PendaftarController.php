@@ -27,11 +27,11 @@ class PendaftarController extends Controller
         if (!$pendaftar) {
             $periodeAktif = PeriodePpdb::where('is_aktif', true)->first();
             if (!$periodeAktif) {
-                return redirect()->route('pendaftar.dashboard')->with('error', 'Tidak ada periode PPDB aktif.');
+                return redirect()->route('pendaftar.dashboard')->with('error', 'Tidak ada periode SPMB aktif.');
             }
 
             $nomorUrut = Pendaftar::where('periode_id', $periodeAktif->id)->count() + 1;
-            $noPendaftaran = 'PPDB-' . date('Y') . '-' . str_pad($nomorUrut, 4, '0', STR_PAD_LEFT);
+            $noPendaftaran = 'SPMB-' . date('Y') . '-' . str_pad($nomorUrut, 4, '0', STR_PAD_LEFT);
 
             $pendaftar = Pendaftar::create([
                 'user_id' => $user->id,

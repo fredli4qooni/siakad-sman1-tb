@@ -163,7 +163,7 @@
                     <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
                         <span class="text-[#545B52] block">Tempat / Ruangan</span>
                         <div class="font-bold text-sm text-[#1C2620] mt-1">
-                            {{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB SMAN 1 Terbanggi Besar' }}
+                            {{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia SPMB SMAN 1 Terbanggi Besar' }}
                         </div>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                 <div class="p-4 rounded-xl bg-white border border-[#6B6200]/30 text-xs space-y-2">
                     <span class="font-bold text-[#6B6200] block">Berkas Fisik yang Wajib Dibawa:</span>
                     <p class="text-[#545B52] leading-relaxed">
-                        {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan PPDB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
+                        {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan SPMB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
                     </p>
                 </div>
             </div>

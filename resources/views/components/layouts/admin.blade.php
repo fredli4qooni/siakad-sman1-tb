@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Admin & Operator' }} — PPDB SIAKAD SMAN 1 TB</title>
+    <title>{{ $title ?? 'Admin & Operator' }} — SPMB SIAKAD SMAN 1 TB</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,10 +39,10 @@
                 </a>
             </div>
 
-            <!-- Modul PPDB -->
+            <!-- Modul SPMB -->
             <div>
                 <div class="px-3 text-[11px] font-semibold uppercase tracking-wider text-[#545B52] mb-2">
-                    Modul PPDB
+                    Modul SPMB
                 </div>
                 <div class="space-y-1">
                     <a href="{{ route('admin.ppdb.periode.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.ppdb.periode*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
@@ -76,7 +76,7 @@
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
-                        Sync Logs (PPDB → SIAKAD)
+                        Sync Logs (SPMB → SIAKAD)
                     </a>
                 </div>
             </div>
@@ -97,25 +97,7 @@
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
-                        Manajemen Kelas
-                    </a>
-                    <a href="{{ route('admin.siakad.guru.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.siakad.guru*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                        </svg>
-                        Data Guru
-                    </a>
-                    <a href="{{ route('admin.siakad.mapel.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.siakad.mapel*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                        Mata Pelajaran
-                    </a>
-                    <a href="{{ route('admin.siakad.pengampu.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.siakad.pengampu*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
-                        </svg>
-                        Penugasan Mengajar
+                        Kelas & Semester
                     </a>
                 </div>
             </div>

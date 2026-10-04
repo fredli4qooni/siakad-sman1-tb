@@ -1,20 +1,20 @@
-# PRD — Sistem PPDB Terintegrasi SIAKAD dengan SSO (OIDC)
+# PRD — Sistem SPMB (Penerimaan Murid Baru) Terintegrasi SIAKAD dengan SSO (OIDC)
 ### Studi Kasus: SMAN 1 Terbanggi Besar
 
-**Versi:** 1.0 (Draft)
+**Versi:** 1.1
 **Diturunkan dari:** Proposal Skripsi "Pengembangan Sistem Pendaftaran PPDB Terintegrasi Sistem Informasi Akademik (SIAKAD) Menggunakan Teknologi Single Sign-On (SSO)" — M Sigit Pratama S, NPM 2271020114
-**Status:** Draft awal, perlu direview sebelum dieksekusi
+**Status:** Implementasi Selesai (Penyesuaian resmi nomenklatur ke Sistem Penerimaan Murid Baru / SPMB)
 
 > **Catatan asumsi kunci** (dikonfirmasi bersama pemilik project):
-> - PPDB saat ini berjalan manual/tidak terdigitalisasi penuh; SIAKAD belum ada. Keduanya dibangun sebagai bagian dari project ini.
-> - Arsitektur: **satu aplikasi Laravel** dengan dua modul (PPDB & SIAKAD) plus satu modul Auth yang bertindak sebagai **Identity Provider (IdP) OIDC internal**. Modul PPDB dan SIAKAD berperan sebagai *Relying Party* terhadap IdP tersebut, sehingga alur SSO tetap nyata secara teknis walau berjalan dalam satu deployment.
+> - SPMB (sebelumnya PPDB): alur resmi disesuaikan di mana calon murid yang telah lulus verifikasi awal/pemerintah mendaftar ulang di portal sekolah, diverifikasi berkas fisik terjadwal, dan ditetapkan kelulusannya.
+> - Arsitektur: **satu aplikasi Laravel** dengan dua modul (SPMB & SIAKAD) plus satu modul Auth yang bertindak sebagai **Identity Provider (IdP) OIDC internal**. Modul SPMB dan SIAKAD berperan sebagai *Relying Party* terhadap IdP tersebut, sehingga alur SSO tetap nyata secara teknis walau berjalan dalam satu deployment.
 > - Detail teknis arsitektur & requirement fungsional lengkap ada di dokumen **SRS** yang menyertai PRD ini.
 
 ---
 
 ## 1. Ringkasan Eksekutif
 
-Produk ini adalah aplikasi web tunggal untuk SMAN 1 Terbanggi Besar yang menggabungkan dua kebutuhan sekolah yang selama ini terpisah: **pendaftaran siswa baru (PPDB)** dan **pengelolaan data akademik dasar (SIAKAD)** — biodata siswa, pembagian kelas, dan input nilai. Kedua modul memakai satu sistem login terpusat berbasis **OpenID Connect (OIDC)**, dan data siswa yang dinyatakan lulus PPDB akan otomatis tersalin ke SIAKAD tanpa input ulang manual.
+Produk ini adalah aplikasi web tunggal untuk SMAN 1 Terbanggi Besar yang menggabungkan dua kebutuhan sekolah yang selama ini terpisah: **pendaftaran murid baru (SPMB)** dan **pengelolaan data akademik dasar (SIAKAD)** — biodata siswa, pembagian kelas, dan input nilai. Kedua modul memakai satu sistem login terpusat berbasis **OpenID Connect (OIDC)**, dan data siswa yang dinyatakan lulus/diterima SPMB akan otomatis tersalin ke SIAKAD tanpa input ulang manual.
 
 ## 2. Latar Belakang Masalah
 

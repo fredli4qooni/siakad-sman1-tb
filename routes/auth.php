@@ -20,9 +20,14 @@ Route::prefix('oauth')->name('oidc.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Alur SSO Relying Party (PPDB & SIAKAD)
+| Alur SSO Relying Party (SPMB / PPDB & SIAKAD)
 |--------------------------------------------------------------------------
 */
+Route::prefix('spmb/sso')->name('sso.spmb.')->group(function () {
+    Route::get('/login', [SsoClientController::class, 'loginPpdb'])->name('login');
+    Route::get('/callback', [SsoClientController::class, 'callbackPpdb'])->name('callback');
+});
+
 Route::prefix('ppdb/sso')->name('sso.ppdb.')->group(function () {
     Route::get('/login', [SsoClientController::class, 'loginPpdb'])->name('login');
     Route::get('/callback', [SsoClientController::class, 'callbackPpdb'])->name('callback');

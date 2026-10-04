@@ -254,7 +254,7 @@ class SyncEngineTest extends TestCase
         // Access sync dashboard
         $response = $this->actingAs($admin)->get('/admin/sync');
         $response->assertStatus(200)
-            ->assertSee('Audit Log Sinkronisasi PPDB')
+            ->assertSee('Audit Log Sinkronisasi SPMB')
             ->assertSee('GAGAL');
 
         // Retry sync

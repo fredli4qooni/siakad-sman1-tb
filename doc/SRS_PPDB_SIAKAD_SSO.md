@@ -1,7 +1,7 @@
-# SRS — Sistem PPDB Terintegrasi SIAKAD dengan SSO (OIDC)
+# SRS — Sistem SPMB (Penerimaan Murid Baru) Terintegrasi SIAKAD dengan SSO (OIDC)
 ### Studi Kasus: SMAN 1 Terbanggi Besar
 
-**Versi:** 1.0 (Draft)
+**Versi:** 1.1
 **Pasangan dokumen:** PRD_PPDB_SIAKAD_SSO.md
 
 ---
@@ -9,19 +9,19 @@
 ## 1. Pendahuluan
 
 ### 1.1 Tujuan Dokumen
-Dokumen ini menjabarkan kebutuhan perangkat lunak secara teknis untuk sistem PPDB yang terintegrasi dengan SIAKAD menggunakan SSO berbasis OpenID Connect (OIDC), sebagai acuan desain dan implementasi.
+Dokumen ini menjabarkan kebutuhan perangkat lunak secara teknis untuk Sistem Penerimaan Murid Baru (SPMB — sebelumnya dikenal sebagai PPDB) yang terintegrasi dengan SIAKAD menggunakan SSO berbasis OpenID Connect (OIDC), sebagai acuan desain dan implementasi.
 
 ### 1.2 Ruang Lingkup Produk
 Satu aplikasi web berbasis Laravel yang terdiri atas tiga modul logis:
 1. **Modul Auth** — Identity Provider (IdP) internal berbasis OIDC
-2. **Modul PPDB** — pendaftaran siswa baru (Relying Party terhadap Modul Auth)
+2. **Modul SPMB** — pendaftaran murid baru (Relying Party terhadap Modul Auth)
 3. **Modul SIAKAD** — biodata siswa, pembagian kelas, input nilai (Relying Party terhadap Modul Auth)
 
 ### 1.3 Definisi & Akronim
 
 | Istilah | Keterangan |
 |---|---|
-| PPDB | Penerimaan Peserta Didik Baru |
+| SPMB (PPDB) | Sistem Penerimaan Murid Baru (sebelumnya istilah PPDB) |
 | SIAKAD | Sistem Informasi Akademik |
 | SSO | Single Sign-On |
 | OIDC | OpenID Connect — protokol autentikasi di atas OAuth 2.0 |

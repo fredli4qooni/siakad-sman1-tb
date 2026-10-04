@@ -1,4 +1,4 @@
-<x-layouts.admin title="Manajemen Kelas" heading="Manajemen Kelas & Rombongan Belajar">
+<x-layouts.admin title="Manajemen Kelas & Semester" heading="Manajemen Kelas & Semester">
     <div class="space-y-6">
 
         <!-- Formulir Tambah Kelas Baru -->
@@ -75,6 +75,7 @@
                         <tr class="border-b border-[#C9CDC3] text-xs font-semibold text-[#545B52]">
                             <th class="py-3 px-3">Nama Kelas</th>
                             <th class="py-3 px-3">Tingkat</th>
+                            <th class="py-3 px-3">Semester</th>
                             <th class="py-3 px-3">Tahun Ajaran</th>
                             <th class="py-3 px-3">Wali Kelas</th>
                             <th class="py-3 px-3 text-right">Kapasitas</th>
@@ -89,6 +90,11 @@
                                 <td class="py-3 px-3">
                                     <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#E7F4EA] text-[#0E6026]">
                                         Tingkat {{ $k->tingkat }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-3">
+                                    <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-[#E7F4EA] text-[#0E6026]">
+                                        Ganjil (1)
                                     </span>
                                 </td>
                                 <td class="py-3 px-3 text-[#545B52] tabular-nums">{{ $k->tahun_ajaran }}</td>

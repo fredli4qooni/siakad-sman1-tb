@@ -2,7 +2,7 @@
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-                <h1 class="text-2xl font-bold text-[#1C2620]">Unggah Berkas Persyaratan PPDB</h1>
+                <h1 class="text-2xl font-bold text-[#1C2620]">Unggah Berkas Persyaratan SPMB</h1>
                 <p class="text-xs text-[#545B52] mt-1">
                     Format file yang diperbolehkan: PDF, JPG, PNG dengan ukuran maksimum 2MB per berkas.
                 </p>

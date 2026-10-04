@@ -71,7 +71,7 @@
                         </div>
                         @if($pendaftar->no_peserta_ppdb_provinsi)
                             <div class="py-3 flex justify-between items-center">
-                                <dt class="text-[#545B52]">No. Kelulusan PPDB Pemerintah</dt>
+                                <dt class="text-[#545B52]">No. Kelulusan SPMB Pemerintah</dt>
                                 <dd class="font-mono font-semibold text-[#0E6026]">{{ $pendaftar->no_peserta_ppdb_provinsi }}</dd>
                             </div>
                         @endif
@@ -209,7 +209,7 @@
                     <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
                         <span class="text-[#545B52] block">Lokasi Verifikasi</span>
                         <div class="font-bold text-sm text-[#1C2620] mt-1">
-                            {{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB SMAN 1 Terbanggi Besar' }}
+                            {{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia SPMB SMAN 1 Terbanggi Besar' }}
                         </div>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                 <div class="p-4 rounded-xl bg-white border border-[#6B6200]/30 text-xs space-y-2">
                     <span class="font-bold text-[#6B6200] block">Berkas Fisik yang Wajib Dibawa Saat Hadir:</span>
                     <p class="text-[#545B52] leading-relaxed">
-                        {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan PPDB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
+                        {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan SPMB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
                     </p>
                 </div>
             </div>

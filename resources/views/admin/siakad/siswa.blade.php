@@ -76,9 +76,14 @@
                                 <td class="py-3 px-3 tabular-nums text-[#545B52]">{{ $s->tahun_masuk }}</td>
                                 <td class="py-3 px-3">
                                     @if($s->kelas)
-                                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#E7F4EA] text-[#0E6026]">
-                                            {{ $s->kelas->nama_kelas }}
-                                        </span>
+                                        <div>
+                                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#E7F4EA] text-[#0E6026]">
+                                                {{ $s->kelas->nama_kelas }} (Tingkat {{ $s->kelas->tingkat }})
+                                            </span>
+                                            <div class="text-[10px] text-[#545B52] mt-0.5">
+                                                Sem. Ganjil &bull; TP {{ $s->kelas->tahun_ajaran }}
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-[#FBF9D6] text-[#6B6200]">
                                             Belum Ditempatkan

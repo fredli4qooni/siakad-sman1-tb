@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Bukti Pendaftaran & Ketetapan PPDB — {{ $pendaftar->no_pendaftaran }} — {{ $pendaftar->nama_lengkap }}</title>
+    <title>Surat Bukti Pendaftaran & Ketetapan SPMB — {{ $pendaftar->no_pendaftaran }} — {{ $pendaftar->nama_lengkap }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -484,7 +484,7 @@
                 Kembali ke Dasbor
             </a>
             <div>
-                <h1 class="bar-title">Surat Bukti Pendaftaran & Ketetapan PPDB Resmi</h1>
+                <h1 class="bar-title">Surat Bukti Pendaftaran & Ketetapan SPMB Resmi</h1>
                 <p class="bar-desc">SMA Negeri 1 Terbanggi Besar — Format Resmi Standar Kedinasan</p>
             </div>
         </div>
@@ -535,9 +535,9 @@
             <!-- Judul & Nomor Surat Resmi -->
             <section class="doc-header">
                 @if($pendaftar->hasilSeleksi && $pendaftar->hasilSeleksi->isLulus())
-                    <h2 class="doc-title">TANDA BUKTI PENDAFTARAN PPDB & SURAT KETETAPAN KELULUSAN</h2>
+                    <h2 class="doc-title">TANDA BUKTI PENDAFTARAN SPMB & SURAT KETETAPAN KELULUSAN</h2>
                 @else
-                    <h2 class="doc-title">TANDA BUKTI PENDAFTARAN PPDB TAHUN AJARAN {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}</h2>
+                    <h2 class="doc-title">TANDA BUKTI PENDAFTARAN SPMB TAHUN AJARAN {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}</h2>
                 @endif
                 <div class="doc-meta">
                     <span class="doc-meta-item">Nomor: <strong>421.3/{{ str_pad($pendaftar->id, 4, '0', STR_PAD_LEFT) }}/V.01/DP.2/{{ date('Y') }}</strong></span>
@@ -549,16 +549,16 @@
             </section>
 
             <p style="margin: 0 0 10px 0; font-size: 11px; text-align: justify; color: #1C2620;">
-                Panitia Penerimaan Peserta Didik Baru (PPDB) SMA Negeri 1 Terbanggi Besar menerangkan bahwa calon peserta didik dengan identitas di bawah ini telah terdata secara sah pada pangkalan data seleksi penerimaan siswa baru Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}:
+                Panitia Penerimaan Murid Baru (SPMB) SMA Negeri 1 Terbanggi Besar menerangkan bahwa calon peserta didik / murid dengan identitas di bawah ini telah terdata secara sah pada pangkalan data seleksi penerimaan murid baru Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}:
             </p>
 
             <!-- I. Data Calon Siswa & Pasfoto -->
-            <h3 class="section-header">I. Data Identitas Calon Peserta Didik</h3>
+            <h3 class="section-header">I. Data Identitas Calon Murid</h3>
             <div class="identity-layout">
                 <div class="identity-details">
                     <table class="info-table">
                         <tr>
-                            <td class="col-label">Nomor Registrasi PPDB</td>
+                            <td class="col-label">Nomor Registrasi SPMB</td>
                             <td class="col-sep">:</td>
                             <td class="col-val tabular-nums">{{ $pendaftar->no_pendaftaran }}</td>
                         </tr>
@@ -681,7 +681,7 @@
                     @empty
                         <tr>
                             <td colspan="4" style="text-align: center; color: #545B52; font-style: italic; padding: 10px;">
-                                Dokumen fisik diverifikasi langsung di sekretariat panitia PPDB.
+                                Dokumen fisik diverifikasi langsung di sekretariat panitia SPMB.
                             </td>
                         </tr>
                     @endforelse
@@ -735,13 +735,13 @@
                     <tr>
                         <td class="col-label">Tempat / Ruangan</td>
                         <td class="col-sep">:</td>
-                        <td class="col-val">{{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia PPDB SMAN 1 Terbanggi Besar' }}</td>
+                        <td class="col-val">{{ $pendaftar->lokasi_verifikasi_fisik ?? 'Ruang Panitia SPMB SMAN 1 Terbanggi Besar' }}</td>
                     </tr>
                     <tr>
                         <td class="col-label">Berkas Wajib Dibawa</td>
                         <td class="col-sep">:</td>
                         <td class="col-val" style="font-size: 10px; color: #1C2620; line-height: 1.4;">
-                            {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Lembar Cetak Bukti Pendaftaran Ulang ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Kelulusan PPDB Pemerintah. 6. Pas Foto 3x4 (3 lembar).' }}
+                            {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Lembar Cetak Bukti Pendaftaran Ulang ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Kelulusan SPMB Pemerintah. 6. Pas Foto 3x4 (3 lembar).' }}
                         </td>
                     </tr>
                 </table>
@@ -782,7 +782,7 @@
 
                 <div>
                     <div class="sig-role">Terbanggi Besar, {{ now()->translatedFormat('d F Y') }}</div>
-                    <div class="sig-subrole">a.n. Kepala SMA Negeri 1 Terbanggi Besar<br>Ketua Panitia Penerimaan PPDB,</div>
+                    <div class="sig-subrole">a.n. Kepala SMA Negeri 1 Terbanggi Besar<br>Ketua Panitia Penerimaan SPMB,</div>
                     <div class="sig-space">
                         <!-- Digital Stamp Seal Representation -->
                         <svg class="stamp-mark" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -790,7 +790,7 @@
                             <circle cx="50" cy="50" r="38" stroke="#0E6026" stroke-width="1.2"/>
                             <path id="curve-stamp" d="M20,50 A30,30 0 1,1 80,50" fill="none"/>
                             <text font-size="7" font-weight="bold" fill="#0E6026" letter-spacing="1">
-                                <textPath href="#curve-stamp" startOffset="50%" text-anchor="middle">PANITIA PPDB SMAN 1 TB</textPath>
+                                <textPath href="#curve-stamp" startOffset="50%" text-anchor="middle">PANITIA SPMB SMAN 1 TB</textPath>
                             </text>
                             <text x="50" y="53" font-size="8.5" font-weight="900" fill="#0E6026" text-anchor="middle">TERVERIFIKASI</text>
                             <text x="50" y="63" font-size="6.5" font-weight="700" fill="#039834" text-anchor="middle">RESMI DINAS</text>
@@ -811,7 +811,7 @@
                 </div>
                 <div class="security-text">
                     <strong>Pemberitahuan Keabsahan Dokumen Elektronik:</strong><br>
-                    Surat tanda bukti ini diterbitkan secara otomatis dan sah melalui <strong>Sistem PPDB & SIAKAD Terintegrasi SMA Negeri 1 Terbanggi Besar</strong> (UUID: {{ md5($pendaftar->no_pendaftaran . $pendaftar->nisn) }}). Keabsahan dokumen dapat divalidasi dengan memindai kode QR atau melakukan pengecekan nomor registrasi pada portal resmi <strong>https://sman1terbanggibesar.sch.id</strong>.<br>
+                    Surat tanda bukti ini diterbitkan secara otomatis dan sah melalui <strong>Sistem SPMB & SIAKAD Terintegrasi SMA Negeri 1 Terbanggi Besar</strong> (UUID: {{ md5($pendaftar->no_pendaftaran . $pendaftar->nisn) }}). Keabsahan dokumen dapat divalidasi dengan memindai kode QR atau melakukan pengecekan nomor registrasi pada portal resmi <strong>https://sman1terbanggibesar.sch.id</strong>.<br>
                     <span style="font-size: 8.5px; color: #9FA29E;">Waktu cetak: {{ now()->translatedFormat('d F Y, H:i:s') }} WIB &bull; Sistem Single Sign-On (SSO) Terpadu SMAN 1 TB</span>
                 </div>
             </footer>

@@ -1,7 +1,7 @@
-# Sistem Pendaftaran PPDB Terintegrasi SIAKAD dengan Single Sign-On (SSO OIDC)
+# Sistem Penerimaan Murid Baru (SPMB) Terintegrasi SIAKAD dengan Single Sign-On (SSO OIDC)
 ### SMAN 1 Terbanggi Besar — Lampung Tengah
 
-Aplikasi web terintegrasi berbasis Laravel 11/12 yang menggabungkan proses Penerimaan Peserta Didik Baru (PPDB) dan Sistem Informasi Akademik (SIAKAD) dalam satu ekosistem terpadu menggunakan arsitektur **Identity Provider (IdP) OpenID Connect (OIDC)**. Sistem ini mengeliminasi duplikasi entri data manual dengan secara otomatis menyinkronkan data siswa yang dinyatakan **"LULUS"** ke basis data akademik SIAKAD.
+Aplikasi web terintegrasi berbasis Laravel 11/12 yang menggabungkan proses Penerimaan Murid Baru (SPMB) dan Sistem Informasi Akademik (SIAKAD) dalam satu ekosistem terpadu menggunakan arsitektur **Identity Provider (IdP) OpenID Connect (OIDC)**. Sistem ini mengeliminasi duplikasi entri data manual dengan secara otomatis menyinkronkan data siswa yang dinyatakan **"LULUS"** ke basis data akademik SIAKAD.
 
 ---
 
@@ -10,19 +10,19 @@ Aplikasi web terintegrasi berbasis Laravel 11/12 yang menggabungkan proses Pener
 ### 1. Modul Autentikasi & Identity Provider (OIDC SSO)
 - **OIDC Server & Discovery:** Menyediakan endpoint standar `/.well-known/openid-configuration`, `/oauth/authorize`, `/oauth/token`, dan `/oauth/userinfo`.
 - **JWT Signed ID Tokens:** Menerbitkan `id_token` bertanda tangan kriptografis untuk pertukaran klaim profil dan peran antar modul.
-- **Single Sign-On (SSO):** Sekali login di portal SSO, pengguna dapat berpindah antara modul PPDB dan SIAKAD tanpa perlu autentikasi ulang.
+- **Single Sign-On (SSO):** Sekali login di portal SSO, pengguna dapat berpindah antara modul SPMB dan SIAKAD tanpa perlu autentikasi ulang.
 - **Multi-Identifier Login:** Pengguna dapat masuk menggunakan email maupun username/nama.
 - **Role-Based Access Control (RBAC):** Pemisahan hak akses ketat antara `admin`, `operator`, `guru`, `siswa`, dan `calon_siswa`.
 - **Single Logout (SLO):** Mengakhiri sesi di seluruh modul secara serentak dan aman.
 
-### 2. Modul PPDB (Penerimaan Peserta Didik Baru)
-- **Portal Publik & Informasi Gelombang:** Halaman depan sekolah yang menampilkan status periode PPDB aktif, kuota rombel, persyaratan, alur seleksi, dan pengumuman hasil.
-- **Formulir Pendaftaran Calon Siswa:** Pengisian data pribadi, asal sekolah, alamat, serta data orang tua/wali dengan validasi format NISN (10 digit) dan NIK (16 digit).
-- **Manajemen Berkas Persyaratan:** Unggah 4 dokumen wajib (KK, Akta Kelahiran, Ijazah/SKL, dan Rapor) dengan validasi MIME (PDF/JPG/PNG) dan batas ukuran 2MB.
-- **Verifikasi Panitia:** Panel administrator untuk meninjau berkas digital, memberikan catatan koreksi, menyetujui/menolak berkas, dan finalisasi verifikasi.
-- **Penetapan Kelulusan & Cetak Bukti:** Penetapan keputusan seleksi (Lulus, Tidak Lulus, Cadangan) serta cetak bukti pendaftaran dan kelulusan ramah kertas A4.
+### 2. Modul SPMB (Sistem Penerimaan Murid Baru)
+- **Portal Publik & Informasi Gelombang:** Halaman depan sekolah yang menampilkan status periode SPMB aktif, kuota rombel, persyaratan, alur seleksi, dan pengumuman hasil.
+- **Formulir Pendaftaran Calon Siswa:** Pengisian data pribadi, asal sekolah, alamat, bukti kelulusan SPMB pemerintah, serta data orang tua/wali dengan validasi format NISN (10 digit) dan NIK (16 digit).
+- **Manajemen Berkas Persyaratan:** Unggah dokumen persyaratan dengan validasi MIME (PDF/JPG/PNG) dan batas ukuran 2MB.
+- **Verifikasi Panitia:** Panel administrator untuk meninjau berkas digital, verifikasi berkas fisik terjadwal, memberikan catatan koreksi, dan finalisasi verifikasi.
+- **Penetapan Kelulusan & Cetak Bukti:** Penetapan keputusan seleksi (Diterima / Tidak Diterima) serta cetak bukti pendaftaran SPMB ramah kertas A4.
 
-### 3. Sync Service Engine (Integrasi Otomatis PPDB → SIAKAD)
+### 3. Sync Service Engine (Integrasi Otomatis SPMB → SIAKAD)
 - **Otomatisasi Berbasis Transaksi (`DB::transaction`):** Saat status pendaftar ditetapkan **"LULUS"**, sistem secara otomatis:
   1. Menyalin data pokok calon siswa dan orang tua ke entitas `Siswa` di SIAKAD.
   2. Menerbitkan Nomor Induk Siswa (NIS) unik otomatis (`YYYYXXXX`).
@@ -125,8 +125,8 @@ Aplikasi kini dapat diakses melalui peramban pada alamat: `http://127.0.0.1:8000
 
 | Peran (Role) | Email / Akun | Kata Sandi | Deskripsi Akses |
 |---|---|---|---|
-| **Super Admin** | `admin@sman1tb.sch.id` | `password` | Akses penuh seluruh modul (PPDB, SIAKAD, Users, Sync Logs) |
-| **Operator PPDB** | `operator@sman1tb.sch.id` | `password` | Verifikasi berkas, periode PPDB, penetapan seleksi, dan sync log |
+| **Super Admin** | `admin@sman1tb.sch.id` | `password` | Akses penuh seluruh modul (SPMB, SIAKAD, Users, Sync Logs) |
+| **Operator SPMB** | `operator@sman1tb.sch.id` | `password` | Verifikasi berkas, periode SPMB, penetapan seleksi, dan sync log |
 | **Guru (Matematika)** | `guru.ahmad@sman1tb.sch.id` | `password` | Portal Guru: Penugasan mengajar, lembar input nilai X MIPA 1 |
 | **Guru (Bahasa)** | `guru.siti@sman1tb.sch.id` | `password` | Portal Guru: Penugasan mengajar kelas X MIPA 2 |
 | **Siswa Contoh** | `siswa@sman1tb.sch.id` | `password` | Portal Siswa: Melihat informasi kelas dan transkrip nilai rapor |
@@ -142,8 +142,8 @@ php artisan test
 
 Hasil eksekusi suite pengujian:
 ```text
-Pass: 28 tests (175 assertions)
-Durasi: ~1.6 detik
+Pass: 30 tests (192 assertions)
+Durasi: ~2.3 detik
 Status: 100% Passed
 ```
 

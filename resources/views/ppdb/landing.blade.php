@@ -1,4 +1,4 @@
-<x-layouts.guest title="Beranda PPDB & SIAKAD">
+<x-layouts.guest title="Beranda SPMB & SIAKAD">
     <!-- Hero Section: Latar Belakang Foto Sekolah SMAN 1 Terbanggi Besar -->
     <div class="border-b border-[#E1E4DE] bg-gradient-to-r from-white/85 via-white/55 to-white/20 py-16 sm:py-20">
         <div class="w-full px-6 sm:px-10 lg:px-16">
@@ -7,7 +7,7 @@
                     @if($periodeAktif)
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-4 border border-[#039834]/20 shadow-2xs">
                             <span class="w-2 h-2 rounded-full bg-[#039834] animate-pulse"></span>
-                            PPDB {{ $periodeAktif->tahun_ajaran }} &bull; {{ $periodeAktif->nama_gelombang }}
+                            SPMB {{ $periodeAktif->tahun_ajaran }} &bull; {{ $periodeAktif->nama_gelombang }}
                         </div>
                     @else
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBEAEA] text-[#C81210] mb-4 border border-[#C81210]/20 shadow-2xs">
@@ -16,7 +16,7 @@
                     @endif
 
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C2620] tracking-tight leading-tight">
-                        Penerimaan Peserta Didik Baru Terintegrasi SIAKAD
+                        Penerimaan Murid Baru Terintegrasi SIAKAD
                     </h1>
                     <p class="mt-4 text-base sm:text-lg text-[#545B52] leading-relaxed">
                         Sistem pendaftaran online SMAN 1 Terbanggi Besar dengan teknologi Single Sign-On (SSO OIDC). Calon siswa yang dinyatakan lulus otomatis tersinkronisasi ke sistem akademik tanpa entri data berulang.
@@ -25,7 +25,7 @@
                     <div class="mt-8 flex flex-wrap items-center gap-3">
                         @if($periodeAktif && $periodeAktif->is_aktif)
                             <x-button as="a" href="{{ route('auth.register') }}" variant="primary" class="shadow-sm">
-                                Daftar PPDB Sekarang
+                                Daftar SPMB Sekarang
                             </x-button>
                         @endif
                         <x-button as="a" href="{{ route('ppdb.pengumuman') }}" variant="secondary" class="bg-white/90 shadow-2xs hover:bg-white">
@@ -96,7 +96,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <x-card title="1. Satu Akun (SSO OIDC)" subtitle="OpenID Connect Identity Provider" class="shadow-md bg-white">
                     <p class="text-sm text-[#545B52] leading-relaxed">
-                        Calon siswa, guru, dan staf sekolah cukup menggunakan satu identitas akun terpusat untuk mengakses portal PPDB maupun portal akademik SIAKAD.
+                        Calon siswa, guru, dan staf sekolah cukup menggunakan satu identitas akun terpusat untuk mengakses portal SPMB maupun portal akademik SIAKAD.
                     </p>
                 </x-card>
 
@@ -119,8 +119,8 @@
     <div class="py-16 bg-white/30">
         <div class="w-full px-6 sm:px-10 lg:px-16">
             <div class="mb-10 text-left">
-                <h2 class="text-2xl font-bold text-[#1C2620]">Alur Pendaftaran PPDB</h2>
-                <p class="mt-1 text-sm text-[#545B52]">4 tahapan mudah penerimaan peserta didik baru hingga terdaftar di SIAKAD.</p>
+                <h2 class="text-2xl font-bold text-[#1C2620]">Alur Pendaftaran SPMB</h2>
+                <p class="mt-1 text-sm text-[#545B52]">4 tahapan mudah penerimaan murid baru hingga terdaftar di SIAKAD.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -150,7 +150,7 @@
                     </div>
                     <h3 class="text-base font-semibold text-[#1C2620] mb-1">Verifikasi Operator</h3>
                     <p class="text-xs text-[#545B52] leading-relaxed">
-                        Panitia PPDB memvalidasi keabsahan data dan berkas yang diajukan oleh calon siswa secara online.
+                        Panitia SPMB memvalidasi keabsahan data dan berkas yang diajukan oleh calon siswa secara online.
                     </p>
                 </div>
 

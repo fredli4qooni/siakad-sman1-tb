@@ -1,8 +1,8 @@
-<x-layouts.admin title="Periode & Kuota PPDB" heading="Manajemen Periode & Kuota PPDB">
+<x-layouts.admin title="Periode & Kuota SPMB" heading="Manajemen Periode & Kuota SPMB">
     <div class="space-y-6">
 
         <!-- Formulir Tambah/Edit Periode -->
-        <x-card title="Buka / Atur Periode PPDB" subtitle="Konfigurasi jadwal pembukaan gelombang dan target kuota penerimaan rombel">
+        <x-card title="Buka / Atur Periode SPMB" subtitle="Konfigurasi jadwal pembukaan gelombang dan target kuota penerimaan rombel">
             <form action="{{ route('admin.ppdb.periode.simpan') }}" method="POST" class="space-y-4">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
@@ -69,8 +69,8 @@
             </form>
         </x-card>
 
-        <!-- Daftar Seluruh Periode PPDB -->
-        <x-card title="Daftar Gelombang PPDB">
+        <!-- Daftar Seluruh Periode SPMB -->
+        <x-card title="Daftar Gelombang SPMB">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-[#1C2620]">
                     <thead>
@@ -119,7 +119,7 @@
                         @empty
                             <tr>
                                 <td colspan="8" class="py-6 text-center text-xs text-[#545B52]">
-                                    Belum ada data periode PPDB yang dibuat.
+                                    Belum ada data periode SPMB yang dibuat.
                                 </td>
                             </tr>
                         @endforelse

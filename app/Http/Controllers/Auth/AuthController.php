@@ -116,7 +116,7 @@ class AuthController extends Controller
 
             // 2. Buat Draft Profil Pendaftar dengan nomor pendaftaran otomatis
             $nomorUrut = Pendaftar::where('periode_id', $periodeAktif->id)->count() + 1;
-            $noPendaftaran = 'PPDB-' . date('Y') . '-' . str_pad($nomorUrut, 4, '0', STR_PAD_LEFT);
+            $noPendaftaran = 'SPMB-' . date('Y') . '-' . str_pad($nomorUrut, 4, '0', STR_PAD_LEFT);
 
             Pendaftar::create([
                 'user_id' => $user->id,

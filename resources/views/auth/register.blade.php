@@ -1,6 +1,6 @@
 <x-layouts.auth title="Registrasi Akun Calon Siswa" heading="Daftar Akun Calon Siswa">
     <p class="text-xs text-[#545B52] mb-6 text-center">
-        Akun yang dibuat akan digunakan untuk proses seleksi PPDB hingga menjadi akun SIAKAD saat dinyatakan lulus.
+        Akun yang dibuat akan digunakan untuk proses seleksi SPMB hingga menjadi akun SIAKAD saat dinyatakan lulus.
     </p>
 
     <form method="POST" action="{{ route('auth.register') }}" class="space-y-4">

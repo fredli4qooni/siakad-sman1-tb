@@ -25,7 +25,7 @@
             {{ $heading ?? 'Single Sign-On (SSO)' }}
         </h2>
         <p class="mt-1 text-center text-xs text-[#E7F4EA]">
-            SMAN 1 Terbanggi Besar — PPDB & SIAKAD Terintegrasi
+            SMAN 1 Terbanggi Besar — SPMB & SIAKAD Terintegrasi
         </p>
     </div>
 

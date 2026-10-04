@@ -15,7 +15,7 @@
 
         @if(in_array($pendaftar->status_pendaftaran, ['terverifikasi', 'lulus', 'tidak_lulus']))
             <x-alert type="warning" title="Formulir Terkunci">
-                Data formulir Anda telah berstatus <strong>{{ strtoupper($pendaftar->status_pendaftaran) }}</strong> dan tidak dapat diubah lagi secara mandiri. Hubungi panitia PPDB jika terdapat perbaikan data mendesak.
+                Data formulir Anda telah berstatus <strong>{{ strtoupper($pendaftar->status_pendaftaran) }}</strong> dan tidak dapat diubah lagi secara mandiri. Hubungi panitia SPMB jika terdapat perbaikan data mendesak.
             </x-alert>
         @endif
 
@@ -23,15 +23,15 @@
             @csrf
 
             <!-- Bagian 1: Data Diri Pendaftar -->
-            <x-card title="A. Data Calon Peserta Didik" subtitle="Informasi identitas pribadi dan kelulusan seleksi pemerintah">
+            <x-card title="A. Data Calon Murid" subtitle="Informasi identitas pribadi dan kelulusan seleksi pemerintah">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="sm:col-span-2">
                         <x-input
-                            label="Nomor Peserta / Bukti Kelulusan PPDB Pemerintah (Dinas Pendidikan Provinsi)"
+                            label="Nomor Peserta / Bukti Kelulusan SPMB Pemerintah (Dinas Pendidikan Provinsi)"
                             name="no_peserta_ppdb_provinsi"
-                            placeholder="Contoh: PPDB-PROV-2026-00123"
+                            placeholder="Contoh: SPMB-PROV-2026-00123"
                             :value="old('no_peserta_ppdb_provinsi', $pendaftar->no_peserta_ppdb_provinsi)"
-                            hint="Nomor pendaftaran atau bukti tanda terima lulus dari portal PPDB resmi pemerintah."
+                            hint="Nomor pendaftaran atau bukti tanda terima lulus dari portal SPMB resmi pemerintah."
                         />
                     </div>
 

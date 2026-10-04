@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'PPDB & SIAKAD' }} — SMAN 1 Terbanggi Besar</title>
+    <title>{{ $title ?? 'SPMB & SIAKAD' }} — SMAN 1 Terbanggi Besar</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
                     <img src="{{ asset('images/logo-sma.png') }}" alt="Logo SMAN 1 TB" class="w-10 h-10 object-contain">
                     <div>
                         <div class="text-sm font-bold text-[#1C2620] leading-tight">SMAN 1 Terbanggi Besar</div>
-                        <div class="text-xs text-[#545B52]">Portal PPDB & SIAKAD Terintegrasi</div>
+                        <div class="text-xs text-[#545B52]">Portal SPMB & SIAKAD Terintegrasi</div>
                     </div>
                 </a>
             </div>
@@ -31,10 +31,10 @@
                 <a href="{{ url('/') }}" class="text-sm font-medium text-[#1C2620] hover:text-[#0E6026] px-3 py-2 rounded-lg transition-colors">
                     Beranda
                 </a>
-                <a href="{{ url('/ppdb/alur') }}" class="text-sm font-medium text-[#1C2620] hover:text-[#0E6026] px-3 py-2 rounded-lg transition-colors">
+                <a href="{{ url('/spmb/alur') }}" class="text-sm font-medium text-[#1C2620] hover:text-[#0E6026] px-3 py-2 rounded-lg transition-colors">
                     Alur & Kuota
                 </a>
-                <a href="{{ url('/ppdb/pengumuman') }}" class="text-sm font-medium text-[#1C2620] hover:text-[#0E6026] px-3 py-2 rounded-lg transition-colors">
+                <a href="{{ url('/spmb/pengumuman') }}" class="text-sm font-medium text-[#1C2620] hover:text-[#0E6026] px-3 py-2 rounded-lg transition-colors">
                     Pengumuman
                 </a>
 
@@ -57,7 +57,7 @@
                         Masuk SSO
                     </a>
                     <a href="{{ route('auth.register') }}" class="text-sm font-medium bg-[#0E6026] text-white px-4 py-2 rounded-lg hover:bg-[#0A4C1E] transition-colors">
-                        Daftar PPDB
+                        Daftar SPMB
                     </a>
                 @endauth
             </nav>
@@ -73,7 +73,7 @@
     <footer class="border-t border-[#E1E4DE] bg-[#F3F5F2]/90 backdrop-blur-md py-8 text-center text-xs text-[#545B52]">
         <div class="w-full px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-                © {{ date('Y') }} SMAN 1 Terbanggi Besar — Sistem Informasi PPDB Terintegrasi SIAKAD
+                © {{ date('Y') }} SMAN 1 Terbanggi Besar — Sistem Informasi SPMB Terintegrasi SIAKAD
             </div>
             <div class="text-xs text-[#9FA29E]">
                 Single Sign-On (OIDC) & Sinkronisasi Otomatis

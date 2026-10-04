@@ -16,8 +16,8 @@ Route::prefix('admin')
             return view('admin.dashboard');
         })->name('dashboard');
 
-        // PPDB Admin
-        Route::prefix('ppdb')->name('ppdb.')->group(function () {
+        // SPMB & PPDB Admin
+        $spmbRoutes = function () {
             Route::get('/periode', [AdminPpdbController::class, 'periodeIndex'])->name('periode.index');
             Route::get('/periode-alias', [AdminPpdbController::class, 'periodeIndex'])->name('periode');
             Route::post('/periode', [AdminPpdbController::class, 'simpanPeriode'])->name('periode.simpan');
@@ -33,7 +33,10 @@ Route::prefix('admin')
             Route::get('/seleksi', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi.index');
             Route::get('/seleksi-alias', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi');
             Route::post('/seleksi/{pendaftar}', [AdminPpdbController::class, 'tetapkanKelulusan'])->name('kelulusan.simpan');
-        });
+        };
+
+        Route::prefix('spmb')->name('spmb.')->group($spmbRoutes);
+        Route::prefix('ppdb')->name('ppdb.')->group($spmbRoutes);
 
         // Integrasi / Sync Logs
         Route::get('/sync', [SyncLogController::class, 'index'])->name('sync.index');

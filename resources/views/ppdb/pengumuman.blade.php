@@ -1,13 +1,13 @@
-<x-layouts.guest title="Pengumuman Kelulusan PPDB — SMAN 1 TB">
+<x-layouts.guest title="Pengumuman Kelulusan SPMB — SMAN 1 TB">
     <div class="w-full px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="max-w-2xl mx-auto space-y-8">
             <!-- Header Halaman Centered -->
             <div class="text-center">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026] mb-3">
-                    Hasil Seleksi PPDB
+                    Hasil Seleksi SPMB
                 </span>
                 <h1 class="text-2xl sm:text-3xl font-bold text-[#1C2620] tracking-tight">
-                    Pengumuman Penerimaan Peserta Didik Baru
+                    Pengumuman Penerimaan Murid Baru
                 </h1>
                 <p class="mt-2 text-sm text-[#545B52] max-w-lg mx-auto leading-relaxed">
                     Masukkan Nomor Pendaftaran atau Nomor Induk Siswa Nasional (NISN) Anda untuk memeriksa status kelulusan.
@@ -20,7 +20,7 @@
                     <x-input
                         label="Nomor Pendaftaran atau NISN"
                         name="keyword"
-                        placeholder="Contoh: PPDB-2026-0001 atau 0098765432"
+                        placeholder="Contoh: SPMB-2026-0001 atau 0098765432"
                         required
                         class="tabular-nums"
                         :value="$keyword ?? ''"
@@ -98,7 +98,7 @@
                                             <span class="text-base font-bold">MOHON MAAF, ANDA BELUM DINYATAKAN LULUS</span>
                                         </div>
                                         <p class="text-xs text-[#1C2620] leading-relaxed">
-                                            Terima kasih telah berpartisipasi dalam proses seleksi PPDB SMAN 1 Terbanggi Besar. Tetap semangat dalam menggapai cita-cita Anda.
+                                            Terima kasih telah berpartisipasi dalam proses seleksi SPMB SMAN 1 Terbanggi Besar. Tetap semangat dalam menggapai cita-cita Anda.
                                         </p>
                                         @if($hasil && $hasil->catatan)
                                             <div class="text-xs pt-1 border-t border-[#C81210]/30 text-[#1C2620]">
@@ -113,7 +113,7 @@
                                             <span class="text-base font-bold">STATUS: SEDANG DALAM PROSES SELEKSI</span>
                                         </div>
                                         <p class="text-xs text-[#1C2620] leading-relaxed">
-                                            Berkas pendaftaran Anda saat ini sedang dalam tahap verifikasi atau menunggu jadwal sidang kelulusan oleh panitia PPDB. Silakan periksa kembali secara berkala.
+                                            Berkas pendaftaran Anda saat ini sedang dalam tahap verifikasi atau menunggu jadwal sidang kelulusan oleh panitia SPMB. Silakan periksa kembali secara berkala.
                                         </p>
                                     </div>
                                 @endif

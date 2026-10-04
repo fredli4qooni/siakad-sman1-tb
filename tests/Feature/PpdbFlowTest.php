@@ -37,7 +37,7 @@ class PpdbFlowTest extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertSee('PPDB 2026/2027')
+            ->assertSee('SPMB 2026/2027')
             ->assertSee('540');
 
         $responseAlur = $this->get('/ppdb/alur');
@@ -233,7 +233,7 @@ class PpdbFlowTest extends TestCase
 
         $printResponse = $this->actingAs($user)->get('/pendaftar/cetak-bukti');
         $printResponse->assertStatus(200)
-            ->assertSee('TANDA BUKTI PENDAFTARAN PPDB')
+            ->assertSee('TANDA BUKTI PENDAFTARAN SPMB')
             ->assertSee('PPDB-2026-0004');
 
         $kelulusanResponse = $this->actingAs($user)->get('/pendaftar/kelulusan');

@@ -1,4 +1,4 @@
-<x-layouts.guest title="Alur Pendaftaran & Kuota — PPDB SMAN 1 TB">
+<x-layouts.guest title="Alur Pendaftaran & Kuota — SPMB SMAN 1 TB">
     <div class="w-full px-6 sm:px-10 lg:px-16 py-12">
         <div class="mb-8">
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E7F4EA] text-[#0E6026] mb-2">
@@ -6,13 +6,13 @@
             </span>
             <h1 class="text-3xl font-bold text-[#1C2620]">Alur Pendaftaran & Ketentuan Kuota</h1>
             <p class="mt-1 text-sm text-[#545B52]">
-                Panduan lengkap tahapan pendaftaran penerimaan peserta didik baru SMAN 1 Terbanggi Besar.
+                Panduan lengkap tahapan pendaftaran penerimaan murid baru SMAN 1 Terbanggi Besar.
             </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-6">
-                <x-card title="Tahapan Pelaksanaan PPDB">
+                <x-card title="Tahapan Pelaksanaan SPMB">
                     <ol class="space-y-4 text-sm text-[#1C2620]">
                         <li class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-[#E7F4EA] text-[#0E6026] flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">1</span>
