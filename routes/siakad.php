@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AdminUserController;
 use App\Http\Controllers\Ppdb\AdminPpdbController;
 use App\Http\Controllers\Siakad\AdminSiakadController;
 use App\Http\Controllers\Siakad\GuruNilaiController;
@@ -68,8 +69,16 @@ Route::prefix('admin')
             Route::delete('/pengampu/{pengampu}', [AdminSiakadController::class, 'hapusPengampu'])->name('pengampu.hapus');
         });
 
-        // Users
-        Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
+        // Manajemen Pengguna & Akun Admin (Khusus Admin)
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/admins', [AdminUserController::class, 'index'])->name('admins.index');
+            Route::post('/admins', [AdminUserController::class, 'store'])->name('admins.store');
+            Route::post('/admins/{user}/toggle', [AdminUserController::class, 'toggleStatus'])->name('admins.toggle');
+            Route::post('/admins/{user}/password', [AdminUserController::class, 'resetPassword'])->name('admins.password');
+            Route::delete('/admins/{user}', [AdminUserController::class, 'destroy'])->name('admins.destroy');
+        });
+
+        Route::get('/users', [AdminUserController::class, 'indexAll'])->name('users.index');
     });
 
 // Rute Portal Guru (Dilindungi Role: guru, admin)

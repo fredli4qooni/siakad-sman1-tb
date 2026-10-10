@@ -16,7 +16,7 @@
                     @endif
 
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C2620] tracking-tight leading-tight">
-                        Penerimaan Murid Baru Terintegrasi SIAKAD
+                        Sistem Penerimaan Murid Baru Terintegrasi SIAKAD
                     </h1>
                     <p class="mt-4 text-base sm:text-lg text-[#545B52] leading-relaxed">
                         Sistem pendaftaran online SMAN 1 Terbanggi Besar dengan teknologi Single Sign-On (SSO OIDC). Calon siswa yang dinyatakan lulus otomatis tersinkronisasi ke sistem akademik tanpa entri data berulang.
