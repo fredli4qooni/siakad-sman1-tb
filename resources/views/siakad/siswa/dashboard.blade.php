@@ -1,4 +1,4 @@
-<x-layouts.pendaftar title="Dashboard SIAKAD Siswa" heading="Data Induk Siswa">
+<x-layouts.siakad title="Dashboard SIAKAD Siswa" heading="Data Induk Siswa">
     <div class="space-y-6">
         <!-- Header Banner Sambutan Siswa -->
         <div class="p-6 rounded-2xl bg-gradient-to-r from-[#E7F4EA] to-[#F3F5F2] border border-[#039834]/30 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -228,4 +228,4 @@
             </div>
         </div>
     </div>
-</x-layouts.pendaftar>
+</x-layouts.siakad>

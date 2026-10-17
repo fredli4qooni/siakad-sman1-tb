@@ -1,10 +1,19 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Ppdb\BerkasController;
 use App\Http\Controllers\Ppdb\DashboardPendaftarController;
 use App\Http\Controllers\Ppdb\PendaftarController;
 use App\Http\Controllers\Ppdb\PublicPpdbController;
 use Illuminate\Support\Facades\Route;
+
+// Login Mandiri SPMB / Pendaftaran Ulang
+Route::get('/spmb/login', [AuthController::class, 'showSpmbLoginForm'])->name('spmb.login');
+Route::post('/spmb/login', [AuthController::class, 'loginSpmb'])->name('spmb.login.post');
+Route::get('/ppdb/login', [AuthController::class, 'showSpmbLoginForm'])->name('ppdb.login');
+Route::post('/ppdb/login', [AuthController::class, 'loginSpmb'])->name('ppdb.login.post');
+Route::get('/pendaftar/login', [AuthController::class, 'showSpmbLoginForm'])->name('pendaftar.login');
+Route::post('/pendaftar/login', [AuthController::class, 'loginSpmb'])->name('pendaftar.login.post');
 
 // Halaman Publik SPMB (dan alias PPDB)
 Route::prefix('spmb')->name('spmb.')->group(function () {

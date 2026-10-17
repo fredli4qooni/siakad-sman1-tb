@@ -25,14 +25,14 @@
                     <div class="mt-8 flex flex-wrap items-center gap-3">
                         @if($periodeAktif && $periodeAktif->is_aktif)
                             <x-button as="a" href="{{ route('auth.register') }}" variant="primary" class="shadow-sm">
-                                Daftar SPMB Sekarang
+                                Daftar SPMB Baru
                             </x-button>
                         @endif
-                        <x-button as="a" href="{{ route('ppdb.pengumuman') }}" variant="secondary" class="bg-white/90 shadow-2xs hover:bg-white">
-                            Cek Hasil Seleksi
+                        <x-button as="a" href="{{ route('spmb.login') }}" variant="secondary" class="bg-white/90 shadow-2xs hover:bg-white text-[#0E6026] font-semibold border border-[#039834]/30">
+                            Masuk Portal SPMB
                         </x-button>
-                        <x-button as="a" href="{{ route('auth.login') }}" variant="ghost" class="bg-white/70 hover:bg-white/90">
-                            Masuk Akun SSO
+                        <x-button as="a" href="{{ route('siakad.login') }}" variant="ghost" class="bg-white/80 hover:bg-white text-[#1C2620] font-semibold border border-[#C9CDC3]">
+                            Masuk Portal SIAKAD
                         </x-button>
                     </div>
                 </div>
@@ -84,6 +84,89 @@
                                 Lihat Persyaratan dan Alur Lengkap
                             </a>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pilihan 2 Portal Terpisah (SPMB vs SIAKAD) -->
+    <div class="py-12 bg-white/70 backdrop-blur-sm border-b border-[#E1E4DE]">
+        <div class="w-full px-6 sm:px-10 lg:px-16">
+            <div class="max-w-2xl mb-8">
+                <span class="text-xs font-bold text-[#0E6026] tracking-wider uppercase">Akses Terpisah</span>
+                <h2 class="text-2xl font-bold text-[#1C2620] mt-1">Dua Portal Layanan Sistem</h2>
+                <p class="text-sm text-[#545B52] mt-1">Silakan pilih portal sesuai tujuan Anda. Masuk dengan akun SSO masing-masing.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card Portal SPMB -->
+                <div class="p-6 rounded-2xl border-2 border-[#0E6026]/20 bg-gradient-to-br from-[#E7F4EA]/40 via-white to-white shadow-md hover:border-[#0E6026]/40 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]/30">
+                                Calon Murid Baru
+                            </span>
+                            <span class="text-xs text-[#545B52] font-semibold">Tahun Masuk 2026/2027</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#1C2620]">1. Portal Pendaftaran Ulang (SPMB)</h3>
+                        <p class="text-sm text-[#545B52] mt-2 leading-relaxed">
+                            Khusus calon murid baru untuk melengkapi biodata pendaftaran ulang, mengunggah berkas fisik (KK, Akta, Surat Pernyataan), dan mengecek jadwal verifikasi berkas oleh panitia.
+                        </p>
+                        <ul class="mt-4 space-y-2 text-xs text-[#545B52]">
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Pengisian Formulir Biodata & Data Orang Tua
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Unggah & Validasi Dokumen Fisik
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Cek Status Kelulusan & Kredensial SIAKAD
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-5 border-t border-[#E1E4DE] flex items-center justify-between gap-3">
+                        <a href="{{ route('auth.register') }}" class="text-xs font-semibold text-[#545B52] hover:text-[#0E6026]">
+                            Belum punya akun? Buat Akun
+                        </a>
+                        <x-button as="a" href="{{ route('spmb.login') }}" variant="primary" class="shadow-sm">
+                            Masuk Portal SPMB &rarr;
+                        </x-button>
+                    </div>
+                </div>
+
+                <!-- Card Portal SIAKAD -->
+                <div class="p-6 rounded-2xl border-2 border-[#1C2620]/15 bg-white shadow-md hover:border-[#1C2620]/30 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#F3F5F2] text-[#1C2620] border border-[#C9CDC3]">
+                                Siswa Aktif &bull; Guru &bull; Admin
+                            </span>
+                            <span class="text-xs text-[#0E6026] font-semibold">Semester Ganjil 2026/2027</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#1C2620]">2. Portal Akademik (SIAKAD)</h3>
+                        <p class="text-sm text-[#545B52] mt-2 leading-relaxed">
+                            Khusus siswa yang telah resmi diterima dan berstatus aktif, guru pengajar, serta staf tata usaha untuk mengelola informasi kependidikan, pembagian rombongan belajar, dan semester berjalan.
+                        </p>
+                        <ul class="mt-4 space-y-2 text-xs text-[#545B52]">
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Data Induk Siswa & Riwayat Sekolah
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Rombongan Belajar (Kelas) & Teman Sekelas
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-[#0E6026] font-bold">&check;</span> Semester Berjalan & Informasi Kurikulum
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-5 border-t border-[#E1E4DE] flex items-center justify-between gap-3">
+                        <span class="text-xs text-[#545B52]">
+                            Gunakan NIS / NIP / Email
+                        </span>
+                        <x-button as="a" href="{{ route('siakad.login') }}" variant="secondary" class="bg-[#1C2620] text-white hover:bg-black">
+                            Masuk Portal SIAKAD &rarr;
+                        </x-button>
                     </div>
                 </div>
             </div>

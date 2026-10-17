@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\Auth\AdminUserController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Ppdb\AdminPpdbController;
 use App\Http\Controllers\Siakad\AdminSiakadController;
 use App\Http\Controllers\Siakad\GuruNilaiController;
 use App\Http\Controllers\Siakad\SiswaPortalController;
 use App\Http\Controllers\Siakad\SyncLogController;
 use Illuminate\Support\Facades\Route;
+
+// Login Mandiri SIAKAD (Siswa Aktif, Guru, Admin)
+Route::get('/siakad/login', [AuthController::class, 'showSiakadLoginForm'])->name('siakad.login');
+Route::post('/siakad/login', [AuthController::class, 'loginSiakad'])->name('siakad.login.post');
 
 // Rute Admin & Operator (Dilindungi Role: admin, operator)
 Route::prefix('admin')

@@ -47,17 +47,24 @@
                         <a href="{{ url('/guru/dashboard') }}" class="text-sm font-medium bg-[#0E6026] text-white px-4 py-2 rounded-lg hover:bg-[#0A4C1E] transition-colors">
                             Portal Guru
                         </a>
+                    @elseif (auth()->user()->role === 'siswa')
+                        <a href="{{ route('siakad.siswa.dashboard') }}" class="text-sm font-medium bg-[#0E6026] text-white px-4 py-2 rounded-lg hover:bg-[#0A4C1E] transition-colors">
+                            Portal SIAKAD
+                        </a>
                     @else
                         <a href="{{ url('/pendaftar/dashboard') }}" class="text-sm font-medium bg-[#0E6026] text-white px-4 py-2 rounded-lg hover:bg-[#0A4C1E] transition-colors">
-                            Portal Siswa
+                            Portal SPMB
                         </a>
                     @endif
                 @else
-                    <a href="{{ route('auth.login') }}" class="text-sm font-medium text-[#0E6026] hover:bg-[#E7F4EA] px-3 py-2 rounded-lg transition-colors">
-                        Masuk SSO
+                    <a href="{{ route('spmb.login') }}" class="text-sm font-medium text-[#0E6026] hover:bg-[#E7F4EA] px-3 py-2 rounded-lg transition-colors">
+                        Login SPMB
+                    </a>
+                    <a href="{{ route('siakad.login') }}" class="text-sm font-medium text-[#1C2620] hover:bg-[#E1E4DE] px-3 py-2 rounded-lg transition-colors border border-[#C9CDC3]">
+                        Login SIAKAD
                     </a>
                     <a href="{{ route('auth.register') }}" class="text-sm font-medium bg-[#0E6026] text-white px-4 py-2 rounded-lg hover:bg-[#0A4C1E] transition-colors">
-                        Daftar SPMB
+                        Daftar Baru
                     </a>
                 @endauth
             </nav>

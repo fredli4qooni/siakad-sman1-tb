@@ -28,6 +28,136 @@ class AuthController extends Controller
     }
 
     /**
+     * Menampilkan formulir login mandiri Portal SPMB / Pendaftaran Ulang.
+     */
+    public function showSpmbLoginForm(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasAdminAccess()) {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('pendaftar.dashboard');
+        }
+
+        return view('auth.login_spmb');
+    }
+
+    /**
+     * Memproses autentikasi khusus Portal SPMB / Pendaftaran Ulang.
+     */
+    public function loginSpmb(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'identity' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $identity = $credentials['identity'];
+        $password = $credentials['password'];
+        $remember = $request->boolean('remember');
+
+        $user = User::where('email', $identity)
+            ->orWhereHas('pendaftar', fn($q) => $q->where('nisn', $identity))
+            ->orWhereHas('siswa', fn($q) => $q->where('nisn', $identity)->orWhere('nis', $identity))
+            ->orWhereHas('guru', fn($q) => $q->where('nip', $identity))
+            ->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
+            return back()->withInput($request->only('identity', 'remember'))
+                ->withErrors(['identity' => 'Kredensial yang diberikan tidak cocok dengan data kami.']);
+        }
+
+        if (!$user->status_aktif) {
+            return back()->withInput($request->only('identity'))
+                ->withErrors(['identity' => 'Akun Anda telah dinonaktifkan oleh administrator sekolah.']);
+        }
+
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+
+        if ($user->hasAdminAccess()) {
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang di Panel Admin SPMB, ' . $user->nama);
+        }
+
+        if ($user->isGuru()) {
+            return redirect()->route('guru.dashboard')->with('info', 'Anda login sebagai Guru. Mengalihkan ke Dashboard Guru SIAKAD.');
+        }
+
+        return redirect()->route('pendaftar.dashboard')->with('success', 'Selamat datang di Portal SPMB / Pendaftaran Ulang, ' . $user->nama);
+    }
+
+    /**
+     * Menampilkan formulir login mandiri Portal SIAKAD (Siswa Aktif, Guru, Admin).
+     */
+    public function showSiakadLoginForm(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasAdminAccess()) {
+                return redirect()->route('admin.dashboard');
+            }
+            if ($user->isGuru()) {
+                return redirect()->route('guru.dashboard');
+            }
+            if ($user->isSiswa() || $user->siswa) {
+                return redirect()->route('siakad.siswa.dashboard');
+            }
+            return redirect()->route('pendaftar.dashboard');
+        }
+
+        return view('auth.login_siakad');
+    }
+
+    /**
+     * Memproses autentikasi khusus Portal SIAKAD.
+     */
+    public function loginSiakad(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'identity' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $identity = $credentials['identity'];
+        $password = $credentials['password'];
+        $remember = $request->boolean('remember');
+
+        $user = User::where('email', $identity)
+            ->orWhereHas('pendaftar', fn($q) => $q->where('nisn', $identity))
+            ->orWhereHas('siswa', fn($q) => $q->where('nisn', $identity)->orWhere('nis', $identity))
+            ->orWhereHas('guru', fn($q) => $q->where('nip', $identity))
+            ->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
+            return back()->withInput($request->only('identity', 'remember'))
+                ->withErrors(['identity' => 'Kredensial yang diberikan tidak cocok dengan data kami.']);
+        }
+
+        if (!$user->status_aktif) {
+            return back()->withInput($request->only('identity'))
+                ->withErrors(['identity' => 'Akun Anda telah dinonaktifkan oleh administrator sekolah.']);
+        }
+
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+
+        if ($user->hasAdminAccess()) {
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang di Panel Admin SIAKAD, ' . $user->nama);
+        }
+
+        if ($user->isGuru()) {
+            return redirect()->route('guru.dashboard')->with('success', 'Selamat datang di Portal Guru SIAKAD, ' . $user->nama);
+        }
+
+        if ($user->isSiswa() || $user->siswa) {
+            return redirect()->route('siakad.siswa.dashboard')->with('success', 'Selamat datang di Portal Akademik SIAKAD, ' . $user->nama);
+        }
+
+        return redirect()->route('pendaftar.dashboard')->with('info', 'Status Anda masih Calon Murid di SPMB. Silakan selesaikan proses pendaftaran ulang terlebih dahulu.');
+    }
+
+    /**
      * Memproses autentikasi pengguna di titik masuk tunggal (SSO IdP).
      */
     public function login(Request $request): RedirectResponse

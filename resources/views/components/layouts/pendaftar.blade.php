@@ -23,8 +23,8 @@
         <div class="h-16 flex-shrink-0 flex items-center gap-3 px-5 border-b border-[#E1E4DE]">
             <img src="{{ asset('images/logo-sma.png') }}" alt="Logo SMAN 1 TB" class="w-8 h-8 object-contain">
             <div>
-                <div class="text-sm font-bold text-[#1C2620] leading-tight">Portal Siswa</div>
-                <div class="text-[11px] text-[#545B52]">SMAN 1 Terbanggi Besar</div>
+                <div class="text-sm font-bold text-[#1C2620] leading-tight">Portal SPMB</div>
+                <div class="text-[11px] text-[#0E6026] font-semibold">Pendaftaran Ulang Siswa</div>
             </div>
         </div>
 
@@ -69,28 +69,6 @@
                 </div>
             </div>
 
-            <!-- Modul SIAKAD (Hanya jika siswa telah diterima & tersinkron) -->
-            @if (auth()->check() && (auth()->user()->role === 'siswa' || auth()->user()->siswa))
-                <div>
-                    <div class="px-3 text-[11px] font-semibold uppercase tracking-wider text-[#0E6026] mb-2">
-                        Akademik SIAKAD
-                    </div>
-                    <div class="space-y-1">
-                        <a href="{{ route('siakad.siswa.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('siakad.siswa.dashboard') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                            Data Induk Siswa
-                        </a>
-                        <a href="{{ route('siakad.siswa.kelas') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm {{ request()->routeIs('siakad.siswa.kelas*') ? 'bg-[#E7F4EA] text-[#0E6026] font-semibold' : 'text-[#1C2620] hover:bg-[#E1E4DE]/50 font-medium' }} transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                            </svg>
-                            Kelas & Semester
-                        </a>
-                    </div>
-                </div>
-            @endif
         </nav>
 
         <!-- User Info & Logout di Bawah Sidebar -->
@@ -130,7 +108,7 @@
                 @if (auth()->check() && (auth()->user()->role === 'siswa' || auth()->user()->siswa))
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E7F4EA] text-[#0E6026]">
                         <span class="w-1.5 h-1.5 rounded-full bg-[#039834]"></span>
-                        SIAKAD Aktif
+                        Siswa Baru Terdaftar
                     </span>
                 @else
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#F3F5F2] text-[#545B52] border border-[#E1E4DE]">

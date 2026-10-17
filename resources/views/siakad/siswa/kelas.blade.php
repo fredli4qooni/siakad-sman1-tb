@@ -1,4 +1,4 @@
-<x-layouts.pendaftar title="Kelas & Semester Saya" heading="Informasi Kelas & Semester Saat Ini">
+<x-layouts.siakad title="Kelas & Semester Saya" heading="Informasi Kelas & Semester Saat Ini">
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E1E4DE]">
             <div>
@@ -84,4 +84,4 @@
             </x-alert>
         @endif
     </div>
-</x-layouts.pendaftar>
+</x-layouts.siakad>
