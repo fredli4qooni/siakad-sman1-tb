@@ -235,29 +235,23 @@
             <form id="reset-password-form" method="POST" class="space-y-4 mt-4">
                 @csrf
                 <div>
-                    <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
-                        Kata Sandi Baru <span class="text-[#C81210]">*</span>
-                    </label>
-                    <input
+                    <x-input
                         type="password"
+                        label="Kata Sandi Baru"
                         name="password"
                         required
                         minlength="8"
-                        class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]"
                         placeholder="Minimal 8 karakter"
                     />
                 </div>
 
                 <div>
-                    <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
-                        Ulangi Kata Sandi Baru <span class="text-[#C81210]">*</span>
-                    </label>
-                    <input
+                    <x-input
                         type="password"
+                        label="Ulangi Kata Sandi Baru"
                         name="password_confirmation"
                         required
                         minlength="8"
-                        class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]"
                         placeholder="Konfirmasi kata sandi baru"
                     />
                 </div>

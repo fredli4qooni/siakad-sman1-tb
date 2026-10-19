@@ -7,6 +7,7 @@ use App\Http\Requests\Siakad\GuruRequest;
 use App\Http\Requests\Siakad\KelasRequest;
 use App\Http\Requests\Siakad\MapelRequest;
 use App\Http\Requests\Siakad\PengampuRequest;
+use App\Http\Requests\Siakad\SiswaRequest;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\MataPelajaran;
@@ -53,18 +54,19 @@ class AdminSiakadController extends Controller
     }
 
     /**
-     * 2. Manajemen Siswa & Penempatan Kelas (Ploting Rombel)
+     * 2. Manajemen Siswa (CRUD) & Penempatan Kelas (Ploting Rombel)
      */
     public function siswaIndex(Request $request): View
     {
-        $query = Siswa::with(['kelas', 'user']);
+        $query = Siswa::with(['kelas', 'user', 'syncLog']);
 
         if ($request->filled('keyword')) {
             $keyword = trim($request->input('keyword'));
             $query->where(function ($q) use ($keyword) {
                 $q->where('nama', 'like', "%{$keyword}%")
                     ->orWhere('nisn', 'like', "%{$keyword}%")
-                    ->orWhere('nis', 'like', "%{$keyword}%");
+                    ->orWhere('nis', 'like', "%{$keyword}%")
+                    ->orWhereHas('user', fn ($uq) => $uq->where('email', 'like', "%{$keyword}%"));
             });
         }
 
@@ -76,18 +78,136 @@ class AdminSiakadController extends Controller
             }
         }
 
+        if ($request->filled('status_aktif') && $request->input('status_aktif') !== 'semua') {
+            $query->where('status_aktif', $request->input('status_aktif') === '1');
+        }
+
         $siswaList = $query->orderByDesc('created_at')->paginate(20)->withQueryString();
 
         $kelasList = Kelas::orderBy('nama_kelas')->get();
         $totalSiswa = Siswa::count();
         $belumDitempatkan = Siswa::whereNull('kelas_id')->count();
+        $totalAktif = Siswa::where('status_aktif', true)->count();
+        $totalLaki = Siswa::where('jenis_kelamin', 'L')->count();
+        $totalPerempuan = Siswa::where('jenis_kelamin', 'P')->count();
 
         return view('admin.siakad.siswa', compact(
             'siswaList',
             'kelasList',
             'totalSiswa',
-            'belumDitempatkan'
+            'belumDitempatkan',
+            'totalAktif',
+            'totalLaki',
+            'totalPerempuan'
         ));
+    }
+
+    /**
+     * Simpan data siswa baru atau perbarui siswa yang sudah ada (Create / Update).
+     */
+    public function simpanSiswa(SiswaRequest $request, ?Siswa $siswa = null): RedirectResponse
+    {
+        $validated = $request->validated();
+        $statusAktif = $request->has('status_aktif') ? $request->boolean('status_aktif') : true;
+
+        DB::transaction(function () use ($validated, $statusAktif, $siswa) {
+            if ($siswa && $siswa->exists) {
+                // Update Data Siswa
+                $siswa->update([
+                    'nisn' => $validated['nisn'],
+                    'nis' => $validated['nis'] ?? null,
+                    'nama' => $validated['nama'],
+                    'jenis_kelamin' => $validated['jenis_kelamin'],
+                    'alamat' => $validated['alamat'] ?? null,
+                    'kelas_id' => $validated['kelas_id'] ?? null,
+                    'tahun_masuk' => $validated['tahun_masuk'],
+                    'status_aktif' => $statusAktif,
+                ]);
+
+                // Update Akun User SSO Siswa
+                if ($siswa->user) {
+                    $userData = [
+                        'nama' => $validated['nama'],
+                        'email' => $validated['email'],
+                        'status_aktif' => $statusAktif,
+                    ];
+
+                    if (!empty($validated['password'])) {
+                        $userData['password'] = Hash::make($validated['password']);
+                    }
+
+                    $siswa->user->update($userData);
+                }
+            } else {
+                // 1. Buat User Akun SSO Siswa Baru
+                $user = User::create([
+                    'nama' => $validated['nama'],
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password'] ?: 'password123'),
+                    'role' => 'siswa',
+                    'status_aktif' => $statusAktif,
+                ]);
+
+                // 2. Buat Record Siswa SIAKAD
+                Siswa::create([
+                    'user_id' => $user->id,
+                    'nisn' => $validated['nisn'],
+                    'nis' => $validated['nis'] ?? null,
+                    'nama' => $validated['nama'],
+                    'jenis_kelamin' => $validated['jenis_kelamin'],
+                    'alamat' => $validated['alamat'] ?? null,
+                    'kelas_id' => $validated['kelas_id'] ?? null,
+                    'tahun_masuk' => $validated['tahun_masuk'],
+                    'status_aktif' => $statusAktif,
+                ]);
+            }
+        });
+
+        $action = ($siswa && $siswa->exists) ? 'diperbarui' : 'ditambahkan';
+        return back()->with('success', "Data siswa {$validated['nama']} berhasil {$action}.");
+    }
+
+    /**
+     * Hapus data siswa dari sistem SIAKAD.
+     */
+    public function hapusSiswa(Siswa $siswa): RedirectResponse
+    {
+        $nama = $siswa->nama;
+
+        DB::transaction(function () use ($siswa) {
+            $user = $siswa->user;
+            $siswa->delete();
+
+            // Jika user hanya berperan sebagai siswa dan tidak punya pendaftar SPMB
+            if ($user && $user->role === 'siswa' && !$user->pendaftar()->exists()) {
+                $user->delete();
+            }
+        });
+
+        return back()->with('success', "Data siswa {$nama} berhasil dihapus dari sistem.");
+    }
+
+    /**
+     * Reset kata sandi akun SSO siswa.
+     */
+    public function resetPasswordSiswa(Request $request, Siswa $siswa): RedirectResponse
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:6'],
+        ], [
+            'password.required' => 'Kata sandi baru wajib diisi.',
+            'password.min' => 'Kata sandi baru minimal 6 karakter.',
+        ]);
+
+        if ($siswa->user) {
+            $siswa->user->update([
+                'password' => Hash::make($request->input('password')),
+            ]);
+
+            return back()->with('success', "Kata sandi akun SSO siswa {$siswa->nama} berhasil direset.");
+        }
+
+        return back()->with('error', 'Akun SSO untuk siswa ini tidak ditemukan.');
     }
 
     public function updatePlotingSiswa(Request $request, Siswa $siswa): RedirectResponse

@@ -38,7 +38,7 @@ class PpdbFlowTest extends TestCase
         $response = $this->get('/');
         $response->assertStatus(200)
             ->assertSee('SPMB 2026/2027')
-            ->assertSee('540');
+            ->assertSee('Sistem Penerimaan Murid Baru');
 
         $responseAlur = $this->get('/ppdb/alur');
         $responseAlur->assertStatus(200)

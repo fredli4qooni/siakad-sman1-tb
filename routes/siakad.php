@@ -51,8 +51,12 @@ Route::prefix('admin')
 
         // SIAKAD Admin
         Route::prefix('siakad')->name('siakad.')->group(function () {
-            // 1. Siswa
+            // 1. Siswa (CRUD & Ploting)
             Route::get('/siswa', [AdminSiakadController::class, 'siswaIndex'])->name('siswa.index');
+            Route::post('/siswa', [AdminSiakadController::class, 'simpanSiswa'])->name('siswa.simpan');
+            Route::put('/siswa/{siswa}', [AdminSiakadController::class, 'simpanSiswa'])->name('siswa.update');
+            Route::delete('/siswa/{siswa}', [AdminSiakadController::class, 'hapusSiswa'])->name('siswa.hapus');
+            Route::post('/siswa/{siswa}/reset-password', [AdminSiakadController::class, 'resetPasswordSiswa'])->name('siswa.reset_password');
             Route::post('/siswa/{siswa}/ploting', [AdminSiakadController::class, 'updatePlotingSiswa'])->name('siswa.ploting');
 
             // 2. Kelas
