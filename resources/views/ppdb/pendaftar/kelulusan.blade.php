@@ -164,6 +164,90 @@
                     </div>
                 </x-card>
             </div>
+        @elseif($pendaftar->isTidakLulus())
+            <!-- Official Decision Banner (TIDAK DITERIMA) -->
+            <div class="rounded-xl border border-[#C81210] bg-[#FBEAEA] p-6 lg:p-7 space-y-4 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[#C81210] text-white flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-[#C81210] border border-[#C81210]">
+                                TIDAK DITERIMA
+                            </span>
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#C81210] mt-1">
+                                Pemberitahuan Hasil Seleksi, {{ $pendaftar->nama_lengkap }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-sm text-[#1C2620] leading-relaxed max-w-4xl">
+                    Berdasarkan hasil seleksi dan verifikasi berkas pendaftaran ulang oleh panitia SMAN 1 Terbanggi Besar Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}, berkas pendaftaran Anda dinyatakan <strong>TIDAK DITERIMA</strong>.
+                </p>
+
+                @if($hasilSeleksi && $hasilSeleksi->catatan)
+                    <div class="p-3.5 rounded-lg bg-white border border-[#C81210]/30 text-xs text-[#1C2620]">
+                        <span class="font-bold text-[#C81210]">Catatan Panitia:</span> {{ $hasilSeleksi->catatan }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Two Column Details Grid for Rejection -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Card 1: Data Penetapan Pendaftar -->
+                <x-card title="Data Hasil Seleksi" subtitle="Rincian identitas pendaftar ulang">
+                    <dl class="divide-y divide-[#E1E4DE] text-xs">
+                        <div class="py-3 flex justify-between items-center">
+                            <dt class="text-[#545B52]">Nomor Registrasi</dt>
+                            <dd class="font-mono font-bold text-[#1C2620]">{{ $pendaftar->no_pendaftaran }}</dd>
+                        </div>
+                        @if($pendaftar->no_peserta_ppdb_provinsi)
+                            <div class="py-3 flex justify-between items-center">
+                                <dt class="text-[#545B52]">No. Kelulusan SPMB Pemerintah</dt>
+                                <dd class="font-mono font-semibold text-[#0E6026]">{{ $pendaftar->no_peserta_ppdb_provinsi }}</dd>
+                            </div>
+                        @endif
+                        <div class="py-3 flex justify-between items-center">
+                            <dt class="text-[#545B52]">NISN</dt>
+                            <dd class="tabular-nums font-semibold text-[#1C2620]">{{ $pendaftar->nisn }}</dd>
+                        </div>
+                        <div class="py-3 flex justify-between items-center">
+                            <dt class="text-[#545B52]">Nama Lengkap</dt>
+                            <dd class="font-bold text-[#1C2620]">{{ $pendaftar->nama_lengkap }}</dd>
+                        </div>
+                        <div class="py-3 flex justify-between items-center">
+                            <dt class="text-[#545B52]">Asal Sekolah (SMP/MTs)</dt>
+                            <dd class="font-medium text-[#1C2620]">{{ $pendaftar->asal_sekolah ?? '-' }}</dd>
+                        </div>
+                        <div class="py-3 flex justify-between items-center">
+                            <dt class="text-[#545B52]">Status Akhir</dt>
+                            <dd>
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
+                                    TIDAK DITERIMA
+                                </span>
+                            </dd>
+                        </div>
+                    </dl>
+                </x-card>
+
+                <!-- Card 2: Informasi Tambahan -->
+                <x-card title="Informasi & Layanan Kendala" subtitle="Bantuan panitia penerimaan siswa baru">
+                    <div class="space-y-4 text-xs">
+                        <p class="text-[#545B52] leading-relaxed">
+                            Terima kasih atas partisipasi Anda dalam mendaftar di SMAN 1 Terbanggi Besar. Jika Anda memiliki pertanyaan atau memerlukan klarifikasi terkait hasil verifikasi, silakan hubungi Sekretariat Panitia SPMB SMAN 1 Terbanggi Besar pada hari dan jam kerja.
+                        </p>
+                        <div class="p-3.5 bg-[#F3F5F2] rounded-xl border border-[#E1E4DE] space-y-2">
+                            <div class="font-bold text-[#1C2620]">Kontak Panitia:</div>
+                            <div class="text-[#545B52]">SMAN 1 Terbanggi Besar, Lampung Tengah</div>
+                            <div class="text-[#545B52]">Email: spmb@sman1terbanggibesar.sch.id</div>
+                        </div>
+                    </div>
+                </x-card>
+            </div>
         @elseif($pendaftar->isDijadwalkanFisik())
             <!-- Banner Tahap Verifikasi Fisik -->
             <div class="rounded-xl border border-[#6B6200] bg-[#FBF9D6] p-6 lg:p-7 space-y-4 shadow-sm">

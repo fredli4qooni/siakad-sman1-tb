@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\AdminUserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Ppdb\AdminPpdbController;
@@ -18,9 +19,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'role:admin,operator'])
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // SPMB & PPDB Admin
         $spmbRoutes = function () {

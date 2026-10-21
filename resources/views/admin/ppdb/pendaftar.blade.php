@@ -86,15 +86,15 @@
                                     </span>
                                 </td>
                                 <td class="py-3 px-3">
-                                    @if(in_array($p->status_pendaftaran, ['lulus', 'diterima']))
+                                    @if($p->isDiterima())
                                         <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#E7F4EA] text-[#0E6026]">Diterima</span>
-                                    @elseif($p->status_pendaftaran === 'tidak_lulus')
+                                    @elseif($p->isTidakLulus())
                                         <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FBEAEA] text-[#C81210]">Tidak Lulus</span>
-                                    @elseif($p->isDijadwalkanFisik())
+                                    @elseif($p->isDijadwalkanFisik() && !$p->isTerverifikasi())
                                         <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FBF9D6] text-[#6B6200]">Jadwal Fisik</span>
-                                    @elseif($p->status_pendaftaran === 'terverifikasi')
+                                    @elseif($p->isTerverifikasi())
                                         <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#E7F4EA] text-[#0E6026]">Terverifikasi</span>
-                                    @elseif($p->status_pendaftaran === 'menunggu_verifikasi')
+                                    @elseif($p->isMenungguVerifikasi())
                                         <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FBF9D6] text-[#6B6200]">Menunggu Verifikasi</span>
                                     @else
                                         <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-neutral-100 text-neutral-600">Draft</span>

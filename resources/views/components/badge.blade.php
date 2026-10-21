@@ -14,6 +14,7 @@
         'nonaktif' => 'bg-[#FBEAEA] text-[#C81210] border border-[#C81210]/10',
         'menunggu' => 'bg-[#FBF9D6] text-[#6B6200] border border-[#6B6200]/10',
         'cadangan' => 'bg-[#FBF9D6] text-[#6B6200] border border-[#6B6200]/10',
+        'terverifikasi' => 'bg-[#E7F4EA] text-[#0E6026] border border-[#0E6026]/10',
         'draft' => 'bg-[#F3F5F2] text-[#545B52] border border-[#C9CDC3]',
     ];
 

@@ -93,7 +93,26 @@ class AdminPpdbController extends Controller
 
         // Filter Status Pendaftaran
         if ($request->filled('status') && $request->input('status') !== 'semua') {
-            $query->where('status_pendaftaran', $request->input('status'));
+            $st = $request->input('status');
+            if ($st === 'lulus' || $st === 'diterima') {
+                $query->where(function ($q) {
+                    $q->whereIn('status_pendaftaran', ['lulus', 'diterima'])
+                        ->orWhereHas('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA']));
+                });
+            } elseif ($st === 'tidak_lulus' || $st === 'tidak_diterima') {
+                $query->where(function ($q) {
+                    $q->whereIn('status_pendaftaran', ['tidak_lulus', 'tidak_diterima'])
+                        ->orWhereHas('hasilSeleksi', fn($h) => $h->whereIn('status', ['TIDAK_LULUS', 'TIDAK_DITERIMA']));
+                });
+            } elseif ($st === 'menunggu_verifikasi') {
+                $query->whereIn('status_pendaftaran', ['menunggu_verifikasi', 'diajukan', 'terkirim'])
+                    ->whereDoesntHave('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA', 'TIDAK_LULUS', 'TIDAK_DITERIMA']));
+            } elseif ($st === 'terverifikasi') {
+                $query->where('status_pendaftaran', 'terverifikasi')
+                    ->whereDoesntHave('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA', 'TIDAK_LULUS', 'TIDAK_DITERIMA']));
+            } else {
+                $query->where('status_pendaftaran', $st);
+            }
         }
 
         // Filter Periode
@@ -105,9 +124,16 @@ class AdminPpdbController extends Controller
 
         // Statistik
         $totalPendaftar = Pendaftar::count();
-        $menungguVerifikasi = Pendaftar::where('status_pendaftaran', 'menunggu_verifikasi')->count();
-        $terverifikasi = Pendaftar::where('status_pendaftaran', 'terverifikasi')->count();
-        $lulus = Pendaftar::where('status_pendaftaran', 'lulus')->count();
+        $menungguVerifikasi = Pendaftar::whereIn('status_pendaftaran', ['menunggu_verifikasi', 'diajukan', 'terkirim'])
+            ->whereDoesntHave('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA', 'TIDAK_LULUS', 'TIDAK_DITERIMA']))
+            ->count();
+        $terverifikasi = Pendaftar::where('status_pendaftaran', 'terverifikasi')
+            ->whereDoesntHave('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA', 'TIDAK_LULUS', 'TIDAK_DITERIMA']))
+            ->count();
+        $lulus = Pendaftar::where(function ($q) {
+            $q->whereIn('status_pendaftaran', ['lulus', 'diterima'])
+                ->orWhereHas('hasilSeleksi', fn($h) => $h->whereIn('status', ['LULUS', 'DITERIMA']));
+        })->count();
 
         $daftarPeriode = PeriodePpdb::orderByDesc('tanggal_buka')->get();
 
@@ -156,6 +182,34 @@ class AdminPpdbController extends Controller
             'diverifikasi_pada' => now(),
         ]);
 
+        // Cek jika seluruh 4 berkas wajib sudah valid, otomatis set status terverifikasi dan verifikasi fisik hadir_valid
+        $totalBerkas = $pendaftar->berkas()->count();
+        $validCount = $pendaftar->berkas()->where('status_verifikasi', 'valid')->count();
+
+        if ($totalBerkas >= 4 && $validCount === $totalBerkas) {
+            $updateData = [
+                'status_pendaftaran' => 'terverifikasi',
+                'status_verifikasi_fisik' => 'hadir_valid',
+            ];
+
+            if (!$pendaftar->tgl_verifikasi_fisik) {
+                $updateData['tgl_verifikasi_fisik'] = now();
+            }
+            if (!$pendaftar->sesi_verifikasi_fisik) {
+                $updateData['sesi_verifikasi_fisik'] = 'Sesi 1 (08.00 - 10.00 WIB)';
+            }
+            if (!$pendaftar->lokasi_verifikasi_fisik) {
+                $updateData['lokasi_verifikasi_fisik'] = 'Ruang Panitia SPMB / Aula SMAN 1 Terbanggi Besar';
+            }
+            if (!$pendaftar->catatan_verifikasi_fisik) {
+                $updateData['catatan_verifikasi_fisik'] = 'Berkas fisik telah diverifikasi langsung oleh panitia dan dinyatakan sah.';
+            }
+
+            $pendaftar->update($updateData);
+
+            return back()->with('success', 'Status berkas ' . str_replace('_', ' ', $berkas->jenis_berkas) . ' berhasil diperbarui. Seluruh berkas telah VALID dan verifikasi fisik otomatis Hadir & Sah.');
+        }
+
         return back()->with('success', 'Status berkas ' . str_replace('_', ' ', $berkas->jenis_berkas) . ' berhasil diperbarui.');
     }
 
@@ -175,10 +229,32 @@ class AdminPpdbController extends Controller
                 return back()->with('error', 'Semua 4 dokumen persyaratan wajib berstatus VALID sebelum menetapkan status terverifikasi.');
             }
 
-            $pendaftar->update(['status_pendaftaran' => 'terverifikasi']);
-            return back()->with('success', 'Berkas pendaftar berhasil ditetapkan TERVERIFIKASI.');
+            $updateData = [
+                'status_pendaftaran' => 'terverifikasi',
+                'status_verifikasi_fisik' => 'hadir_valid',
+            ];
+
+            if (!$pendaftar->tgl_verifikasi_fisik) {
+                $updateData['tgl_verifikasi_fisik'] = now();
+            }
+            if (!$pendaftar->sesi_verifikasi_fisik) {
+                $updateData['sesi_verifikasi_fisik'] = 'Sesi 1 (08.00 - 10.00 WIB)';
+            }
+            if (!$pendaftar->lokasi_verifikasi_fisik) {
+                $updateData['lokasi_verifikasi_fisik'] = 'Ruang Panitia SPMB / Aula SMAN 1 Terbanggi Besar';
+            }
+            if (!$pendaftar->catatan_verifikasi_fisik) {
+                $updateData['catatan_verifikasi_fisik'] = 'Berkas fisik telah diverifikasi langsung oleh panitia dan dinyatakan sah.';
+            }
+
+            $pendaftar->update($updateData);
+
+            return back()->with('success', 'Berkas pendaftar berhasil ditetapkan TERVERIFIKASI dan status verifikasi fisik otomatis dinyatakan Hadir & Sah.');
         } else {
-            $pendaftar->update(['status_pendaftaran' => 'draft']);
+            $pendaftar->update([
+                'status_pendaftaran' => 'draft',
+                'status_verifikasi_fisik' => 'belum_dijadwalkan',
+            ]);
             return back()->with('success', 'Status pendaftar dikembalikan ke DRAFT untuk perbaikan oleh siswa.');
         }
     }

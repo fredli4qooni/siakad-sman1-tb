@@ -25,19 +25,19 @@
                     <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
                         DITERIMA / SISWA RESMI
                     </span>
+                @elseif($pendaftar->isTidakLulus())
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
+                        TIDAK DITERIMA
+                    </span>
+                @elseif($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isTerverifikasi())
+                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026] border border-[#039834]">
+                        BERKAS ONLINE VALID
+                    </span>
                 @elseif($pendaftar->isDijadwalkanFisik())
                     <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200] border border-[#6B6200]">
                         JADWAL VERIFIKASI FISIK
                     </span>
-                @elseif($pendaftar->status_pendaftaran === 'tidak_lulus' || ($hasilSeleksi && $hasilSeleksi->status === 'TIDAK_LULUS'))
-                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBEAEA] text-[#C81210] border border-[#C81210]">
-                        TIDAK LULUS
-                    </span>
-                @elseif($pendaftar->status_pendaftaran === 'terverifikasi')
-                    <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">
-                        BERKAS ONLINE VALID
-                    </span>
-                @elseif($pendaftar->status_pendaftaran === 'menunggu_verifikasi')
+                @elseif($pendaftar->isMenungguVerifikasi())
                     <span class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">
                         MENUNGGU VERIFIKASI
                     </span>
@@ -118,10 +118,43 @@
                     @endif
                 </div>
             </div>
-        @endif
 
-        <!-- 2. JADWAL VALIDASI BERKAS FISIK DI SEKOLAH -->
-        @if($pendaftar->isDijadwalkanFisik() && !$pendaftar->isDiterima())
+        <!-- 2. PENGUMUMAN TIDAK DITERIMA / TIDAK LULUS -->
+        @elseif($pendaftar->isTidakLulus())
+            <div class="p-6 rounded-2xl bg-[#FBEAEA] border border-[#C81210] text-[#1C2620] space-y-4 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[#C81210] text-white flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold tracking-wider uppercase text-[#C81210]">Pengumuman Resmi Seleksi</span>
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#C81210]">MOHON MAAF, ANDA DINYATAKAN TIDAK DITERIMA</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <x-button as="a" href="{{ route('pendaftar.kelulusan') }}" variant="secondary" class="text-xs font-semibold">
+                            Lihat Rincian Penetapan
+                        </x-button>
+                    </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-[#545B52] leading-relaxed">
+                    Berdasarkan hasil seleksi dan verifikasi berkas oleh panitia SPMB SMAN 1 Terbanggi Besar Tahun Ajaran {{ $pendaftar->periode->tahun_ajaran ?? '2026/2027' }}, berkas pendaftaran ulang Anda dinyatakan belum dapat diterima.
+                </p>
+
+                @if($hasilSeleksi && $hasilSeleksi->catatan)
+                    <div class="p-3.5 bg-white rounded-xl border border-[#C81210]/30 text-xs">
+                        <strong class="text-[#C81210]">Catatan Panitia:</strong>
+                        <span class="text-[#1C2620]">{{ $hasilSeleksi->catatan }}</span>
+                    </div>
+                @endif
+            </div>
+
+        <!-- 3. JADWAL VALIDASI BERKAS FISIK DI SEKOLAH (HANYA JIKA TERJADWAL & BELUM VALID/DITOLAK) -->
+        @elseif($pendaftar->isDijadwalkanFisik())
             <div class="p-6 rounded-2xl bg-[#FBF9D6] border border-[#6B6200] text-[#1C2620] space-y-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-center gap-3">
@@ -149,7 +182,7 @@
                     <div class="p-3.5 bg-white rounded-xl border border-[#6B6200]/30">
                         <span class="text-[#545B52] block">Hari & Tanggal</span>
                         <div class="font-bold text-sm text-[#1C2620] mt-1">
-                            {{ $pendaftar->tgl_verifikasi_fisik->isoFormat('dddd, D MMMM Y') }}
+                            {{ $pendaftar->tgl_verifikasi_fisik ? $pendaftar->tgl_verifikasi_fisik->isoFormat('dddd, D MMMM Y') : '-' }}
                         </div>
                     </div>
 
@@ -174,6 +207,25 @@
                         {{ $pendaftar->catatan_verifikasi_fisik ?? '1. Cetak Bukti Pendaftaran Ulang dari sistem ini. 2. Ijazah SMP/MTs atau SKL Asli & Fotokopi legalisir (2 lembar). 3. Kartu Keluarga (KK) Asli & Fotokopi (2 lembar). 4. Akta Kelahiran Asli & Fotokopi (2 lembar). 5. Bukti Tanda Kelulusan SPMB Pemerintah. 6. Pas Foto 3x4 berwarna (3 lembar).' }}
                     </p>
                 </div>
+            </div>
+
+        <!-- 4. BERKAS FISIK SUDAH VALID & MENUNGGU HASIL SELEKSI -->
+        @elseif($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isTerverifikasi())
+            <div class="p-6 rounded-2xl bg-[#E7F4EA] border border-[#039834] text-[#1C2620] space-y-3 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-[#039834] text-white flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold tracking-wider uppercase text-[#0E6026]">Verifikasi Berkas Selesai</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-[#0E6026]">Berkas Valid & Terverifikasi (Hadir & Sah)</h2>
+                    </div>
+                </div>
+                <p class="text-xs sm:text-sm text-[#545B52] leading-relaxed">
+                    Dokumen Anda telah diperiksa dan dinyatakan sah oleh panitia SPMB. Saat ini sistem sedang menunggu penetapan hasil akhir kelulusan oleh sekolah.
+                </p>
             </div>
         @endif
 
@@ -221,13 +273,13 @@
                 </div>
 
                 <!-- Tahap 4 -->
-                <div class="p-3.5 rounded-xl border border-[#E1E4DE] {{ $pendaftar->isDijadwalkanFisik() ? 'bg-[#F3F5F2]' : 'bg-white' }}">
+                <div class="p-3.5 rounded-xl border border-[#E1E4DE] {{ ($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isDiterima() || $pendaftar->isTerverifikasi() || $pendaftar->isTidakLulus()) ? 'bg-[#F3F5F2]' : 'bg-white' }}">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="w-6 h-6 rounded-full {{ $pendaftar->isDijadwalkanFisik() ? 'bg-[#0E6026] text-white' : 'bg-neutral-200 text-[#545B52]' }} flex items-center justify-center font-bold text-xs">
-                            {{ $pendaftar->isDijadwalkanFisik() ? '✓' : '4' }}
+                        <span class="w-6 h-6 rounded-full {{ ($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isDiterima() || $pendaftar->isTerverifikasi() || $pendaftar->isTidakLulus()) ? 'bg-[#0E6026] text-white' : 'bg-neutral-200 text-[#545B52]' }} flex items-center justify-center font-bold text-xs">
+                            {{ ($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isDiterima() || $pendaftar->isTerverifikasi() || $pendaftar->isTidakLulus()) ? '✓' : '4' }}
                         </span>
-                        <span class="text-[10px] font-semibold uppercase {{ $pendaftar->isDijadwalkanFisik() ? 'text-[#0E6026]' : 'text-neutral-500' }}">
-                            {{ $pendaftar->status_verifikasi_fisik === 'hadir_valid' ? 'Valid' : ($pendaftar->isDijadwalkanFisik() ? 'Terjadwal' : 'Menunggu') }}
+                        <span class="text-[10px] font-semibold uppercase {{ ($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isDiterima() || $pendaftar->isTerverifikasi() || $pendaftar->isTidakLulus()) ? 'text-[#0E6026]' : 'text-neutral-500' }}">
+                            {{ ($pendaftar->status_verifikasi_fisik === 'hadir_valid' || $pendaftar->isDiterima() || $pendaftar->isTerverifikasi() || $pendaftar->isTidakLulus()) ? 'Valid' : ($pendaftar->isDijadwalkanFisik() ? 'Terjadwal' : 'Menunggu') }}
                         </span>
                     </div>
                     <div class="font-semibold text-xs text-[#1C2620]">4. Validasi Fisik</div>
@@ -235,17 +287,29 @@
                 </div>
 
                 <!-- Tahap 5 -->
-                <div class="p-3.5 rounded-xl border border-[#E1E4DE] {{ $pendaftar->isDiterima() ? 'bg-[#F3F5F2]' : 'bg-white' }}">
+                <div class="p-3.5 rounded-xl border border-[#E1E4DE] {{ $pendaftar->isDiterima() ? 'bg-[#E7F4EA]' : ($pendaftar->isTidakLulus() ? 'bg-[#FBEAEA]' : 'bg-white') }}">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="w-6 h-6 rounded-full {{ $pendaftar->isDiterima() ? 'bg-[#0E6026] text-white' : 'bg-neutral-200 text-[#545B52]' }} flex items-center justify-center font-bold text-xs">
-                            {{ $pendaftar->isDiterima() ? '✓' : '5' }}
-                        </span>
-                        <span class="text-[10px] font-semibold uppercase {{ $pendaftar->isDiterima() ? 'text-[#0E6026]' : 'text-neutral-500' }}">
-                            {{ $pendaftar->isDiterima() ? 'Diterima' : 'Menunggu' }}
-                        </span>
+                        @if($pendaftar->isDiterima())
+                            <span class="w-6 h-6 rounded-full bg-[#0E6026] text-white flex items-center justify-center font-bold text-xs">
+                                ✓
+                            </span>
+                            <span class="text-[10px] font-semibold uppercase text-[#0E6026]">Diterima</span>
+                        @elseif($pendaftar->isTidakLulus())
+                            <span class="w-6 h-6 rounded-full bg-[#C81210] text-white flex items-center justify-center font-bold text-xs">
+                                ✕
+                            </span>
+                            <span class="text-[10px] font-semibold uppercase text-[#C81210]">Tidak Lulus</span>
+                        @else
+                            <span class="w-6 h-6 rounded-full bg-neutral-200 text-[#545B52] flex items-center justify-center font-bold text-xs">
+                                5
+                            </span>
+                            <span class="text-[10px] font-semibold uppercase text-neutral-500">Menunggu</span>
+                        @endif
                     </div>
                     <div class="font-semibold text-xs text-[#1C2620]">5. Akses SIAKAD</div>
-                    <div class="text-[11px] text-[#545B52] mt-0.5">Dapat NIS & akun aktif</div>
+                    <div class="text-[11px] text-[#545B52] mt-0.5">
+                        {{ $pendaftar->isDiterima() ? 'Dapat NIS & akun aktif' : ($pendaftar->isTidakLulus() ? 'Pendaftaran tidak lolos' : 'Menunggu keputusan') }}
+                    </div>
                 </div>
             </div>
         </x-card>

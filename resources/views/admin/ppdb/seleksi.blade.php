@@ -68,7 +68,7 @@
                                 <td class="py-3 px-3 font-semibold">{{ $p->nama_lengkap }}</td>
                                 <td class="py-3 px-3 tabular-nums font-mono">{{ $p->nisn }}</td>
                                 <td class="py-3 px-3">
-                                    @if($p->status_verifikasi_fisik === 'hadir_valid')
+                                    @if($p->status_verifikasi_fisik === 'hadir_valid' || $p->isDiterima() || $p->isTerverifikasi())
                                         <span class="inline-flex items-center gap-1 text-[#0E6026] font-medium">
                                             <span class="w-1.5 h-1.5 rounded-full bg-[#039834]"></span> Hadir & Sah
                                         </span>

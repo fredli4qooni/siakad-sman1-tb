@@ -80,15 +80,17 @@ class SyncService
                     'synced_at' => now()->toIso8601String(),
                 ];
 
-                $log = SyncLog::create([
-                    'pendaftar_id' => $pendaftar->id,
-                    'siswa_id' => $siswa->id,
-                    'user_id' => $pendaftar->user_id,
-                    'waktu_sinkron' => now(),
-                    'status' => 'BERHASIL',
-                    'detail_payload' => $payload,
-                    'error_message' => null,
-                ]);
+                $log = SyncLog::updateOrCreate(
+                    ['pendaftar_id' => $pendaftar->id],
+                    [
+                        'siswa_id' => $siswa->id,
+                        'user_id' => $pendaftar->user_id,
+                        'waktu_sinkron' => now(),
+                        'status' => 'BERHASIL',
+                        'detail_payload' => $payload,
+                        'error_message' => null,
+                    ]
+                );
 
                 return [
                     'success' => true,
@@ -103,15 +105,17 @@ class SyncService
             ]);
 
             // Catat kegagalan transaksi di sync_log
-            SyncLog::create([
-                'pendaftar_id' => $pendaftar->id,
-                'siswa_id' => null,
-                'user_id' => $pendaftar->user_id,
-                'waktu_sinkron' => now(),
-                'status' => 'GAGAL',
-                'detail_payload' => ['error' => $e->getMessage()],
-                'error_message' => $e->getMessage(),
-            ]);
+            SyncLog::updateOrCreate(
+                ['pendaftar_id' => $pendaftar->id],
+                [
+                    'siswa_id' => null,
+                    'user_id' => $pendaftar->user_id,
+                    'waktu_sinkron' => now(),
+                    'status' => 'GAGAL',
+                    'detail_payload' => ['error' => $e->getMessage()],
+                    'error_message' => $e->getMessage(),
+                ]
+            );
 
             return [
                 'success' => false,

@@ -52,7 +52,7 @@ class PpdbSeeder extends Seeder
                     'asal_sekolah' => 'SMP Negeri 1 Terbanggi Besar',
                     'alamat' => 'Jl. Lintas Sumatera No. 45, Terbanggi Besar, Lampung Tengah',
                     'no_hp' => '081234567890',
-                    'status_pendaftaran' => 'terverifikasi',
+                    'status_pendaftaran' => 'diterima',
                     'catatan_verifikasi' => 'Berkas lengkap dan sesuai fisik.',
                 ]
             );

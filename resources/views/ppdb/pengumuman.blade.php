@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="pt-2">
-                                @if($status === 'LULUS')
+                                @if($pendaftar->isDiterima() || in_array($status, ['LULUS', 'DITERIMA']))
                                     <div class="p-4 rounded-xl bg-[#E7F4EA] border border-[#039834] text-[#0E6026] space-y-2">
                                         <div class="flex items-center gap-2">
                                             <span class="w-3 h-3 rounded-full bg-[#039834]"></span>
@@ -91,7 +91,7 @@
                                             </x-button>
                                         </div>
                                     </div>
-                                @elseif($status === 'TIDAK_LULUS')
+                                @elseif($pendaftar->isTidakLulus() || in_array($status, ['TIDAK_LULUS', 'TIDAK_DITERIMA']))
                                     <div class="p-4 rounded-xl bg-[#FBEAEA] border border-[#C81210] text-[#C81210] space-y-2">
                                         <div class="flex items-center gap-2">
                                             <span class="w-3 h-3 rounded-full bg-[#C81210]"></span>

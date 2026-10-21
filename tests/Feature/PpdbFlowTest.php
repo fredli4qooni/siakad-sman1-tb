@@ -422,4 +422,57 @@ class PpdbFlowTest extends TestCase
             ->assertSee('Data Induk Kependidikan Siswa')
             ->assertSee('0077889900');
     }
+
+    public function test_admin_rejects_student_and_student_sees_rejection_on_dashboard_and_kelulusan(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $candidateUser = User::factory()->create(['role' => 'calon_siswa']);
+
+        $pendaftar = Pendaftar::create([
+            'user_id' => $candidateUser->id,
+            'periode_id' => $this->periode->id,
+            'no_pendaftaran' => 'PPDB-2026-0088',
+            'nisn' => '0088990011',
+            'nik' => '1802010101100088',
+            'nama_lengkap' => 'Budi Santoso',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Bandar Jaya',
+            'tanggal_lahir' => '2010-02-02',
+            'agama' => 'Islam',
+            'asal_sekolah' => 'SMPN 2 TB',
+            'alamat' => 'Jl. Gatot Subroto No. 12',
+            'no_hp' => '081388990011',
+            'status_pendaftaran' => 'terverifikasi',
+            'status_verifikasi_fisik' => 'hadir_valid',
+            'tgl_verifikasi_fisik' => '2026-10-21',
+        ]);
+
+        // Admin marks as TIDAK_LULUS
+        $this->actingAs($admin)->post("/admin/ppdb/seleksi/{$pendaftar->id}", [
+            'status' => 'TIDAK_LULUS',
+            'catatan' => 'Berkas fisik tidak sesuai dengan dokumen asli',
+        ])->assertSessionHas('success');
+
+        $pendaftar->refresh();
+        $this->assertTrue($pendaftar->isTidakLulus());
+        $this->assertFalse($pendaftar->isDiterima());
+        $this->assertFalse($pendaftar->isDijadwalkanFisik());
+
+        // Calon siswa checks dashboard
+        $response = $this->actingAs($candidateUser)->get('/pendaftar/dashboard');
+        $response->assertStatus(200)
+            ->assertSee('TIDAK DITERIMA')
+            ->assertSee('MOHON MAAF, ANDA DINYATAKAN TIDAK DITERIMA')
+            ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli')
+            ->assertDontSee('JADWAL VERIFIKASI FISIK')
+            ->assertDontSee('Jadwal Validasi Berkas Fisik di SMAN 1 Terbanggi Besar');
+
+        // Calon siswa checks kelulusan page
+        $responseKelulusan = $this->actingAs($candidateUser)->get('/pendaftar/kelulusan');
+        $responseKelulusan->assertStatus(200)
+            ->assertSee('TIDAK DITERIMA')
+            ->assertSee('Pemberitahuan Hasil Seleksi, Budi Santoso')
+            ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli')
+            ->assertDontSee('JADWAL VALIDASI BERKAS FISIK');
+    }
 }

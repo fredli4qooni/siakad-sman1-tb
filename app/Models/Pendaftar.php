@@ -48,13 +48,33 @@ class Pendaftar extends Model
 
     public function isDijadwalkanFisik(): bool
     {
-        return !empty($this->tgl_verifikasi_fisik) && in_array($this->status_verifikasi_fisik, ['dijadwalkan', 'hadir_valid']);
+        return !$this->isDiterima() &&
+            !$this->isTidakLulus() &&
+            !empty($this->tgl_verifikasi_fisik) &&
+            $this->status_verifikasi_fisik === 'dijadwalkan';
     }
 
     public function isDiterima(): bool
     {
-        return in_array(strtolower($this->status_pendaftaran), ['lulus', 'diterima']) ||
-            ($this->hasilSeleksi && in_array(strtoupper($this->hasilSeleksi->status), ['LULUS', 'DITERIMA']));
+        return in_array(strtolower($this->status_pendaftaran ?? ''), ['lulus', 'diterima']) ||
+            ($this->hasilSeleksi && in_array(strtoupper($this->hasilSeleksi->status ?? ''), ['LULUS', 'DITERIMA']));
+    }
+
+    public function isTidakLulus(): bool
+    {
+        return in_array(strtolower($this->status_pendaftaran ?? ''), ['tidak_lulus', 'tidak_diterima', 'ditolak']) ||
+            ($this->hasilSeleksi && in_array(strtoupper($this->hasilSeleksi->status ?? ''), ['TIDAK_LULUS', 'TIDAK_DITERIMA']));
+    }
+
+    public function isTerverifikasi(): bool
+    {
+        return strtolower($this->status_pendaftaran ?? '') === 'terverifikasi' && !$this->isDiterima() && !$this->isTidakLulus();
+    }
+
+    public function isMenungguVerifikasi(): bool
+    {
+        return in_array(strtolower($this->status_pendaftaran ?? ''), ['menunggu_verifikasi', 'diajukan', 'terkirim']) &&
+            !$this->isDiterima() && !$this->isTidakLulus();
     }
 
     public function user(): BelongsTo

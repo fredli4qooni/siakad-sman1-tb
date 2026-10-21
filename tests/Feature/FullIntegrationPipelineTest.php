@@ -157,6 +157,7 @@ class FullIntegrationPipelineTest extends TestCase
 
         $pendaftar->refresh();
         $this->assertEquals('terverifikasi', $pendaftar->status_pendaftaran);
+        $this->assertEquals('hadir_valid', $pendaftar->status_verifikasi_fisik);
 
         // 3.3 Admin Menetapkan Kelulusan Siswa -> Memicu Pipeline Sinkronisasi Otomatis
         $this->actingAs($admin)->post("/admin/ppdb/seleksi/{$pendaftar->id}", [

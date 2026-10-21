@@ -12,11 +12,13 @@
             </div>
 
             <div class="flex items-center gap-3">
-                @if($pendaftar->status_pendaftaran === 'lulus')
-                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">Lulus Seleksi</span>
-                @elseif($pendaftar->status_pendaftaran === 'terverifikasi')
+                @if($pendaftar->isDiterima())
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">Diterima (Lulus)</span>
+                @elseif($pendaftar->isTidakLulus())
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBEAEA] text-[#C81210]">Tidak Lolos</span>
+                @elseif($pendaftar->isTerverifikasi())
                     <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E7F4EA] text-[#0E6026]">Terverifikasi</span>
-                @elseif($pendaftar->status_pendaftaran === 'menunggu_verifikasi')
+                @elseif($pendaftar->isMenungguVerifikasi())
                     <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FBF9D6] text-[#6B6200]">Menunggu Verifikasi</span>
                 @else
                     <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-100 text-neutral-600">Draft</span>
