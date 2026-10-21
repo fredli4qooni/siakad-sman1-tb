@@ -12,11 +12,13 @@ use App\Models\BerkasPendaftaran;
 use App\Models\HasilSeleksi;
 use App\Models\Pendaftar;
 use App\Models\PeriodePpdb;
+use App\Models\Siswa;
 use App\Services\SyncService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AdminPpdbController extends Controller
@@ -346,5 +348,43 @@ class AdminPpdbController extends Controller
         }
 
         return back()->with('success', "Status pendaftaran ulang {$pendaftar->nama_lengkap} berhasil ditetapkan menjadi {$status}.{$syncMsg}");
+    }
+
+    /**
+     * 5. Hapus Data Calon Siswa / Pendaftar PPDB/SPMB dari sistem.
+     */
+    public function hapusPendaftar(Pendaftar $pendaftar): RedirectResponse
+    {
+        $nama = $pendaftar->nama_lengkap;
+        $noPendaftaran = $pendaftar->no_pendaftaran;
+        $nisn = $pendaftar->nisn;
+
+        DB::transaction(function () use ($pendaftar, $nisn) {
+            // 1. Hapus file-file berkas fisik dari storage
+            foreach ($pendaftar->berkas as $berkas) {
+                if ($berkas->file_path && Storage::disk('public')->exists($berkas->file_path)) {
+                    Storage::disk('public')->delete($berkas->file_path);
+                }
+            }
+
+            $user = $pendaftar->user;
+
+            // 2. Jika ada data siswa SIAKAD terkait (berdasarkan user_id atau NISN), hapus terlebih dahulu
+            $siswaList = Siswa::where('nisn', $nisn);
+            if ($user) {
+                $siswaList->orWhere('user_id', $user->id);
+            }
+            $siswaList->delete();
+
+            // 3. Hapus data pendaftar (relasi orang_tua, berkas, hasil_seleksi, sync_log cascade otomatis)
+            $pendaftar->delete();
+
+            // 4. Hapus akun pengguna jika berperan sebagai calon_siswa atau siswa
+            if ($user && in_array($user->role, ['calon_siswa', 'siswa'])) {
+                $user->delete();
+            }
+        });
+
+        return back()->with('success', "Data calon siswa {$nama} ({$noPendaftaran}) berhasil dihapus dari sistem SPMB & SIAKAD.");
     }
 }

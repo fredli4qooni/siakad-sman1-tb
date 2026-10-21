@@ -38,6 +38,8 @@ Route::prefix('admin')
             Route::get('/seleksi', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi.index');
             Route::get('/seleksi-alias', [AdminPpdbController::class, 'seleksiIndex'])->name('seleksi');
             Route::post('/seleksi/{pendaftar}', [AdminPpdbController::class, 'tetapkanKelulusan'])->name('kelulusan.simpan');
+
+            Route::delete('/pendaftar/{pendaftar}', [AdminPpdbController::class, 'hapusPendaftar'])->name('pendaftar.hapus');
         };
 
         Route::prefix('spmb')->name('spmb.')->group($spmbRoutes);

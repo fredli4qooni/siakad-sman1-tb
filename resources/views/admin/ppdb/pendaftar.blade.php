@@ -101,9 +101,18 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-3 text-right">
-                                    <x-button as="a" href="{{ route('admin.ppdb.verifikasi.show', $p->id) }}" variant="secondary" class="text-xs py-1">
-                                        Periksa Berkas
-                                    </x-button>
+                                    <div class="inline-flex items-center gap-1.5 justify-end">
+                                        <x-button as="a" href="{{ route('admin.ppdb.verifikasi.show', $p->id) }}" variant="secondary" class="text-xs py-1">
+                                            Periksa Berkas
+                                        </x-button>
+                                        <form action="{{ route('admin.ppdb.pendaftar.hapus', $p->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data calon pendaftar {{ addslashes($p->nama_lengkap) }} ({{ $p->no_pendaftaran }})? Seluruh data pendaftaran dan berkas digital akan dihapus permanen.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-[#C81210] bg-[#FBEAEA] hover:bg-[#FBEAEA]/80 border border-[#C81210]/30 rounded-lg transition-colors" title="Hapus Data Calon Siswa">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

@@ -96,24 +96,34 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-3 text-right">
-                                    <form action="{{ route('admin.ppdb.kelulusan.simpan', $p->id) }}" method="POST" class="inline-flex items-center gap-2">
-                                        @csrf
-                                        <select name="status" class="rounded-lg border border-[#C9CDC3] px-2 py-1 text-xs text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]">
-                                            <option value="DITERIMA" {{ in_array($status, ['DITERIMA', 'LULUS']) ? 'selected' : '' }}>Diterima (Siswa Baru)</option>
-                                            <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Diterima</option>
-                                            <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
-                                        </select>
+                                    <div class="inline-flex items-center gap-2 justify-end">
+                                        <form action="{{ route('admin.ppdb.kelulusan.simpan', $p->id) }}" method="POST" class="inline-flex items-center gap-1.5">
+                                            @csrf
+                                            <select name="status" class="rounded-lg border border-[#C9CDC3] px-2 py-1 text-xs text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]">
+                                                <option value="DITERIMA" {{ in_array($status, ['DITERIMA', 'LULUS']) ? 'selected' : '' }}>Diterima (Siswa Baru)</option>
+                                                <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Diterima</option>
+                                                <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
+                                            </select>
 
-                                        <input
-                                            type="hidden"
-                                            name="catatan"
-                                            value="Penetapan daftar ulang siswa baru SMAN 1 Terbanggi Besar"
-                                        />
+                                            <input
+                                                type="hidden"
+                                                name="catatan"
+                                                value="Penetapan daftar ulang siswa baru SMAN 1 Terbanggi Besar"
+                                            />
 
-                                        <x-button type="submit" variant="primary" class="text-xs py-1 px-3">
-                                            Simpan
-                                        </x-button>
-                                    </form>
+                                            <x-button type="submit" variant="primary" class="text-xs py-1 px-2.5">
+                                                Simpan
+                                            </x-button>
+                                        </form>
+
+                                        <form action="{{ route('admin.ppdb.pendaftar.hapus', $p->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus calon siswa {{ addslashes($p->nama_lengkap) }} ({{ $p->no_pendaftaran }})? Data dan berkas akan dihapus.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-[#C81210] bg-[#FBEAEA] hover:bg-[#FBEAEA]/80 border border-[#C81210]/30 rounded-lg transition-colors" title="Hapus Calon Siswa">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

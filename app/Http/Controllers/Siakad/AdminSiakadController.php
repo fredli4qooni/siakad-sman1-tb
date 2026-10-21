@@ -11,6 +11,7 @@ use App\Http\Requests\Siakad\SiswaRequest;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\MataPelajaran;
+use App\Models\Pendaftar;
 use App\Models\Pengampu;
 use App\Models\Siswa;
 use App\Models\User;
@@ -18,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AdminSiakadController extends Controller
@@ -168,23 +170,49 @@ class AdminSiakadController extends Controller
     }
 
     /**
-     * Hapus data siswa dari sistem SIAKAD.
+     * Hapus data siswa dari sistem SIAKAD beserta seluruh riwayat pendaftaran di SPMB.
      */
     public function hapusSiswa(Siswa $siswa): RedirectResponse
     {
         $nama = $siswa->nama;
+        $nisn = $siswa->nisn;
 
-        DB::transaction(function () use ($siswa) {
+        DB::transaction(function () use ($siswa, $nisn) {
             $user = $siswa->user;
+
+            // 1. Temukan seluruh data pendaftar SPMB terkait (berdasarkan NISN, user_id, atau syncLog)
+            $pendaftarQuery = Pendaftar::query()->where('nisn', $nisn);
+
+            if ($user) {
+                $pendaftarQuery->orWhere('user_id', $user->id);
+            }
+
+            if ($siswa->syncLog && $siswa->syncLog->pendaftar_id) {
+                $pendaftarQuery->orWhere('id', $siswa->syncLog->pendaftar_id);
+            }
+
+            $pendaftarList = $pendaftarQuery->get();
+
+            // 2. Hapus berkas digital dan record pendaftar (cascade ke hasil_seleksi, berkas, ortu, sync_log)
+            foreach ($pendaftarList as $pendaftar) {
+                foreach ($pendaftar->berkas as $berkas) {
+                    if ($berkas->file_path && Storage::disk('public')->exists($berkas->file_path)) {
+                        Storage::disk('public')->delete($berkas->file_path);
+                    }
+                }
+                $pendaftar->delete();
+            }
+
+            // 3. Hapus data siswa dari SIAKAD (cascade ke nilai)
             $siswa->delete();
 
-            // Jika user hanya berperan sebagai siswa dan tidak punya pendaftar SPMB
-            if ($user && $user->role === 'siswa' && !$user->pendaftar()->exists()) {
+            // 4. Hapus akun pengguna jika role adalah siswa atau calon_siswa
+            if ($user && in_array($user->role, ['siswa', 'calon_siswa'])) {
                 $user->delete();
             }
         });
 
-        return back()->with('success', "Data siswa {$nama} berhasil dihapus dari sistem.");
+        return back()->with('success', "Data siswa {$nama} beserta seluruh riwayat pendaftaran SPMB berhasil dihapus.");
     }
 
     /**

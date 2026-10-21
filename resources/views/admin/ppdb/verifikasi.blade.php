@@ -24,6 +24,14 @@
                     <span class="px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-100 text-neutral-600">Draft</span>
                 @endif
 
+                <form action="{{ route('admin.ppdb.pendaftar.hapus', $pendaftar->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data calon siswa {{ addslashes($pendaftar->nama_lengkap) }} ({{ $pendaftar->no_pendaftaran }}) beserta seluruh berkas digitalnya? Tindakan ini tidak dapat dibatalkan.')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-[#C81210] bg-[#FBEAEA] hover:bg-[#FBEAEA]/80 border border-[#C81210]/30 rounded-lg transition-colors">
+                        Hapus Pendaftar
+                    </button>
+                </form>
+
                 <x-button as="a" href="{{ route('admin.ppdb.pendaftar') }}" variant="ghost" class="text-xs">
                     Kembali
                 </x-button>

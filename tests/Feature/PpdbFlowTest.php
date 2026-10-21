@@ -475,4 +475,51 @@ class PpdbFlowTest extends TestCase
             ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli')
             ->assertDontSee('JADWAL VALIDASI BERKAS FISIK');
     }
+
+    public function test_admin_can_delete_pendaftar_and_associated_records(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $candidateUser = User::factory()->create(['role' => 'calon_siswa']);
+
+        $pendaftar = Pendaftar::create([
+            'user_id' => $candidateUser->id,
+            'periode_id' => $this->periode->id,
+            'no_pendaftaran' => 'PPDB-2026-DEL99',
+            'nisn' => '0099881122',
+            'nama_lengkap' => 'Pendaftar Mau Dihapus',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Bandar Jaya',
+            'tanggal_lahir' => '2010-03-03',
+            'asal_sekolah' => 'SMPN 3 TB',
+            'alamat' => 'Jl. Merdeka No. 10',
+            'no_hp' => '081299881122',
+            'status_pendaftaran' => 'menunggu_verifikasi',
+        ]);
+
+        // Upload berkas palsu
+        $file = UploadedFile::fake()->create('dokumen.pdf', 500);
+        $path = $file->store('berkas_ppdb', 'public');
+        $berkas = BerkasPendaftaran::create([
+            'pendaftar_id' => $pendaftar->id,
+            'jenis_berkas' => 'kartu_keluarga',
+            'nama_file_asli' => 'dokumen.pdf',
+            'file_path' => $path,
+            'ukuran_file' => 500,
+            'mime_type' => 'application/pdf',
+            'status_verifikasi' => 'menunggu',
+        ]);
+
+        $this->assertTrue(Storage::disk('public')->exists($path));
+
+        // Admin invokes delete route
+        $response = $this->actingAs($admin)->delete("/admin/ppdb/pendaftar/{$pendaftar->id}");
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        // Check storage and database
+        $this->assertFalse(Storage::disk('public')->exists($path));
+        $this->assertDatabaseMissing('pendaftar', ['id' => $pendaftar->id]);
+        $this->assertDatabaseMissing('berkas_pendaftaran', ['id' => $berkas->id]);
+        $this->assertDatabaseMissing('users', ['id' => $candidateUser->id]);
+    }
 }

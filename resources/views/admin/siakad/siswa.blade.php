@@ -243,9 +243,10 @@
                                         </button>
 
                                         <!-- Hapus Siswa -->
-                                        <form action="{{ route('admin.siakad.siswa.hapus', $s->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa {{ addslashes($s->nama) }}? Tindakan ini tidak dapat dibatalkan.')">
+                                        <form action="{{ route('admin.siakad.siswa.hapus', $s->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa {{ addslashes($s->nama) }}? Data siswa dan pendaftaran SPMB terkait (jika ada) akan ikut dihapus.')">
                                             @csrf
                                             @method('DELETE')
+                                            <input type="hidden" name="hapus_pendaftar" value="1">
                                             <button type="submit" class="text-xs font-semibold text-[#C81210] hover:underline">
                                                 Hapus
                                             </button>

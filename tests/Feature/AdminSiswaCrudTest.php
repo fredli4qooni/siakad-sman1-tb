@@ -188,6 +188,68 @@ class AdminSiswaCrudTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 
+    public function test_admin_deletes_siswa_and_associated_pendaftar_is_also_deleted(): void
+    {
+        $user = User::factory()->create([
+            'nama' => 'Siswa Sync SPMB',
+            'email' => 'sync@siswa.sman1tb.sch.id',
+            'role' => 'siswa',
+        ]);
+
+        $periode = \App\Models\PeriodePpdb::first() ?? \App\Models\PeriodePpdb::create([
+            'tahun_ajaran' => '2026/2027',
+            'nama_gelombang' => 'Gelombang 1',
+            'tanggal_buka' => '2026-07-01',
+            'tanggal_tutup' => '2026-07-15',
+            'kuota' => 100,
+            'is_aktif' => true,
+        ]);
+
+        $pendaftar = \App\Models\Pendaftar::create([
+            'user_id' => $user->id,
+            'periode_id' => $periode->id,
+            'no_pendaftaran' => 'PPDB-2026-DEL1',
+            'nisn' => '0087788991',
+            'nama_lengkap' => 'Siswa Sync SPMB',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Lampung',
+            'tanggal_lahir' => '2010-01-01',
+            'asal_sekolah' => 'SMPN 1 TB',
+            'alamat' => 'Alamat',
+            'no_hp' => '0812345678',
+            'status_pendaftaran' => 'lulus',
+        ]);
+
+        $siswa = Siswa::create([
+            'user_id' => $user->id,
+            'nisn' => '0087788991',
+            'nama' => 'Siswa Sync SPMB',
+            'jenis_kelamin' => 'L',
+            'tahun_masuk' => '2026',
+            'status_aktif' => true,
+        ]);
+
+        // Hapus data siswa via rute SIAKAD tanpa parameter tambahan
+        $response = $this->actingAs($this->admin)->delete(route('admin.siakad.siswa.hapus', $siswa->id));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        // Pastikan terhapus dari database
+        $this->assertDatabaseMissing('siswa', ['id' => $siswa->id]);
+        $this->assertDatabaseMissing('pendaftar', ['id' => $pendaftar->id]);
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+
+        // Pastikan tidak lagi muncul di Daftar Calon Peserta Didik Baru & Daftar Calon Siswa Terverifikasi
+        $this->actingAs($this->admin)->get(route('admin.ppdb.pendaftar'))
+            ->assertDontSee('PPDB-2026-DEL1')
+            ->assertSee('Tidak ada data calon siswa yang sesuai dengan filter');
+
+        $this->actingAs($this->admin)->get(route('admin.ppdb.seleksi'))
+            ->assertDontSee('PPDB-2026-DEL1')
+            ->assertSee('Belum ada calon peserta didik yang berstatus siap penetapan');
+    }
+
     public function test_validation_prevents_duplicate_nisn_and_email(): void
     {
         $existingUser = User::factory()->create([
