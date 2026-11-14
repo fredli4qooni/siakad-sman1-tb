@@ -315,14 +315,25 @@ class AdminPpdbController extends Controller
         SyncService $syncService
     ): RedirectResponse {
         $validated = $request->validated();
-        $status = $validated['status']; // DITERIMA / LULUS / TIDAK_LULUS
+        $status = $validated['status']; // DITERIMA / LULUS / TIDAK_LULUS / MENUNGGU
 
-        DB::transaction(function () use ($pendaftar, $validated, $status) {
+        $catatan = trim($validated['catatan'] ?? '');
+        if (empty($catatan)) {
+            if ($status === 'TIDAK_LULUS') {
+                $catatan = 'Berkas fisik atau kriteria seleksi belum memenuhi ketentuan penerimaan murid baru SMAN 1 Terbanggi Besar.';
+            } elseif (in_array($status, ['DITERIMA', 'LULUS'])) {
+                $catatan = 'Selamat! Anda resmi diterima sebagai siswa baru SMAN 1 Terbanggi Besar.';
+            } else {
+                $catatan = 'Menunggu proses verifikasi dan penetapan panitia.';
+            }
+        }
+
+        DB::transaction(function () use ($pendaftar, $status, $catatan) {
             HasilSeleksi::updateOrCreate(
                 ['pendaftar_id' => $pendaftar->id],
                 [
                     'status' => $status,
-                    'catatan' => $validated['catatan'] ?? null,
+                    'catatan' => $catatan,
                     'diverifikasi_oleh' => Auth::id(),
                     'tanggal_pengumuman' => now(),
                 ]

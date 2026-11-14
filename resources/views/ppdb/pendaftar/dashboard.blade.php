@@ -146,9 +146,16 @@
                 </p>
 
                 @if($hasilSeleksi && $hasilSeleksi->catatan)
-                    <div class="p-3.5 bg-white rounded-xl border border-[#C81210]/30 text-xs">
-                        <strong class="text-[#C81210]">Catatan Panitia:</strong>
-                        <span class="text-[#1C2620]">{{ $hasilSeleksi->catatan }}</span>
+                    <div class="p-4 bg-white rounded-xl border border-[#C81210]/30 text-xs space-y-1.5 shadow-xs">
+                        <div class="font-bold text-[#C81210] flex items-center gap-1.5 text-xs">
+                            <svg class="w-4 h-4 text-[#C81210] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Alasan Penolakan dari Panitia SPMB:
+                        </div>
+                        <div class="text-[#1C2620] pl-5 leading-relaxed font-medium">
+                            {{ $hasilSeleksi->catatan }}
+                        </div>
                     </div>
                 @endif
             </div>

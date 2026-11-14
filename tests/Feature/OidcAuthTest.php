@@ -12,11 +12,13 @@ class OidcAuthTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected PeriodePpdb $periode;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        PeriodePpdb::create([
+        $this->periode = PeriodePpdb::create([
             'tahun_ajaran' => '2026/2027',
             'nama_gelombang' => 'Gelombang 1 Reguler',
             'tanggal_buka' => '2026-07-01',
@@ -99,6 +101,47 @@ class OidcAuthTest extends TestCase
         ]);
 
         $response->assertRedirect(route('pendaftar.formulir'));
+    }
+
+    public function test_calon_siswa_registration_generates_unique_no_pendaftaran_even_with_deleted_records(): void
+    {
+        // Buat data pendaftar awal dengan nomor urut lebih tinggi (misal setelah pendaftar sebelumnya dihapus)
+        $userAwal = User::factory()->create(['role' => 'calon_siswa']);
+        $pendaftarAwal = \App\Models\Pendaftar::create([
+            'user_id' => $userAwal->id,
+            'periode_id' => $this->periode->id,
+            'no_pendaftaran' => 'SPMB-' . date('Y') . '-0004',
+            'nisn' => '0011223399',
+            'nama_lengkap' => 'Siswa Eksis 4',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Lampung',
+            'tanggal_lahir' => '2010-01-01',
+            'asal_sekolah' => 'SMPN 1 TB',
+            'alamat' => 'Alamat',
+            'no_hp' => '0812345678',
+            'status_pendaftaran' => 'draft',
+        ]);
+
+        // Total data di database saat ini hanya 1, tetapi nomor pendaftarannya sudah berakhiran 0004.
+        // Jika menggunakan count() + 1, sistem lama akan mencoba membuat SPMB-YYYY-0002 yang berpotensi bentrok jika ada record lain.
+        // Lebih parah lagi, jika ada SPMB-YYYY-0002 dan count adalah 1, sistem lama bentrok pada 0002.
+        // Sekarang registrasi calon siswa baru:
+        $response = $this->post('/auth/register', [
+            'nama' => 'Calon Siswa Baru Unik',
+            'nisn' => '0098765439',
+            'email' => 'calon.unik@example.com',
+            'password' => 'secret123',
+            'password_confirmation' => 'secret123',
+        ]);
+
+        $response->assertRedirect(route('pendaftar.formulir'));
+
+        // Pendaftar baru harus mendapatkan nomor urut di atas 0004 (misal 0005) tanpa error constraint violation
+        $this->assertDatabaseHas('pendaftar', [
+            'nisn' => '0098765439',
+            'nama_lengkap' => 'Calon Siswa Baru Unik',
+            'no_pendaftaran' => 'SPMB-' . date('Y') . '-0005',
+        ]);
     }
 
     public function test_oidc_authorization_flow_and_token_exchange(): void

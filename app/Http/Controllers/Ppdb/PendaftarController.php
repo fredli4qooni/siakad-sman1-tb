@@ -30,8 +30,7 @@ class PendaftarController extends Controller
                 return redirect()->route('pendaftar.dashboard')->with('error', 'Tidak ada periode SPMB aktif.');
             }
 
-            $nomorUrut = Pendaftar::where('periode_id', $periodeAktif->id)->count() + 1;
-            $noPendaftaran = 'SPMB-' . date('Y') . '-' . str_pad($nomorUrut, 4, '0', STR_PAD_LEFT);
+            $noPendaftaran = Pendaftar::generateNomorPendaftaran($periodeAktif->id);
 
             $pendaftar = Pendaftar::create([
                 'user_id' => $user->id,

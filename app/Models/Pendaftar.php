@@ -46,6 +46,57 @@ class Pendaftar extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::creating(function (Pendaftar $pendaftar) {
+            if (empty($pendaftar->no_pendaftaran)) {
+                $pendaftar->no_pendaftaran = static::generateNomorPendaftaran($pendaftar->periode_id);
+            }
+        });
+    }
+
+    /**
+     * Menghasilkan nomor registrasi pendaftaran unik berurutan yang anti-bentrok.
+     */
+    public static function generateNomorPendaftaran(?int $periodeId = null): string
+    {
+        $year = date('Y');
+        if ($periodeId) {
+            $periode = PeriodePpdb::find($periodeId);
+            if ($periode && !empty($periode->tahun_ajaran)) {
+                $year = substr($periode->tahun_ajaran, 0, 4);
+            }
+        }
+
+        $existing = static::query()
+            ->where('no_pendaftaran', 'like', "%{$year}%")
+            ->pluck('no_pendaftaran');
+
+        $maxNumber = 0;
+        foreach ($existing as $no) {
+            $parts = explode('-', $no);
+            $lastPart = end($parts);
+            if (is_numeric($lastPart)) {
+                $num = (int) $lastPart;
+                if ($num < 9000 && $num > $maxNumber) {
+                    $maxNumber = $num;
+                }
+            }
+        }
+
+        $nextNumber = $maxNumber + 1;
+
+        do {
+            $candidate = 'SPMB-' . $year . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+            $exists = static::where('no_pendaftaran', $candidate)->exists();
+            if ($exists) {
+                $nextNumber++;
+            }
+        } while ($exists);
+
+        return $candidate;
+    }
+
     public function isDijadwalkanFisik(): bool
     {
         return !$this->isDiterima() &&

@@ -38,6 +38,19 @@
             </div>
         </div>
 
+        @if($pendaftar->isTidakLulus() && $pendaftar->hasilSeleksi?->catatan)
+            <div class="p-4 rounded-xl bg-[#FBEAEA] border border-[#C81210]/40 text-xs text-[#1C2620] flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-[#C81210] text-white flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-[10px]">
+                    !
+                </div>
+                <div>
+                    <span class="font-bold text-[#C81210] block mb-0.5">Calon Siswa Berstatus Tidak Diterima</span>
+                    <span class="text-[#545B52]">Alasan Penolakan:</span>
+                    <strong class="text-[#1C2620]">{{ $pendaftar->hasilSeleksi->catatan }}</strong>
+                </div>
+            </div>
+        @endif
+
         <!-- Detail Biodata Pokok & Orang Tua -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <x-card title="Data Pokok Calon Siswa">

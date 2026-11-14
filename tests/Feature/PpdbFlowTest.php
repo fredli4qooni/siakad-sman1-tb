@@ -474,6 +474,19 @@ class PpdbFlowTest extends TestCase
             ->assertSee('Pemberitahuan Hasil Seleksi, Budi Santoso')
             ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli')
             ->assertDontSee('JADWAL VALIDASI BERKAS FISIK');
+
+        // Admin checks seleksi page and sees the rejection reason in the list
+        $responseAdmin = $this->actingAs($admin)->get('/admin/ppdb/seleksi');
+        $responseAdmin->assertStatus(200)
+            ->assertSee('Tidak Diterima')
+            ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli');
+
+        // Public pengumuman page also shows rejection reason
+        $responsePublic = $this->get('/ppdb/pengumuman?keyword=0088990011');
+        $responsePublic->assertStatus(200)
+            ->assertSee('MOHON MAAF, ANDA BELUM DINYATAKAN LULUS')
+            ->assertSee('Alasan Penolakan:')
+            ->assertSee('Berkas fisik tidak sesuai dengan dokumen asli');
     }
 
     public function test_admin_can_delete_pendaftar_and_associated_records(): void

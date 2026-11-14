@@ -89,6 +89,11 @@
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBEAEA] text-[#C81210]">
                                             Tidak Diterima
                                         </span>
+                                        @if($hasil && $hasil->catatan)
+                                            <div class="mt-1.5 p-1.5 rounded-lg bg-[#FBEAEA] border border-[#C81210]/20 text-[11px] text-[#C81210] max-w-xs leading-snug">
+                                                <span class="font-bold">Alasan:</span> {{ $hasil->catatan }}
+                                            </div>
+                                        @endif
                                     @else
                                         <span class="px-2.5 py-1 rounded text-xs font-semibold bg-[#FBF9D6] text-[#6B6200]">
                                             Menunggu Penetapan
@@ -97,29 +102,22 @@
                                 </td>
                                 <td class="py-3 px-3 text-right">
                                     <div class="inline-flex items-center gap-2 justify-end">
-                                        <form action="{{ route('admin.ppdb.kelulusan.simpan', $p->id) }}" method="POST" class="inline-flex items-center gap-1.5">
-                                            @csrf
-                                            <select name="status" class="rounded-lg border border-[#C9CDC3] px-2 py-1 text-xs text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]">
-                                                <option value="DITERIMA" {{ in_array($status, ['DITERIMA', 'LULUS']) ? 'selected' : '' }}>Diterima (Siswa Baru)</option>
-                                                <option value="TIDAK_LULUS" {{ $status === 'TIDAK_LULUS' ? 'selected' : '' }}>Tidak Diterima</option>
-                                                <option value="MENUNGGU" {{ $status === 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
-                                            </select>
-
-                                            <input
-                                                type="hidden"
-                                                name="catatan"
-                                                value="Penetapan daftar ulang siswa baru SMAN 1 Terbanggi Besar"
-                                            />
-
-                                            <x-button type="submit" variant="primary" class="text-xs py-1 px-2.5">
-                                                Simpan
-                                            </x-button>
-                                        </form>
+                                        <button
+                                            type="button"
+                                            onclick="openKeputusanModal('{{ $p->id }}', '{{ addslashes($p->nama_lengkap) }}', '{{ $p->no_pendaftaran }}', '{{ $status }}', '{{ addslashes($hasil?->catatan ?? '') }}')"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold {{ in_array($status, ['DITERIMA', 'LULUS']) ? 'bg-[#E7F4EA] text-[#0E6026] hover:bg-[#d8eedc] border border-[#039834]/30' : ($status === 'TIDAK_LULUS' ? 'bg-[#FBEAEA] text-[#C81210] hover:bg-[#f7d8d8] border border-[#C81210]/30' : 'bg-[#0E6026] text-white hover:bg-[#0A4C1E]') }} transition-colors"
+                                            title="Tetapkan Kelulusan atau Berikan Alasan Penolakan"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                            {{ $status === 'MENUNGGU' ? 'Tetapkan Hasil' : 'Ubah Keputusan' }}
+                                        </button>
 
                                         <form action="{{ route('admin.ppdb.pendaftar.hapus', $p->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus calon siswa {{ addslashes($p->nama_lengkap) }} ({{ $p->no_pendaftaran }})? Data dan berkas akan dihapus.')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-[#C81210] bg-[#FBEAEA] hover:bg-[#FBEAEA]/80 border border-[#C81210]/30 rounded-lg transition-colors" title="Hapus Calon Siswa">
+                                            <button type="submit" class="px-2.5 py-1.5 text-xs font-semibold text-[#C81210] bg-[#FBEAEA] hover:bg-[#FBEAEA]/80 border border-[#C81210]/30 rounded-lg transition-colors" title="Hapus Calon Siswa">
                                                 Hapus
                                             </button>
                                         </form>
@@ -144,4 +142,153 @@
             @endif
         </x-card>
     </div>
+
+    <!-- Modal Penetapan Hasil Seleksi & Alasan Penolakan -->
+    <div id="keputusan-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#E1E4DE] m-4">
+            <div class="flex items-start justify-between pb-3 border-b border-[#E1E4DE]">
+                <div>
+                    <h3 class="text-base font-bold text-[#1C2620]">Penetapan Hasil Seleksi & Kelulusan</h3>
+                    <p class="text-xs text-[#545B52] mt-0.5">
+                        Nama: <strong id="modal-student-name" class="text-[#1C2620]">-</strong> &bull; No. Reg: <span id="modal-student-no" class="font-mono font-medium">-</span>
+                    </p>
+                </div>
+                <button type="button" onclick="closeKeputusanModal()" class="text-[#545B52] hover:text-[#1C2620] text-xl font-bold p-1">
+                    &times;
+                </button>
+            </div>
+
+            <form id="keputusan-form" method="POST" class="space-y-4 mt-4">
+                @csrf
+                <div>
+                    <label class="block text-[13px] font-medium text-[#1C2620] mb-1.5">
+                        Status Kelulusan / Penerimaan <span class="text-[#C81210]">*</span>
+                    </label>
+                    <select
+                        name="status"
+                        id="modal-status-select"
+                        onchange="handleStatusChange(this.value)"
+                        class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-sm text-[#1C2620] bg-white focus:outline-none focus:border-[#039834]"
+                        required
+                    >
+                        <option value="DITERIMA">DITERIMA (Siswa Baru Resmi)</option>
+                        <option value="TIDAK_LULUS">TIDAK DITERIMA (Ditolak)</option>
+                        <option value="MENUNGGU">MENUNGGU (Dalam Proses Sidang)</option>
+                    </select>
+                </div>
+
+                <!-- Bagian Alasan / Catatan Penolakan -->
+                <div id="modal-catatan-container" class="space-y-2">
+                    <label class="block text-[13px] font-medium text-[#1C2620]" id="modal-catatan-label">
+                        Alasan Penolakan / Catatan Panitia
+                    </label>
+
+                    <div id="quick-reasons-box" class="space-y-1.5">
+                        <span class="text-[11px] text-[#545B52] block">Pilih template alasan cepat (klik untuk mengisi):</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button type="button" onclick="setQuickReason('Berkas fisik asli tidak sesuai atau tidak lengkap saat verifikasi faktual di sekolah.')" class="px-2 py-1 bg-[#F3F5F2] hover:bg-[#E1E4DE] rounded text-[11px] text-[#1C2620] transition-colors border border-[#E1E4DE]">
+                                Berkas fisik tidak lengkap / tidak sesuai
+                            </button>
+                            <button type="button" onclick="setQuickReason('Tidak hadir pada jadwal validasi berkas fisik yang telah ditentukan di sekolah.')" class="px-2 py-1 bg-[#F3F5F2] hover:bg-[#E1E4DE] rounded text-[11px] text-[#1C2620] transition-colors border border-[#E1E4DE]">
+                                Tidak hadir jadwal validasi fisik
+                            </button>
+                            <button type="button" onclick="setQuickReason('Kuota daya tampung penerimaan murid baru untuk tahun ajaran ini telah terpenuhi.')" class="px-2 py-1 bg-[#F3F5F2] hover:bg-[#E1E4DE] rounded text-[11px] text-[#1C2620] transition-colors border border-[#E1E4DE]">
+                                Kuota daya tampung terpenuhi
+                            </button>
+                            <button type="button" onclick="setQuickReason('Nilai rapor / hasil verifikasi akademik belum memenuhi ambang batas seleksi.')" class="px-2 py-1 bg-[#F3F5F2] hover:bg-[#E1E4DE] rounded text-[11px] text-[#1C2620] transition-colors border border-[#E1E4DE]">
+                                Nilai belum memenuhi kriteria
+                            </button>
+                        </div>
+                    </div>
+
+                    <textarea
+                        name="catatan"
+                        id="modal-catatan-textarea"
+                        rows="3"
+                        class="w-full rounded-lg border border-[#C9CDC3] px-3.5 py-2 text-xs text-[#1C2620] placeholder-[#9FA29E] focus:outline-none focus:border-[#039834] focus:ring-1 focus:ring-[#039834]"
+                        placeholder="Tulis alasan penolakan secara jelas agar calon siswa mengetahui alasannya..."
+                    ></textarea>
+                    <p class="text-[11px] text-[#545B52]" id="modal-catatan-hint">
+                        Catatan ini akan langsung ditampilkan kepada calon siswa di halaman dasbor dan pengumuman.
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#E1E4DE]">
+                    <button
+                        type="button"
+                        onclick="closeKeputusanModal()"
+                        class="px-4 py-2 rounded-lg text-xs font-semibold text-[#545B52] hover:bg-[#F3F5F2]"
+                    >
+                        Batal
+                    </button>
+                    <x-button type="submit" variant="primary" class="text-xs">
+                        Simpan Keputusan & Alasan
+                    </x-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openKeputusanModal(pendaftarId, namaSiswa, noPendaftaran, status, catatan) {
+            const modal = document.getElementById('keputusan-modal');
+            const form = document.getElementById('keputusan-form');
+            const studentName = document.getElementById('modal-student-name');
+            const studentNo = document.getElementById('modal-student-no');
+            const statusSelect = document.getElementById('modal-status-select');
+            const textarea = document.getElementById('modal-catatan-textarea');
+
+            form.action = `/admin/ppdb/seleksi/${pendaftarId}`;
+            studentName.innerText = namaSiswa;
+            studentNo.innerText = noPendaftaran;
+
+            const currentStatus = (status === 'LULUS' || status === 'DITERIMA') ? 'DITERIMA' : (status === 'TIDAK_LULUS' ? 'TIDAK_LULUS' : 'MENUNGGU');
+            statusSelect.value = currentStatus;
+            textarea.value = catatan || '';
+
+            handleStatusChange(currentStatus);
+            modal.classList.remove('hidden');
+        }
+
+        function closeKeputusanModal() {
+            const modal = document.getElementById('keputusan-modal');
+            modal.classList.add('hidden');
+        }
+
+        function setQuickReason(reason) {
+            const textarea = document.getElementById('modal-catatan-textarea');
+            textarea.value = reason;
+            textarea.focus();
+        }
+
+        function handleStatusChange(status) {
+            const label = document.getElementById('modal-catatan-label');
+            const quickBox = document.getElementById('quick-reasons-box');
+            const textarea = document.getElementById('modal-catatan-textarea');
+            const hint = document.getElementById('modal-catatan-hint');
+
+            if (status === 'TIDAK_LULUS') {
+                label.innerHTML = '<span class="text-[#C81210] font-bold">Alasan Penolakan untuk Calon Siswa:</span>';
+                quickBox.classList.remove('hidden');
+                textarea.placeholder = "Jelaskan alasan mengapa calon siswa belum dapat diterima...";
+                hint.innerText = "Alasan ini akan tampil di dasbor calon siswa agar mereka memahami mengapa tidak lolos.";
+                if (!textarea.value || textarea.value.includes('Selamat!') || textarea.value.includes('Penetapan')) {
+                    textarea.value = 'Berkas fisik asli tidak sesuai atau tidak lengkap saat verifikasi faktual di sekolah.';
+                }
+            } else if (status === 'DITERIMA') {
+                label.innerHTML = '<span class="text-[#0E6026] font-bold">Catatan Penerimaan Siswa (Opsional):</span>';
+                quickBox.classList.add('hidden');
+                textarea.placeholder = "Catatan atau instruksi tambahan untuk siswa baru...";
+                hint.innerText = "Catatan ini akan tampil di dasbor pendaftaran ulang siswa yang diterima.";
+                if (!textarea.value || textarea.value.includes('tidak') || textarea.value.includes('Penetapan')) {
+                    textarea.value = 'Selamat! Anda resmi diterima sebagai siswa baru SMAN 1 Terbanggi Besar.';
+                }
+            } else {
+                label.innerText = 'Catatan Status (Opsional):';
+                quickBox.classList.add('hidden');
+                textarea.placeholder = "Catatan internal atau keterangan status...";
+                hint.innerText = "Catatan ini disimpan dalam sistem.";
+            }
+        }
+    </script>
 </x-layouts.admin>

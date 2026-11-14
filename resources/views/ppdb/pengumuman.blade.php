@@ -101,8 +101,8 @@
                                             Terima kasih telah berpartisipasi dalam proses seleksi SPMB SMAN 1 Terbanggi Besar. Tetap semangat dalam menggapai cita-cita Anda.
                                         </p>
                                         @if($hasil && $hasil->catatan)
-                                            <div class="text-xs pt-1 border-t border-[#C81210]/30 text-[#1C2620]">
-                                                <strong>Keterangan:</strong> {{ $hasil->catatan }}
+                                            <div class="text-xs pt-2 border-t border-[#C81210]/30 text-[#1C2620]">
+                                                <strong class="text-[#C81210]">Alasan Penolakan:</strong> {{ $hasil->catatan }}
                                             </div>
                                         @endif
                                     </div>
